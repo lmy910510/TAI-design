@@ -1,0 +1,281 @@
+---
+description: 
+alwaysApply: true
+enabled: true
+updatedAt: 2026-03-18T13:13:28.256Z
+provider: 
+---
+
+# TAI Design 设计规范
+
+本规则定义了 TAI Design 组件库的设计规范，生成任何 UI 代码时必须严格遵循。
+
+---
+
+## 1. 间距 (Spacing)
+
+**原则：所有间距必须是 6 的倍数**
+
+使用 `SPACING` 常量，禁止使用任意数值：
+
+| Token | 值 | 用途 |
+|-------|-----|------|
+| `SPACING["2"]` | 12px | 紧凑间距（图标与文字、小元素间） |
+| `SPACING["3"]` | 18px | 常规小间距（列表项内部） |
+| `SPACING["4"]` | 24px | 常规间距（卡片内边距、区块间） |
+| `SPACING["5"]` | 30px | 中等间距（大区块间） |
+| `SPACING["6"]` | 36px | 较大间距（页面级分隔） |
+
+```tsx
+// ✅ 正确
+<div style={{ padding: SPACING["4"], gap: SPACING["3"] }}>
+
+// ❌ 禁止
+<div style={{ padding: 20, gap: 15 }}>
+```
+
+---
+
+## 2. 颜色 (Colors)
+
+**原则：必须通过 `useTheme()` 获取颜色，确保支持暗色模式**
+
+### 2.1 获取颜色
+
+```tsx
+import { useTheme } from '@tai-design/components';
+
+function MyComponent() {
+  const { colors, isDark } = useTheme();
+  
+  return (
+    <div style={{ 
+      backgroundColor: colors.bg.primary,
+      color: colors.text.primary 
+    }}>
+      ...
+    </div>
+  );
+}
+```
+
+### 2.2 语义色表
+
+#### 文字颜色 `colors.text`
+| Token | 用途 |
+|-------|------|
+| `primary` | 主要文字 (92% 不透明度) |
+| `secondary` | 次要文字 (72%) |
+| `tertiary` | 辅助文字 (60%) |
+| `disabled` | 禁用文字 (30%) |
+| `placeholder` | 占位符 (42%) |
+| `inverse` | 反色文字 |
+
+#### 背景颜色 `colors.bg`
+| Token | 用途 |
+|-------|------|
+| `primary` | 主背景（浅色白/深色 #1A1D28） |
+| `secondary` | 次级背景 |
+| `tertiary` | 三级背景 |
+| `elevated` | 悬浮层背景 |
+| `overlay` | 遮罩层 |
+
+#### 边框颜色 `colors.border`
+| Token | 用途 |
+|-------|------|
+| `default` | 默认边框 |
+| `subtle` | 细微边框 |
+| `hover` | 悬停边框 |
+| `focus` | 聚焦边框 |
+
+#### 功能色 `colors.functional`
+| Token | 色值 | 用途 |
+|-------|------|------|
+| `danger.main` | #ff293b | 危险/警示 |
+| `notice.main` | #fa6800 | 提示/警告 |
+| `success.main` | #00b578 | 成功/积极 |
+| `info.main` | #697181 | 常规/信息 |
+
+每个功能色都有透明度变体：`6`, `12`, `24`, `30`
+
+#### 品牌色 `colors.brand`
+| Token | 色值 |
+|-------|------|
+| `primary` | #1A1D28 |
+
+#### 固定色 `colors.static`
+| Token | 色值 |
+|-------|------|
+| `white` | #FFFFFF |
+| `black` | #000000 |
+| `transparent` | transparent |
+
+### 2.3 组件级颜色
+
+组件已内置颜色适配，直接使用：
+- `colors.button.primary/secondary/tertiary/ghost/danger`
+- `colors.input`
+- `colors.dialog`
+- `colors.toast`
+- `colors.switch`
+- `colors.checkbox`
+- `colors.tag`
+- `colors.list`
+- `colors.loading`
+
+---
+
+## 3. 圆角 (Radius)
+
+使用 `RADIUS` 常量：
+
+| Token | 值 | 用途 |
+|-------|-----|------|
+| `RADIUS.xl` | 24px | 操作按钮、输入框 |
+| `RADIUS["2xl"]` | 30px | 卡片、面板 |
+| `RADIUS["4xl"]` | 42px | 弹窗、大按钮 |
+
+```tsx
+// ✅ 正确
+<div style={{ borderRadius: RADIUS["2xl"] }}>
+
+// ❌ 禁止
+<div style={{ borderRadius: 16 }}>
+```
+
+---
+
+## 4. 阴影 (Shadow)
+
+使用 `SHADOW` 常量：
+
+| Token | 用途 |
+|-------|------|
+| `SHADOW.xl` | 全局弹窗、模态框 |
+
+```tsx
+<div style={{ boxShadow: SHADOW.xl }}>
+```
+
+---
+
+## 5. 图标 (Icons)
+
+**使用 TDesign Icons**
+
+```tsx
+import { IconName } from 'tdesign-icons-react';
+
+// 颜色跟随 token
+<IconName style={{ color: colors.text.primary }} />
+```
+
+### 5.1 图标容器设计原则
+
+**核心原则：克制、优雅、简约**
+
+当图标需要背景容器时（如列表项前缀图标），遵循以下原则：
+
+1. **默认使用冷灰色板** — 大多数场景优先使用 `blueGray`，视觉安静不抢眼
+2. **彩色需有明确语义** — 仅在需要强调特定含义时使用彩色（如：危险用红色、成功用绿色）
+3. **同一区域保持统一** — 相邻图标风格一致，避免五颜六色
+
+**默认样式参考（冷灰调）：**
+
+| 属性 | 浅色模式 | 深色模式 |
+|------|---------|---------|
+| 容器背景 | `blueGray[10]` (#F3F4F7) | `blueGray[90]` (#32394A) |
+| 图标颜色 | `blueGray[80]` (#444C5C) | `blueGray[30]` (#D0D5DC) |
+| 容器尺寸 | 72 × 72px | 72 × 72px |
+| 圆角 | 18px | 18px |
+| 图标大小 | 42px | 42px |
+
+```tsx
+import { blueGray } from '@/data/colorTokens';
+import { UserCircleIcon } from 'tdesign-icons-react';
+
+// ✅ 默认：冷灰色调，克制优雅
+<div style={{
+  width: 72,
+  height: 72,
+  backgroundColor: isDark ? blueGray[90] : blueGray[10],
+  color: isDark ? blueGray[30] : blueGray[80],
+  borderRadius: 18,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center'
+}}>
+  <UserCircleIcon style={{ fontSize: 42 }} />
+</div>
+
+// ✅ 有语义时：可用彩色强调（如危险操作）
+<div style={{
+  backgroundColor: isDark ? 'rgba(255, 41, 59, 0.1)' : status.red[0],
+  color: status.red[50]
+}}>
+  <DeleteIcon style={{ fontSize: 42 }} />
+</div>
+```
+
+**注意事项：**
+- 图标颜色要足够深，避免看起来像置灰/禁用态
+- 不要为了好看随意使用彩色，彩色应该有意义
+
+---
+
+## 6. 组件优先
+
+**优先使用 `@tai-design/components` 已有组件：**
+
+- `Button` - 按钮（primary/secondary/tertiary/ghost/danger）
+- `Input` - 输入框
+- `Checkbox` - 多选框
+- `Switch` - 开关
+- `Slider` - 滑块
+- `Tag` - 标签
+- `Badge` - 徽标
+- `Card` - 卡片（gray/white/elevated/transparent）
+- `List` / `ListItem` - 列表
+- `Dialog` - 弹窗
+- `Toast` - 轻提示
+- `Loading` - 加载
+- `ActionSheet` - 动作面板
+- `ThemeProvider` / `useTheme` - 主题
+
+---
+
+## 7. 主题适配
+
+**所有 UI 必须同时支持浅色和暗色模式：**
+
+```tsx
+// 根组件
+<ThemeProvider defaultDark={false}>
+  <App />
+</ThemeProvider>
+
+// 子组件自动适配
+function Card() {
+  const { colors } = useTheme();
+  return (
+    <div style={{ 
+      background: colors.bg.elevated,
+      color: colors.text.primary 
+    }}>
+      ...
+    </div>
+  );
+}
+```
+
+---
+
+## 8. 禁止事项
+
+- ❌ 使用非 6 倍数的间距值（如 10px, 15px, 20px）
+- ❌ 使用硬编码颜色值（如 `#333`, `gray`）
+- ❌ 使用非 token 定义的圆角值
+- ❌ 不考虑暗色模式的颜色写法
+- ❌ 重复造轮子（已有组件不用）
+- ❌ 无语义地滥用彩色（彩色应有明确含义）
+- ❌ 同一列表/区域内图标样式杂乱不统一
