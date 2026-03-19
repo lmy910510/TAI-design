@@ -22,6 +22,24 @@
 - `Node.js >= 18`
 - `pnpm >= 8`
 
+### 如果你连“克隆仓库”都不知道是什么意思
+
+你可以把“克隆仓库”直接理解成：**把这个项目完整下载到你的电脑里，并且以后还能继续同步和上传修改。**
+
+如果你完全不想碰命令行，最简单的方法是用 `GitHub Desktop`：
+
+1. 打开这个链接：`https://github.com/lmy910510/TAI-design`
+2. 安装并打开 `GitHub Desktop`
+3. 在 `GitHub Desktop` 顶部菜单点 `File` -> `Clone repository...`
+4. 切到 `URL` 标签
+5. 把这个地址贴进去：`https://github.com/lmy910510/TAI-design.git`
+6. 选一个你自己容易找到的位置，比如桌面或文稿
+7. 点 `Clone`
+8. 下载完成后，点 `Show in Finder` 或 `Open in Visual Studio Code`
+9. 再打开 CodeBuddy，把 `PROMPTS.md` 里的第一段话直接发给它
+
+如果别人对你说“先 clone 一下”，你就把它理解成上面这 9 步，不需要额外学术语。
+
 ### 首次启动
 
 标准流程如下：
@@ -66,7 +84,8 @@
 
 你只需要：
 
-- 打开这个仓库
+- 先按上面的步骤把项目下载到电脑
+- 打开下载好的项目文件夹
 - 把上面的固定提示词发给 CodeBuddy
 - 按 CodeBuddy 提示补 1 到 2 个必要步骤
 - 后续继续用自然语言描述你想改的规范、组件或页面

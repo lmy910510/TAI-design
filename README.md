@@ -33,4 +33,5 @@ TAI Design 是一个基于 `pnpm workspace` 的组件库仓库，当前包含组
 - `packages/docs/src/imports` 与 `packages/docs/src/figma-demos` 中仍有部分 Figma 生成过渡文件，后续新增能力建议优先沉淀到正式组件与文档页
 - 构建产物如 `dist`、安装目录如 `node_modules` 不应作为源码交接内容保留
 - 交接给同事时，优先一起提供 `HANDOVER.md`、`PROMPTS.md` 与 `WORKING-AREAS.md`
+- 如果接手同事连 Git 都不熟，可以优先按 `HANDOVER.md` 里的“把项目下载到电脑”步骤操作
 - 如果接手同事使用 CodeBuddy，建议先让它读取上述文档和 `.codebuddy/rules` 下的规则文件，再开始操作
