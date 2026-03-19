@@ -8,6 +8,7 @@ import {
   useTheme,
 } from "@tai-design/components";
 import { ArrowRightIcon } from "tdesign-icons-react";
+import { MapEnvNotice } from "../components/MapEnvNotice";
 import { blueGray } from "../data/colorTokens";
 import { portalEntries } from "./siteConfig";
 

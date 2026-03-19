@@ -34,6 +34,7 @@ import {
   ArrowLeft,
 } from "lucide-react";
 import { Button, RADIUS, SPACING, useTheme } from "@tai-design/components";
+import { MapEnvNotice } from "../components/MapEnvNotice";
 import { APP_ROUTES } from "../home/siteConfig";
 
 const SIDEBAR_WIDTH = 264;
