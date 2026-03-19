@@ -281,7 +281,17 @@ export function DesignSystemLayout() {
       </aside>
 
       <main style={{ minHeight: "100vh", marginLeft: SIDEBAR_WIDTH, minWidth: 0 }}>
-        <div style={{ maxWidth: 1680, margin: "0 auto", padding: SPACING["6"] }}>
+        <div
+          style={{
+            maxWidth: 1680,
+            margin: "0 auto",
+            padding: SPACING["6"],
+            display: "flex",
+            flexDirection: "column",
+            gap: SPACING["4"],
+          }}
+        >
+          <MapEnvNotice />
           <Outlet context={{ isDark }} />
         </div>
       </main>

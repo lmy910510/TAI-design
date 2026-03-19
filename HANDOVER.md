@@ -45,9 +45,15 @@
 标准流程如下：
 
 1. 在仓库根目录执行 `pnpm install`
-2. 如需地图示例页，复制 `packages/docs/.env.example` 为 `packages/docs/.env.local`
-3. 在 `packages/docs/.env.local` 中填写 `VITE_TENCENT_MAP_KEY`
-4. 运行 `pnpm dev`
+2. 运行 `pnpm dev`
+3. 如需查看地图示例页，再复制 `packages/docs/.env.example` 为 `packages/docs/.env.local`
+4. 在 `packages/docs/.env.local` 中填写 `VITE_TENCENT_MAP_KEY`
+
+补充说明：
+
+- `pnpm dev` 现在会先自动生成 `packages/components/dist`，然后同时启动组件监听和文档站
+- 如果没有配置 `VITE_TENCENT_MAP_KEY`，不是项目启动失败，而是只有地图相关示例页无法完整预览
+- 地图 key 请私下安全传递，不要直接写进仓库
 
 ### 交接时不要传什么
 

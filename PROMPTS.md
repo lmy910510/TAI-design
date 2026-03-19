@@ -5,7 +5,7 @@
 ### 1. 首次接手仓库
 
 ```text
-这是一个 pnpm workspace 的 TAI Design 组件库仓库，请你先阅读 README.md、HANDOVER.md、PROMPTS.md、WORKING-AREAS.md、package.json、pnpm-workspace.yaml、packages/docs/.env.example 以及 .codebuddy/rules 下的规则文件；然后帮我检查本机 Node 和 pnpm 是否满足要求，不满足就告诉我最少操作步骤；如果环境没问题，就安装依赖、检查我是否缺少 packages/docs/.env.local、提醒我填写 VITE_TENCENT_MAP_KEY，然后启动项目，并用非技术语言告诉我：这个仓库现在应该优先在哪些目录继续维护，哪些目录只是过渡内容。
+这是一个 pnpm workspace 的 TAI Design 组件库仓库，请你先阅读 README.md、HANDOVER.md、PROMPTS.md、WORKING-AREAS.md、package.json、pnpm-workspace.yaml、packages/docs/.env.example 以及 .codebuddy/rules 下的规则文件；然后帮我检查本机 Node 和 pnpm 是否满足要求，不满足就告诉我最少操作步骤；如果环境没问题，就安装依赖并直接启动项目（pnpm dev）。如果我缺少 packages/docs/.env.local 或 VITE_TENCENT_MAP_KEY，请明确告诉我：这不会影响大部分页面预览，只会影响地图相关示例；最后再用非技术语言告诉我：这个仓库现在应该优先在哪些目录继续维护，哪些目录只是过渡内容。
 ```
 
 ### 2. 日常继续做规范 / 组件

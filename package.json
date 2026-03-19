@@ -4,13 +4,16 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "pnpm --filter @tai-design/docs dev",
+    "dev": "pnpm build:components && concurrently -n components,docs -c blue,green \"pnpm dev:components\" \"pnpm dev:docs\"",
+    "dev:components": "pnpm --filter @tai-design/components dev",
+    "dev:docs": "pnpm --filter @tai-design/docs dev",
     "build": "pnpm --filter @tai-design/components build && pnpm --filter @tai-design/docs build",
     "build:components": "pnpm --filter @tai-design/components build",
     "build:docs": "pnpm --filter @tai-design/docs build",
     "preview": "pnpm --filter @tai-design/docs preview"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "typescript": "^5.3.0"
   },
   "engines": {

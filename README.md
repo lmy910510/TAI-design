@@ -15,13 +15,17 @@ TAI Design 是一个基于 `pnpm workspace` 的组件库仓库，当前包含组
 ### 快速开始
 
 1. 在仓库根目录安装依赖：`pnpm install`
-2. 如需预览地图示例页，复制 `packages/docs/.env.example` 为 `packages/docs/.env.local`
-3. 在 `packages/docs/.env.local` 中填写 `VITE_TENCENT_MAP_KEY`
-4. 启动文档站：`pnpm dev`
+2. 启动文档站：`pnpm dev`
+3. 如需预览地图示例页，再复制 `packages/docs/.env.example` 为 `packages/docs/.env.local`
+4. 在 `packages/docs/.env.local` 中填写 `VITE_TENCENT_MAP_KEY`
+
+> 说明：`pnpm dev` 会先自动构建一次 `@tai-design/components`，然后并行启动组件监听与文档站。
+>
+> 未配置 `VITE_TENCENT_MAP_KEY` 时，仓库其余页面仍可正常预览，只有地图相关示例会提示缺少配置。
 
 ### 常用命令
 
-- `pnpm dev`：启动文档站开发环境
+- `pnpm dev`：开箱即用启动文档站，同时自动准备组件构建结果并监听变更
 - `pnpm build`：构建组件包与文档站
 - `pnpm build:components`：仅构建组件包
 - `pnpm build:docs`：仅构建文档站

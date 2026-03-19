@@ -134,6 +134,8 @@ export function WelcomePage() {
           </Button>
         </div>
 
+        <MapEnvNotice />
+
         <div
           style={{
             display: "grid",
