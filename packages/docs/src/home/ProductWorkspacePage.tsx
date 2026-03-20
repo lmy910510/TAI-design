@@ -24,6 +24,13 @@ const FRAME_SCALE = 0.5;
 const DiscoveryFrame = lazy(() => import("../imports/框架随行发现"));
 const MarketFrame = lazy(() => import("../imports/框架随行市集"));
 const ChatFrame = lazy(() => import("../imports/框架随行Chat"));
+const ChatTeamFrame = lazy(() => import("../imports/框架随行ChatTeam"));
+
+type FramePreviewCanvas = {
+  title: string;
+  routeLabel: string;
+  FrameComponent: LazyExoticComponent<ComponentType<any>>;
+};
 
 function FrameWorkspaceFallback() {
   const { colors } = useTheme();
@@ -78,16 +85,16 @@ function getReadinessColor(
 
 function FrameWorkspacePreview({
   badgeText,
-  routeLabel,
   note,
-  FrameComponent,
+  frames,
 }: {
   badgeText: string;
-  routeLabel: string;
   note: string;
-  FrameComponent: LazyExoticComponent<ComponentType<any>>;
+  frames: FramePreviewCanvas[];
 }) {
   const { colors } = useTheme();
+  const framesMinWidth =
+    frames.length * FRAME_STAGE_WIDTH + (frames.length - 1) * SPACING["3"];
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: SPACING["3"] }}>
@@ -129,7 +136,7 @@ function FrameWorkspacePreview({
             fontWeight: 500,
           }}
         >
-          {routeLabel}
+          {`${frames.length} 个画布`}
         </span>
         <span
           style={{
@@ -157,35 +164,83 @@ function FrameWorkspacePreview({
       >
         <div
           style={{
-            minWidth: FRAME_STAGE_WIDTH,
+            minWidth: framesMinWidth,
             display: "flex",
-            justifyContent: "center",
+            justifyContent: frames.length === 1 ? "center" : "flex-start",
+            gap: SPACING["3"],
           }}
         >
-          <div
-            style={{
-              width: FRAME_STAGE_WIDTH,
-              height: FRAME_STAGE_HEIGHT,
-              position: "relative",
-              flexShrink: 0,
-            }}
-          >
+          {frames.map(({ title, routeLabel, FrameComponent }) => (
             <div
+              key={title}
               style={{
-                width: FRAME_CANVAS_WIDTH,
-                height: FRAME_CANVAS_HEIGHT,
-                position: "absolute",
-                left: 0,
-                top: 0,
-                transform: `scale(${FRAME_SCALE})`,
-                transformOrigin: "top left",
+                display: "flex",
+                flexDirection: "column",
+                gap: SPACING["2"],
+                padding: SPACING["2"],
+                borderRadius: RADIUS["2xl"],
+                backgroundColor: colors.bg.secondary,
+                border: `1px solid ${colors.border.subtle}`,
               }}
             >
-              <Suspense fallback={<FrameWorkspaceFallback />}>
-                <FrameComponent />
-              </Suspense>
+              <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] }}>
+                <span
+                  style={{
+                    fontSize: 14,
+                    lineHeight: "18px",
+                    fontWeight: 600,
+                    color: colors.text.primary,
+                  }}
+                >
+                  {title}
+                </span>
+                <span
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    width: "fit-content",
+                    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
+                    borderRadius: RADIUS.xl,
+                    backgroundColor: colors.bg.primary,
+                    color: colors.text.secondary,
+                    border: `1px solid ${colors.border.subtle}`,
+                    fontSize: 12,
+                    lineHeight: "12px",
+                    fontWeight: 500,
+                  }}
+                >
+                  {routeLabel}
+                </span>
+              </div>
+
+              <div
+                style={{
+                  width: FRAME_STAGE_WIDTH,
+                  height: FRAME_STAGE_HEIGHT,
+                  position: "relative",
+                  flexShrink: 0,
+                  overflow: "hidden",
+                  borderRadius: RADIUS.xl,
+                }}
+              >
+                <div
+                  style={{
+                    width: FRAME_CANVAS_WIDTH,
+                    height: FRAME_CANVAS_HEIGHT,
+                    position: "absolute",
+                    left: 0,
+                    top: 0,
+                    transform: `scale(${FRAME_SCALE})`,
+                    transformOrigin: "top left",
+                  }}
+                >
+                  <Suspense fallback={<FrameWorkspaceFallback />}>
+                    <FrameComponent />
+                  </Suspense>
+                </div>
+              </div>
             </div>
-          </div>
+          ))}
         </div>
       </div>
 
@@ -267,23 +322,43 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
     entryKey === "discovery"
       ? {
           badgeText: "基础框架已接入",
-          routeLabel: "欢迎页 → 随行发现",
           note: "已直接复用规范库中的精简版框架，点击左侧导航图标可切换内容详情页与地图导航页。",
-          FrameComponent: DiscoveryFrame,
+          frames: [
+            {
+              title: "基础框架",
+              routeLabel: "欢迎页 → 随行发现",
+              FrameComponent: DiscoveryFrame,
+            },
+          ],
         }
       : entryKey === "market"
         ? {
             badgeText: "精简版框架已接入",
-            routeLabel: "欢迎页 → 随行市集",
             note: "已补充与随行生活同结构的精简版框架，左侧主 Tab 可切换点餐与订单两类功能。",
-            FrameComponent: MarketFrame,
+            frames: [
+              {
+                title: "市集主框架",
+                routeLabel: "欢迎页 → 随行市集",
+                FrameComponent: MarketFrame,
+              },
+            ],
           }
         : entryKey === "chat"
           ? {
               badgeText: "扩展版框架已接入",
-              routeLabel: "欢迎页 → 随行Chat",
-              note: "已直接复用规范库中的扩展版框架，可继续基于左侧栏与组队聊天面板扩展聊天类业务 demo。",
-              FrameComponent: ChatFrame,
+              note: "当前同时展示大厅概览与组队房间两个画布，可继续基于左侧栏与语音协同面板扩展聊天类业务 demo。",
+              frames: [
+                {
+                  title: "大厅概览",
+                  routeLabel: "欢迎页 → 随行Chat",
+                  FrameComponent: ChatFrame,
+                },
+                {
+                  title: "组队房间",
+                  routeLabel: "房间页 → 随行Chat Team",
+                  FrameComponent: ChatTeamFrame,
+                },
+              ],
             }
           : null;
 

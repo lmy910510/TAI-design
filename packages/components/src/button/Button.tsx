@@ -72,11 +72,11 @@ function getVariantColors(colors: Colors, variant: ButtonVariant) {
     textHover: btnColors.textHover,
     textActive: btnColors.textActive,
     textDisabled: btnColors.textDisabled,
-    icon: "icon" in btnColors ? btnColors.icon : btnColors.text,
-    iconHover: "iconHover" in btnColors ? btnColors.iconHover : btnColors.textHover,
-    iconActive: "iconActive" in btnColors ? btnColors.iconActive : btnColors.textActive,
-    iconDisabled: "iconDisabled" in btnColors ? btnColors.iconDisabled : btnColors.textDisabled,
-    border: "border" in btnColors ? btnColors.border : undefined,
+    icon: btnColors.icon,
+    iconHover: btnColors.iconHover,
+    iconActive: btnColors.iconActive,
+    iconDisabled: btnColors.iconDisabled,
+    border: btnColors.border,
   };
 }
 

@@ -6,3 +6,4 @@ pnpm-debug.log*
 packages/docs/.env.local
 .codebuddy/memory/
 test-results/
+*.code-workspace

@@ -1,4 +1,11 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from "react";
+import {
+  Button,
+  RADIUS,
+  SHADOW,
+  SPACING,
+  useThemeOptional,
+} from "@tai-design/components";
 
 export type DialogType = "feedback" | "confirm";
 export type DialogSize = "small" | "large";
@@ -26,17 +33,19 @@ export interface DialogComponentProps {
   className?: string;
 }
 
+const DIALOG_WIDTH = {
+  small: 660,
+  large: 948,
+} as const;
+
+const CONTENT_PADDING = {
+  small: { paddingBlock: 48, paddingInline: 30 },
+  large: { paddingTop: 60, paddingBottom: 48, paddingInline: 42 },
+} as const;
+
 /**
  * 弹窗组件 (Dialog)
- * 属于模态弹窗的一种，当需要告知用户关键或者警示性信息并强制用户必须回应时使用
- * 这是一种强阻断模态组件
- * 
- * 设计规范：
- * - 主标题：最大支持2行，不允许超长文本
- * - 内容：支持长文本，最多显示3行；作为副标题时最多1行
- * - 主要操作：延续主标题动词，背景rgba(0,0,0,0.92)
- * - 次要操作：不会产生实质改变结果，默认"取消"，背景rgba(0,0,0,0.06)
- * - 蒙层颜色通常使用黑色的 24%-30% 透明度
+ * 文档站展示层保留 ReactNode 内容能力，但颜色、阴影与按钮全部来自组件包 token。
  */
 export function DialogComponent({
   type = "confirm",
@@ -50,59 +59,95 @@ export function DialogComponent({
   isOpen = true,
   className = "",
 }: DialogComponentProps) {
+  const { colors } = useThemeOptional();
+
   if (!isOpen) return null;
 
+  const paddingConfig = CONTENT_PADDING[size];
+
   return (
-    <div 
-      className={`relative ${
-        size === "large" ? "w-[948px] max-w-full" : "w-[660px] max-w-full"
-      } bg-white rounded-[42px] overflow-hidden shadow-2xl ${className}`}
+    <div
+      className={`relative overflow-hidden ${className}`.trim()}
+      style={{
+        width: "100%",
+        maxWidth: DIALOG_WIDTH[size],
+        backgroundColor: colors.dialog.bg,
+        borderRadius: RADIUS["4xl"],
+        boxShadow: SHADOW.xl,
+      }}
     >
-      <div 
-        className={`${
-          size === "large" 
-            ? "pt-[60px] pb-[48px] px-[42px]" 
-            : "py-[48px] px-[30px]"
-        } flex flex-col items-center gap-[48px]`}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: SPACING["5"],
+          paddingTop:
+            "paddingTop" in paddingConfig ? paddingConfig.paddingTop : paddingConfig.paddingBlock,
+          paddingBottom:
+            "paddingBottom" in paddingConfig
+              ? paddingConfig.paddingBottom
+              : paddingConfig.paddingBlock,
+          paddingLeft: paddingConfig.paddingInline,
+          paddingRight: paddingConfig.paddingInline,
+        }}
       >
-        
-        {/* 文本区域 */}
-        <div 
-          className={`flex flex-col items-center justify-center gap-[24px] w-full ${
-            size === "large" ? "" : "max-w-[600px]"
-          }`}
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: SPACING["4"],
+            width: "100%",
+            maxWidth: size === "large" ? undefined : 600,
+          }}
         >
-          <h3 className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[36px] leading-[36px] text-[rgba(0,0,0,0.92)] text-center w-full m-0">
+          <h3
+            style={{
+              margin: 0,
+              width: "100%",
+              textAlign: "center",
+              fontSize: 36,
+              lineHeight: "36px",
+              fontWeight: 600,
+              color: colors.dialog.title,
+            }}
+          >
             {title}
           </h3>
-          {content && (
-            <div 
-              className={`font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[28px] leading-[42px] text-[rgba(0,0,0,0.84)] w-full ${
-                size === "large" ? "" : "text-center"
-              }`}
+
+          {content ? (
+            <div
+              style={{
+                width: "100%",
+                textAlign: size === "large" ? "left" : "center",
+                fontSize: 28,
+                lineHeight: "42px",
+                color: colors.dialog.content,
+              }}
             >
               {content}
             </div>
-          )}
+          ) : null}
         </div>
 
-        {/* 操作按钮区域 */}
-        <div className="flex gap-[24px] items-start w-full justify-center">
-          <button 
-            onClick={onPrimaryClick}
-            className="bg-[rgba(0,0,0,0.92)] text-white font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[32px] leading-[32px] h-[84px] rounded-[42px] px-[42px] flex items-center justify-center transition-opacity hover:opacity-80 active:opacity-60 flex-1"
-          >
-            {primaryButtonText}
-          </button>
-          
-          {type === "confirm" && (
-            <button 
-              onClick={onSecondaryClick}
-              className="bg-[rgba(0,0,0,0.06)] text-[rgba(0,0,0,0.92)] font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[32px] leading-[32px] h-[84px] rounded-[42px] px-[42px] flex items-center justify-center transition-opacity hover:bg-[rgba(0,0,0,0.1)] active:bg-[rgba(0,0,0,0.15)] flex-1"
-            >
+        <div
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "center",
+            gap: SPACING["4"],
+          }}
+        >
+          {type === "confirm" ? (
+            <Button variant="secondary" fullWidth onClick={onSecondaryClick}>
               {secondaryButtonText}
-            </button>
-          )}
+            </Button>
+          ) : null}
+          <Button variant="primary" fullWidth onClick={onPrimaryClick}>
+            {primaryButtonText}
+          </Button>
         </div>
       </div>
     </div>

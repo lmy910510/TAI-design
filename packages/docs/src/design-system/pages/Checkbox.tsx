@@ -1,373 +1,310 @@
-import { useOutletContext } from "react-router-dom";
-import { useState } from "react";
+import type { CSSProperties } from "react";
+import { useMemo, useState } from "react";
+import { RADIUS, SPACING, useTheme } from "@tai-design/components";
 import { CheckboxComponent } from "../CheckboxComponent";
-import ActionSheetAndroid from "../../figma-demos/ActionSheetAndroid-81-1372";
+
+const SHEET_OPTIONS = [
+  {
+    key: "notice",
+    title: "接收推送通知",
+    description: "允许接收系统推送的重要消息",
+  },
+  {
+    key: "map",
+    title: "自动更新地图",
+    description: "Wi‑Fi 连接时自动下载地图更新",
+  },
+  {
+    key: "assistant",
+    title: "启用语音助手",
+    description: "使用语音控制车载功能",
+  },
+] as const;
+
+function CheckmarkPreview({ color }: { color: string }) {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M5.5 12.5L10 17L18.5 8.5" stroke={color} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export function Checkbox() {
-  const { isDark } = useOutletContext<{ isDark: boolean }>();
+  const { colors } = useTheme();
   const [demoCheckbox, setDemoCheckbox] = useState(false);
-  const [option1, setOption1] = useState(false);
-  const [option2, setOption2] = useState(true);
-  const [option3, setOption3] = useState(false);
+  const [sheetValues, setSheetValues] = useState<string[]>(["map"]);
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
+  const chipStyle: CSSProperties = {
+    display: "inline-block",
+    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
+    marginBottom: SPACING["3"],
+    borderRadius: 999,
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.secondary,
+    color: colors.text.secondary,
+    fontSize: 14,
+  };
+
+  const panelStyle: CSSProperties = {
+    padding: SPACING["6"],
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.elevated,
+  };
+
+  const guidePanelStyle: CSSProperties = {
+    padding: SPACING["6"],
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.brand}`,
+    background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+  };
+
+  const actionButtonStyle: CSSProperties = {
+    padding: `${SPACING["2"]}px ${SPACING["4"]}px`,
+    borderRadius: RADIUS["4xl"],
+    border: `1px solid ${colors.button.primary.border}`,
+    backgroundColor: colors.button.primary.bg,
+    color: colors.button.primary.text,
+    fontSize: 18,
+    fontWeight: 600,
+  };
+
+  const overlayStyle: CSSProperties = {
+    position: "fixed",
+    inset: 0,
+    zIndex: 50,
+    display: "flex",
+    alignItems: "flex-end",
+    justifyContent: "center",
+    padding: SPACING["6"],
+    backgroundColor: colors.bg.overlay,
+  };
+
+  const sheetStyle: CSSProperties = {
+    width: "min(720px, 100%)",
+    padding: SPACING["5"],
+    borderRadius: RADIUS["4xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.elevated,
+  };
+
+  const selectedLabel = useMemo(() => (demoCheckbox ? "已选中" : "未选中"), [demoCheckbox]);
+
+  const toggleSheetValue = (key: string) => {
+    setSheetValues((prev) => (prev.includes(key) ? prev.filter((item) => item !== key) : [...prev, key]));
+  };
+
   return (
-    <div>
-      <div className="mb-8">
-        <div className={`inline-block px-3 py-1 border rounded-full text-sm mb-4 ${
-          isDark ? 'bg-white/10 border-white/20 text-gray-200' : 'bg-gray-100 border-gray-300 text-gray-900'
-        }`}>
-          Components / 组件
-        </div>
-        <h1 className="text-4xl font-bold mb-4">多选</h1>
-        <p className={`text-lg ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-          用于多项选择场景的交互组件，支持独立选择和取消
+    <div className="pb-24">
+      <div className="mb-12">
+        <div style={chipStyle}>Components / 组件</div>
+        <h1 className="text-4xl font-bold mb-4">多选 Checkbox</h1>
+        <p className="text-lg" style={{ color: colors.text.secondary }}>
+          用于多项选择场景的交互组件，页面说明与演示直接展示组件包中的真实 token，不再额外维护旧色值文案。
         </p>
       </div>
 
-      {/* 实际效果预览 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">实际效果</h2>
-        <div className={`p-12 border rounded-xl ${isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'}`}>
-          <div className="flex items-center justify-center">
-            <div className="flex flex-col items-center gap-4">
-              <CheckboxComponent
-                checked={demoCheckbox}
-                onChange={setDemoCheckbox}
-              />
-              <span className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                {demoCheckbox ? '已选中' : '未选中'}
-              </span>
-            </div>
+        <div style={panelStyle}>
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: SPACING["3"] }}>
+            <CheckboxComponent checked={demoCheckbox} onChange={setDemoCheckbox} />
+            <span className="text-sm" style={{ color: colors.text.secondary }}>{selectedLabel}</span>
           </div>
         </div>
       </div>
 
-      {/* 尺寸规格 */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">尺寸规格</h2>
-        <div className={`p-6 border rounded-xl ${
-          isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-        }`}>
-          <div className="flex items-start gap-8">
-            <div className="flex-shrink-0 flex justify-center items-center w-48">
-              <CheckboxComponent checked={true} onChange={() => {}} />
-            </div>
-            <div className="flex-1">
-              <h3 className="text-lg font-semibold mb-4">标准尺寸</h3>
-              <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                <li>• <strong>整体尺寸：</strong>48px × 48px（8×6栅格）</li>
-                <li>• <strong>图标区域：</strong>38px × 38px（内边距10.42%）</li>
-                <li>• <strong>圆角：</strong>完全圆形（border-radius: 50%）</li>
-                <li>• <strong>栅格对齐：</strong>符合6px基准栅格</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 状态展示 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">状态</h2>
-        <div className="grid grid-cols-3 gap-6">
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: SPACING["4"] }}>
+          <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-4">未选中</h3>
             <div className="flex justify-center mb-4">
               <CheckboxComponent checked={false} onChange={() => {}} />
             </div>
-            <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              <li>• <strong>边框色：</strong>rgba(0,0,0,0.24)</li>
-              <li>• <strong>背景：</strong>透明</li>
-              <li>• <strong>描述：</strong>灰色空心圆</li>
+            <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+              <li>• 边框使用 `colors.checkbox.unchecked`</li>
+              <li>• 背景保持透明，突出可选但未激活状态</li>
+              <li>• 适合默认未选择的多选项</li>
             </ul>
           </div>
 
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
+          <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-4">已选中</h3>
             <div className="flex justify-center mb-4">
-              <CheckboxComponent checked={true} onChange={() => {}} />
+              <CheckboxComponent checked onChange={() => {}} />
             </div>
-            <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              <li>• <strong>背景色：</strong>黑色 (#000000)</li>
-              <li>• <strong>对勾：</strong>白色</li>
-              <li>• <strong>描述：</strong>实心圆带对勾</li>
+            <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+              <li>• 填充色使用 `colors.checkbox.checked`</li>
+              <li>• 对勾使用 `colors.checkbox.checkmark`</li>
+              <li>• 适合表达已确认、已启用的多选项</li>
             </ul>
           </div>
 
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
+          <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-4">禁用状态</h3>
             <div className="flex justify-center gap-4 mb-4">
               <CheckboxComponent checked={false} onChange={() => {}} disabled />
-              <CheckboxComponent checked={true} onChange={() => {}} disabled />
+              <CheckboxComponent checked onChange={() => {}} disabled />
             </div>
-            <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              <li>• <strong>透明度：</strong>20%</li>
-              <li>• <strong>鼠标：</strong>not-allowed</li>
-              <li>• <strong>交互：</strong>不可点击</li>
+            <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+              <li>• 透明度由组件本体统一控制</li>
+              <li>• 鼠标与键盘交互均被禁用</li>
+              <li>• 适合必选或只读说明项</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* 交互演示 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">交互演示</h2>
-        <div className={`p-8 border rounded-xl ${isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'}`}>
-          <div className="bg-white rounded-[30px] pl-[36px] max-w-2xl mx-auto">
-            {/* 选项1 */}
-            <div className="border-b border-[#f0f0f0]">
-              <div className="flex gap-[24px] items-start pr-[36px] py-[36px]">
-                <div className="shrink-0">
-                  <CheckboxComponent
-                    checked={option1}
-                    onChange={setOption1}
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[32px] text-[rgba(0,0,0,0.92)] leading-normal font-['PingFang_SC',sans-serif]">
-                    接收推送通知
-                  </p>
-                  <p className="text-[28px] text-[rgba(0,0,0,0.4)] leading-normal mt-1 font-['PingFang_SC',sans-serif]">
-                    允许接收系统推送的重要消息
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 选项2 */}
-            <div className="border-b border-[#f0f0f0]">
-              <div className="flex gap-[24px] items-start pr-[36px] py-[36px]">
-                <div className="shrink-0">
-                  <CheckboxComponent
-                    checked={option2}
-                    onChange={setOption2}
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[32px] text-[rgba(0,0,0,0.92)] leading-normal font-['PingFang_SC',sans-serif]">
-                    自动更新地图
-                  </p>
-                  <p className="text-[28px] text-[rgba(0,0,0,0.4)] leading-normal mt-1 font-['PingFang_SC',sans-serif]">
-                    WiFi连接时自动下载地图更新
-                  </p>
+        <div style={panelStyle}>
+          <div style={{ maxWidth: 720, margin: "0 auto", display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
+            {SHEET_OPTIONS.map((item) => (
+              <div
+                key={item.key}
+                style={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: SPACING["3"],
+                  paddingBottom: SPACING["4"],
+                  borderBottom: `1px solid ${colors.border.subtle}`,
+                }}
+              >
+                <CheckboxComponent checked={sheetValues.includes(item.key)} onChange={() => toggleSheetValue(item.key)} />
+                <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] / 2 }}>
+                  <p className="text-2xl font-semibold" style={{ color: colors.text.primary }}>{item.title}</p>
+                  <p className="text-sm" style={{ color: colors.text.secondary }}>{item.description}</p>
                 </div>
               </div>
-            </div>
-
-            {/* 选项3 */}
-            <div className="border-b border-[#f0f0f0]">
-              <div className="flex gap-[24px] items-start pr-[36px] py-[36px]">
-                <div className="shrink-0">
-                  <CheckboxComponent
-                    checked={option3}
-                    onChange={setOption3}
-                  />
-                </div>
-                <div className="flex flex-col justify-center">
-                  <p className="text-[32px] text-[rgba(0,0,0,0.92)] leading-normal font-['PingFang_SC',sans-serif]">
-                    启用语音助手
-                  </p>
-                  <p className="text-[28px] text-[rgba(0,0,0,0.4)] leading-normal mt-1 font-['PingFang_SC',sans-serif]">
-                    使用语音控制车载功能
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* 选项4 - 禁用 */}
-            <div>
-              <div className="flex gap-[24px] items-start pr-[36px] py-[36px]">
-                <div className="shrink-0">
-                  <CheckboxComponent
-                    checked={true}
-                    onChange={() => {}}
-                    disabled
-                  />
-                </div>
-                <div className="flex flex-col justify-center opacity-20">
-                  <p className="text-[32px] text-[rgba(0,0,0,0.92)] leading-normal font-['PingFang_SC',sans-serif]">
-                    基础安全服务（必选）
-                  </p>
-                  <p className="text-[28px] text-[rgba(0,0,0,0.4)] leading-normal mt-1 font-['PingFang_SC',sans-serif]">
-                    系统必需的安全功能，无法关闭
-                  </p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* 设计规范 */}
-      <div className={`p-6 border rounded-xl mb-8 ${
-        isDark 
-          ? 'bg-gradient-to-r from-blue-600/10 to-purple-600/10 border-blue-500/20' 
-          : 'bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200'
-      }`}>
+      <div style={guidePanelStyle} className="mb-8">
         <h3 className="text-lg font-semibold mb-3">📐 设计规范</h3>
-        <div className="grid grid-cols-2 gap-6">
-          <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-            <p className="mb-2"><strong>尺寸体系（6px栅格）：</strong></p>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["4"] }}>
+          <div className="text-sm" style={{ color: colors.text.secondary }}>
+            <p className="mb-2"><strong>尺寸体系：</strong></p>
             <ul className="space-y-1 text-xs">
-              <li>• <strong>整体：</strong>48×48px（8×6栅格）</li>
-              <li>• <strong>图标区域：</strong>38×38px</li>
-              <li>• <strong>内边距：</strong>10.42%</li>
-              <li>• <strong>圆角：</strong>完全圆形</li>
+              <li>• 整体触控范围 48×48px</li>
+              <li>• 演示与说明统一沿用组件本体尺寸</li>
+              <li>• 列表项间距和面板间距均保持 6px 基准栅格</li>
             </ul>
           </div>
-          <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
+          <div className="text-sm" style={{ color: colors.text.secondary }}>
             <p className="mb-2"><strong>交互规则：</strong></p>
             <ul className="space-y-1 text-xs">
-              <li>• <strong>点击切换：</strong>独立状态控制</li>
-              <li>• <strong>多选支持：</strong>可同时选中多个</li>
-              <li>• <strong>禁用样式：</strong>20%透明度</li>
-              <li>• <strong>触控反馈：</strong>点击即时响应</li>
+              <li>• 多项可同时选中，状态彼此独立</li>
+              <li>• 禁用态由组件控制透明度与可点击性</li>
+              <li>• 页面不再展示旧的固定色值说明，统一引用组件 token</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* 颜色规范 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">颜色规范</h2>
-        <div className="grid grid-cols-2 gap-6">
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
-            <h3 className="text-lg font-semibold mb-4">未选中色值</h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg border-4" style={{ borderColor: 'rgba(0,0,0,0.24)', backgroundColor: 'transparent' }}></div>
-                <div className="text-sm">
-                  <div className="font-mono">rgba(0,0,0,0.24)</div>
-                  <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>边框 - 浅灰色</div>
-                </div>
-              </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: SPACING["4"] }}>
+          <div style={panelStyle}>
+            <h3 className="text-lg font-semibold mb-4">未选中边框</h3>
+            <div className="text-sm" style={{ color: colors.text.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: 999, border: `2px solid ${colors.checkbox.unchecked}`, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: colors.text.primary }}>{colors.checkbox.unchecked}</div>
+              <div>`colors.checkbox.unchecked`</div>
             </div>
           </div>
 
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
-            <h3 className="text-lg font-semibold mb-4">已选中色值</h3>
-            <div className="space-y-3">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg bg-black"></div>
-                <div className="text-sm">
-                  <div className="font-mono">#000000</div>
-                  <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>背景 - 纯黑色</div>
-                </div>
+          <div style={panelStyle}>
+            <h3 className="text-lg font-semibold mb-4">选中填充</h3>
+            <div className="text-sm" style={{ color: colors.text.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: 999, backgroundColor: colors.checkbox.checked, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: colors.text.primary }}>{colors.checkbox.checked}</div>
+              <div>`colors.checkbox.checked`</div>
+            </div>
+          </div>
+
+          <div style={panelStyle}>
+            <h3 className="text-lg font-semibold mb-4">对勾颜色</h3>
+            <div className="text-sm" style={{ color: colors.text.secondary }}>
+              <div
+                style={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: 999,
+                  backgroundColor: colors.checkbox.checked,
+                  marginBottom: SPACING["2"],
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <CheckmarkPreview color={colors.checkbox.checkmark} />
               </div>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-lg bg-white border-2 border-gray-200"></div>
-                <div className="text-sm">
-                  <div className="font-mono">#FFFFFF</div>
-                  <div className={isDark ? 'text-gray-400' : 'text-gray-600'}>对勾 - 白色</div>
-                </div>
-              </div>
+              <div className="font-mono" style={{ color: colors.text.primary }}>{colors.checkbox.checkmark}</div>
+              <div>`colors.checkbox.checkmark`</div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 使用场景 */}
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">使用场景</h2>
-        <div className="grid grid-cols-2 gap-6">
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
-            <h3 className="text-lg font-semibold mb-3">✅ 适用场景</h3>
-            <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              <li>• 多项选择（如功能设置、权限配置）</li>
-              <li>• 批量操作（如选择多个文件）</li>
-              <li>• 可选配置（如推送通知、自动更新）</li>
-              <li>• 协议同意（如用户协议、隐私政策）</li>
-            </ul>
-          </div>
-
-          <div className={`p-6 border rounded-xl ${
-            isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-          }`}>
-            <h3 className="text-lg font-semibold mb-3">❌ 不适用场景</h3>
-            <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              <li>• 单选互斥（应使用Radio单选）</li>
-              <li>• 开关状态（应使用Switch）</li>
-              <li>• 二元确认（应使用Button）</li>
-              <li>• 复杂选项（应使用Dropdown）</li>
-            </ul>
-          </div>
-        </div>
-      </div>
-
-      {/* 代码示例 */}
-      <div className={`p-6 border rounded-xl mb-8 ${
-        isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'
-      }`}>
-        <h3 className="text-lg font-semibold mb-3">💻 代码示例</h3>
-        <div className={`p-4 rounded-lg overflow-x-auto ${isDark ? 'bg-white/5' : 'bg-gray-50'}`}>
-          <pre className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-{`import { CheckboxComponent } from "./CheckboxComponent";
-import { useState } from "react";
-
-function App() {
-  const [checked, setChecked] = useState(false);
-
-  return (
-    <CheckboxComponent
-      checked={checked}
-      onChange={setChecked}
-    />
-  );
-}`}
-          </pre>
-        </div>
-      </div>
-
-      {/* 使用说明 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">使用说明</h2>
-        <p className={`text-sm mb-4 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-          多选组件示例：弹层用于让用户选择可选内容
-        </p>
-        <div className={`p-8 border rounded-xl ${isDark ? 'bg-[#141414] border-[#2a2a2a]' : 'bg-white border-gray-200'}`}>
-          <div className="max-w-2xl mx-auto">
+        <div style={panelStyle}>
+          <div style={{ maxWidth: 720, margin: "0 auto" }}>
             <h3 className="text-lg font-semibold mb-3">多选弹层示例</h3>
-            <p className={`text-sm mb-6 ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-              点击按钮触发弹层，用户可以选择不同的选项
+            <p className="text-sm mb-6" style={{ color: colors.text.secondary }}>
+              通过主题 token 构建的示例弹层，展示多选项列表与底部浮层的组合方式。
             </p>
-            
-            {/* 触发按钮 */}
-            <button 
-              onClick={() => setIsSheetOpen(true)}
-              className="bg-[#232a3a] font-['Noto_Sans_SC:Medium',sans-serif] font-medium leading-[0] px-[48px] py-[24px] rounded-[50px] text-[28px] text-white transition-all hover:opacity-90 active:scale-95"
-            >
-              <span className="leading-[normal]">打开选择弹层</span>
+            <button type="button" style={actionButtonStyle} onClick={() => setIsSheetOpen(true)}>
+              打开选择弹层
             </button>
-
-            {/* 弹层容器 */}
-            {isSheetOpen && (
-              <div 
-                className="fixed inset-0 z-50 flex items-end justify-center bg-black/40"
-                onClick={() => setIsSheetOpen(false)}
-              >
-                <div 
-                  className="w-[480px] max-w-[90%] mb-[48px] animate-[slideUp_0.3s_ease-out]"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <ActionSheetAndroid />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {isSheetOpen ? (
+        <div style={overlayStyle} onClick={() => setIsSheetOpen(false)}>
+          <div style={sheetStyle} onClick={(event) => event.stopPropagation()}>
+            <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
+              <div>
+                <p className="text-lg font-semibold" style={{ color: colors.text.primary }}>偏好设置</p>
+                <p className="text-sm mt-2" style={{ color: colors.text.secondary }}>
+                  请选择希望在车机内开启的辅助功能。
+                </p>
+              </div>
+              {SHEET_OPTIONS.map((item) => (
+                <div
+                  key={item.key}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: SPACING["3"],
+                    padding: `${SPACING["2"]}px 0`,
+                    borderTop: `1px solid ${colors.border.subtle}`,
+                  }}
+                >
+                  <CheckboxComponent checked={sheetValues.includes(item.key)} onChange={() => toggleSheetValue(item.key)} />
+                  <div>
+                    <p className="text-base font-semibold" style={{ color: colors.text.primary }}>{item.title}</p>
+                    <p className="text-sm mt-2" style={{ color: colors.text.secondary }}>{item.description}</p>
+                  </div>
+                </div>
+              ))}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: SPACING["2"] }}>
+                <p className="text-sm" style={{ color: colors.text.secondary }}>
+                  已选择 {sheetValues.length} 项
+                </p>
+                <button type="button" style={actionButtonStyle} onClick={() => setIsSheetOpen(false)}>
+                  完成
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </div>
   );
 }

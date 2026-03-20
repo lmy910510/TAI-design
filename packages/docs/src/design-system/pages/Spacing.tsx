@@ -1,6 +1,6 @@
-import { useOutletContext } from "react-router-dom";
+import type { CSSProperties } from "react";
+import { RADIUS, SPACING, useTheme } from "@tai-design/components";
 
-// 基于6px的栅格系统
 const spacingScale = [
   { multiplier: "0.5n", value: 3, usage: "极小间距，用于紧凑布局" },
   { multiplier: "n", value: 6, usage: "最小间距单位" },
@@ -13,9 +13,8 @@ const spacingScale = [
   { multiplier: "8n", value: 48, usage: "超大间距" },
   { multiplier: "9n", value: 60, usage: "区域分隔" },
   { multiplier: "10n", value: 66, usage: "页面边距" },
-];
+] as const;
 
-// 常用间距场景
 const commonUseCases = [
   {
     name: "组件内边距",
@@ -44,120 +43,92 @@ const commonUseCases = [
       { spacing: "8n (48px)", usage: "大区块分隔" },
     ],
   },
-];
+] as const;
 
 export function Spacing() {
-  const { isDark } = useOutletContext<{ isDark: boolean }>();
+  const { colors } = useTheme();
+
+  const chipStyle: CSSProperties = {
+    display: "inline-block",
+    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
+    marginBottom: SPACING["3"],
+    borderRadius: 999,
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.secondary,
+    color: colors.text.secondary,
+    fontSize: 14,
+  };
+
+  const panelStyle: CSSProperties = {
+    padding: SPACING["6"],
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.elevated,
+  };
+
+  const definitionPanelStyle: CSSProperties = {
+    ...panelStyle,
+    border: `1px solid ${colors.border.brand}`,
+    background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+  };
 
   return (
     <div>
       <div className="mb-8">
-        <div
-          className={`inline-block px-3 py-1 border rounded-full text-sm mb-4 ${
-            isDark
-              ? "bg-white/10 border-white/20 text-gray-200"
-              : "bg-gray-100 border-gray-300 text-gray-900"
-          }`}
-        >
-          Foundation / 基础
-        </div>
+        <div style={chipStyle}>Foundation / 基础</div>
         <h1 className="text-4xl font-bold mb-4">栅格类型</h1>
-        <p className={`text-lg ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-          栅格设计原则，遵循统一的 6px 栅格系统，间距使用 6 的倍数，如12、18、24、30。适合大部分车机端屏幕尺寸。
+        <p className="text-lg" style={{ color: colors.text.secondary }}>
+          栅格设计原则遵循统一的 6px 基准系统，间距优先使用 12、18、24、30、36 等 6 的倍数，更适合车机大屏场景。
         </p>
       </div>
 
-      {/* 定义 */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-4">定义</h2>
-        <div
-          className={`p-6 border rounded-xl ${
-            isDark
-              ? "bg-gradient-to-r from-orange-600/10 to-amber-600/10 border-orange-500/20"
-              : "bg-gradient-to-r from-orange-50 to-amber-50 border-orange-200"
-          }`}
-        >
-          <div className="space-y-3">
-            <p className={`text-base leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-              <strong className={isDark ? "text-white" : "text-gray-900"}>n = 6px</strong> - 车机端以6px为基准单位，相比传统Web端的4px或8px栅格系统，更适合车机大屏场景。
-            </p>
-            <p className={`text-base leading-relaxed ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-              所有间距、内边距、外边距都应该是6的倍数，确保视觉对齐和一致性。这个系统能够在不同尺寸的车机屏幕上保持良好的比例和可读性。
-            </p>
+        <div style={definitionPanelStyle}>
+          <div className="space-y-3 text-base leading-relaxed" style={{ color: colors.text.secondary }}>
+            <p><strong style={{ color: colors.text.primary }}>n = 6px</strong>：车机端以 6px 为基准单位，相比常见 Web 端的 4px 或 8px 栅格，更适合大屏和远距阅读。</p>
+            <p>所有间距、内边距、外边距都应优先选择 6 的倍数，确保视觉对齐和节奏一致。</p>
           </div>
         </div>
       </div>
 
-      {/* 间距规范表 */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-4">间距规范</h2>
-        <div
-          className={`p-8 border rounded-xl overflow-x-auto ${
-            isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-[#f6f7fa] border-gray-200"
-          }`}
-        >
-          <div className="flex gap-0 min-w-max">
-            {spacingScale.map((item, index) => (
+        <div style={{ ...panelStyle, overflowX: "auto" }}>
+          <div style={{ display: "flex", gap: SPACING["2"], minWidth: "max-content" }}>
+            {spacingScale.map((item) => (
               <div
-                key={index}
-                className={`flex flex-col items-center justify-center px-6 py-3 border border-black/10 ${
-                  index === 0 ? "rounded-l-lg" : ""
-                } ${index === spacingScale.length - 1 ? "rounded-r-lg" : ""} ${
-                  isDark ? "bg-[#1a1a1a]" : "bg-white"
-                }`}
-                style={{ minWidth: "100px" }}
+                key={item.multiplier}
+                style={{
+                  minWidth: 108,
+                  padding: `${SPACING["2"]}px ${SPACING["3"]}px`,
+                  borderRadius: RADIUS.xl,
+                  border: `1px solid ${colors.border.subtle}`,
+                  backgroundColor: colors.bg.secondary,
+                  textAlign: "center",
+                }}
               >
-                <p className={`text-xs mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                  {item.multiplier}
-                </p>
-                <p className="text-lg font-semibold text-[#0052d9]">{item.value}px</p>
+                <p className="text-xs mb-1" style={{ color: colors.text.tertiary }}>{item.multiplier}</p>
+                <p className="text-lg font-semibold" style={{ color: colors.brand.primary }}>{item.value}px</p>
               </div>
             ))}
-            {/* xn 扩展 */}
-            <div
-              className={`flex flex-col items-center justify-center px-6 py-3 border border-black/10 rounded-r-lg ${
-                isDark ? "bg-[#1a1a1a]" : "bg-white"
-              }`}
-              style={{ minWidth: "100px" }}
-            >
-              <p className={`text-xs mb-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>xn</p>
-              <p className="text-lg font-semibold text-[#0052d9]">...</p>
-            </div>
           </div>
         </div>
       </div>
 
-      {/* 可视化展示 */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-4">间距可视化</h2>
-        <div
-          className={`p-8 border rounded-xl ${
-            isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"
-          }`}
-        >
-          <div className="space-y-6">
-            {spacingScale.slice(0, 9).map((item, index) => (
-              <div key={index} className="flex items-center gap-6">
-                {/* 标签 */}
-                <div className="w-32 flex-shrink-0">
-                  <p className={`text-sm font-medium ${isDark ? "text-white" : "text-gray-900"}`}>
-                    {item.multiplier}
-                  </p>
-                  <p className="text-xs text-[#0052d9]">{item.value}px</p>
+        <div style={panelStyle}>
+          <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
+            {spacingScale.slice(0, 9).map((item) => (
+              <div key={item.multiplier} style={{ display: "flex", alignItems: "center", gap: SPACING["4"] }}>
+                <div style={{ width: 132, flexShrink: 0 }}>
+                  <p className="text-sm font-medium" style={{ color: colors.text.primary }}>{item.multiplier}</p>
+                  <p className="text-xs" style={{ color: colors.brand.primary }}>{item.value}px</p>
                 </div>
-
-                {/* 可视化方块 */}
-                <div className="flex items-center gap-3">
-                  <div
-                    className="bg-[#0052d9] rounded"
-                    style={{
-                      width: `${item.value * 2}px`,
-                      height: "24px",
-                    }}
-                  />
-                  <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                    {item.usage}
-                  </p>
+                <div style={{ display: "flex", alignItems: "center", gap: SPACING["3"] }}>
+                  <div style={{ width: item.value * 2, height: 24, borderRadius: RADIUS.xl / 2, backgroundColor: colors.brand.primary }} />
+                  <p className="text-xs" style={{ color: colors.text.secondary }}>{item.usage}</p>
                 </div>
               </div>
             ))}
@@ -165,27 +136,17 @@ export function Spacing() {
         </div>
       </div>
 
-      {/* 常用场景 */}
       <div className="mb-12">
         <h2 className="text-2xl font-bold mb-4">常用场景</h2>
         <div className="grid grid-cols-3 gap-6">
-          {commonUseCases.map((useCase, index) => (
-            <div
-              key={index}
-              className={`p-6 border rounded-xl ${
-                isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"
-              }`}
-            >
-              <h3 className={`text-lg font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-                {useCase.name}
-              </h3>
+          {commonUseCases.map((useCase) => (
+            <div key={useCase.name} style={panelStyle}>
+              <h3 className="text-lg font-semibold mb-4" style={{ color: colors.text.primary }}>{useCase.name}</h3>
               <div className="space-y-3">
-                {useCase.examples.map((example, i) => (
-                  <div key={i} className="space-y-1">
-                    <p className="text-sm font-medium text-[#0052d9]">{example.spacing}</p>
-                    <p className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                      {example.usage}
-                    </p>
+                {useCase.examples.map((example) => (
+                  <div key={example.spacing} className="space-y-1">
+                    <p className="text-sm font-medium" style={{ color: colors.brand.primary }}>{example.spacing}</p>
+                    <p className="text-xs" style={{ color: colors.text.secondary }}>{example.usage}</p>
                   </div>
                 ))}
               </div>
@@ -194,90 +155,66 @@ export function Spacing() {
         </div>
       </div>
 
-      {/* ���用示例 */}
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">应用示例</h2>
         <div className="grid grid-cols-2 gap-6">
-          {/* 卡片示例 */}
-          <div
-            className={`border rounded-xl ${isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"}`}
-            style={{ padding: "24px" }}
-          >
-            <h3 className={`text-base font-semibold mb-3 ${isDark ? "text-white" : "text-gray-900"}`}>
-              卡片内边距：4n (24px)
-            </h3>
-            <div
-              className={`rounded-lg ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}
-              style={{ padding: "18px" }}
-            >
-              <p className={`text-sm mb-3 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                内容区域内边距：3n (18px)
-              </p>
-              <div className="flex gap-3">
+          <div style={panelStyle}>
+            <h3 className="text-base font-semibold mb-3" style={{ color: colors.text.primary }}>卡片内边距：4n (24px)</h3>
+            <div style={{ padding: SPACING["3"], borderRadius: RADIUS.xl, backgroundColor: colors.bg.secondary }}>
+              <p className="text-sm mb-3" style={{ color: colors.text.secondary }}>内容区域内边距：3n (18px)</p>
+              <div style={{ display: "flex", gap: SPACING["2"], flexWrap: "wrap" }}>
                 <button
-                  className="px-4 py-2 rounded-lg bg-black text-white text-sm"
-                  style={{ padding: "12px 18px" }}
+                  type="button"
+                  style={{
+                    padding: `${SPACING["2"]}px ${SPACING["3"]}px`,
+                    borderRadius: RADIUS.xl,
+                    border: `1px solid ${colors.button.primary.border}`,
+                    backgroundColor: colors.button.primary.bg,
+                    color: colors.button.primary.text,
+                    fontSize: 14,
+                  }}
                 >
                   按钮内边距 2n×3n
                 </button>
                 <button
-                  className={`px-4 py-2 rounded-lg border text-sm ${
-                    isDark ? "border-gray-600 text-gray-300" : "border-gray-300 text-gray-700"
-                  }`}
-                  style={{ padding: "12px 18px" }}
+                  type="button"
+                  style={{
+                    padding: `${SPACING["2"]}px ${SPACING["3"]}px`,
+                    borderRadius: RADIUS.xl,
+                    border: `1px solid ${colors.button.secondary.border}`,
+                    backgroundColor: colors.button.secondary.bg,
+                    color: colors.button.secondary.text,
+                    fontSize: 14,
+                  }}
                 >
                   次按钮
                 </button>
               </div>
             </div>
-            <p className={`text-xs mt-3 ${isDark ? "text-gray-500" : "text-gray-500"}`}>
-              按钮之间间距：2n (12px)
-            </p>
+            <p className="text-xs mt-3" style={{ color: colors.text.tertiary }}>按钮之间间距：2n (12px)</p>
           </div>
 
-          {/* 列表示例 */}
-          <div
-            className={`border rounded-xl ${isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"}`}
-            style={{ padding: "24px" }}
-          >
-            <h3 className={`text-base font-semibold mb-4 ${isDark ? "text-white" : "text-gray-900"}`}>
-              列表内边距：4n (24px)
-            </h3>
-            <div className="space-y-3">
+          <div style={panelStyle}>
+            <h3 className="text-base font-semibold mb-4" style={{ color: colors.text.primary }}>列表内边距：4n (24px)</h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] }}>
               {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className={`rounded-lg ${isDark ? "bg-[#0a0a0a]" : "bg-gray-50"}`}
-                  style={{ padding: "12px" }}
-                >
-                  <p className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-                    列表项内边距：2n (12px)
-                  </p>
+                <div key={item} style={{ padding: SPACING["2"], borderRadius: RADIUS.xl, backgroundColor: colors.bg.secondary }}>
+                  <p className="text-sm" style={{ color: colors.text.secondary }}>列表项内边距：2n (12px)</p>
                 </div>
               ))}
             </div>
-            <p className={`text-xs mt-3 ${isDark ? "text-gray-500" : "text-gray-500"}`}>
-              列表项之间间距：2n (12px)
-            </p>
+            <p className="text-xs mt-3" style={{ color: colors.text.tertiary }}>列表项之间间距：2n (12px)</p>
           </div>
         </div>
       </div>
 
-      {/* 栅格系统优势 */}
-      <div
-        className={`p-6 border rounded-xl ${
-          isDark
-            ? "bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border-blue-500/20"
-            : "bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200"
-        }`}
-      >
-        <h3 className="text-base font-semibold mb-3">💡 6px栅格系统优势</h3>
-        <ul className={`text-sm space-y-2 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
-          <li>• <strong>车机适配</strong>：6px基准单位更适合车机大屏尺寸，比4px更大气，比8px更灵活</li>
-          <li>• <strong>视觉对齐</strong>：所有元素按6px倍数对齐，确保界面整齐有序</li>
-          <li>• <strong>可扩展性</strong>：支持0.5n (3px)到xn的灵活组合，适应各种场景</li>
-          <li>• <strong>开发效率</strong>：统一的间距规范减少设计决策，提高开发一致性</li>
-          <li>• <strong>适配性好</strong>：6的倍数能被常见屏幕尺寸整除，减少像素偏差</li>
+      <div style={definitionPanelStyle}>
+        <h3 className="text-base font-semibold mb-3">💡 6px 栅格系统优势</h3>
+        <ul className="text-sm space-y-2" style={{ color: colors.text.secondary }}>
+          <li>• 车机适配：6px 基准单位更适合大屏尺寸。</li>
+          <li>• 视觉对齐：所有元素按 6px 倍数对齐，界面更整齐。</li>
+          <li>• 可扩展性：从 0.5n 到 xn 的组合能覆盖多种布局场景。</li>
+          <li>• 开发一致性：统一间距规范能显著减少页面层的自由发挥。</li>
         </ul>
       </div>
     </div>

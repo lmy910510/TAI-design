@@ -1,5 +1,4 @@
-import svgPathsChecked from "../assets/svg-data/svg-oznl9js8qm";
-import svgPathsUnchecked from "../assets/svg-data/svg-kojoco54sr";
+import { useThemeOptional } from "@tai-design/components";
 
 interface CheckboxComponentProps {
   checked: boolean;
@@ -7,61 +6,48 @@ interface CheckboxComponentProps {
   disabled?: boolean;
 }
 
+const SIZE = 48;
+const STROKE_WIDTH = 3;
+
+function Checkmark({ color }: { color: string }) {
+  return (
+    <svg width={24} height={24} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path
+        d="M5.5 12.5L10 17L18.5 8.5"
+        stroke={color}
+        strokeWidth={STROKE_WIDTH}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 export function CheckboxComponent({
   checked,
   onChange,
   disabled = false,
 }: CheckboxComponentProps) {
+  const { colors } = useThemeOptional();
+
   return (
     <button
       onClick={() => !disabled && onChange(!checked)}
       disabled={disabled}
-      className="relative cursor-pointer disabled:cursor-not-allowed"
+      className="relative inline-flex items-center justify-center cursor-pointer disabled:cursor-not-allowed"
       style={{
-        width: "48px",
-        height: "48px",
+        width: SIZE,
+        height: SIZE,
+        borderRadius: SIZE / 2,
         opacity: disabled ? 0.2 : 1,
+        backgroundColor: checked ? colors.checkbox.checked : "transparent",
+        border: checked ? "none" : `2px solid ${colors.checkbox.unchecked}`,
+        transition: "background-color 150ms ease, border-color 150ms ease",
       }}
+      type="button"
+      aria-pressed={checked}
     >
-      {checked ? (
-        // 选中状态 - 黑色圆形带对勾
-        <div className="absolute left-0 overflow-clip size-[48px] top-0">
-          <div className="absolute inset-[10.42%]">
-            <svg
-              className="absolute block size-full"
-              fill="none"
-              preserveAspectRatio="none"
-              viewBox="0 0 38 38"
-            >
-              <path
-                clipRule="evenodd"
-                d={svgPathsChecked.p2b164270}
-                fill="black"
-                fillRule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      ) : (
-        // 未选中状态 - 灰色边框空心圆
-        <div className="absolute left-0 overflow-clip size-[48px] top-0">
-          <div className="absolute inset-[10.42%]">
-            <svg
-              className="absolute block size-full"
-              fill="none"
-              preserveAspectRatio="none"
-              viewBox="0 0 38 38"
-            >
-              <path
-                clipRule="evenodd"
-                d={svgPathsUnchecked.p1ca6f0f0}
-                fill="rgba(0,0,0,0.24)"
-                fillRule="evenodd"
-              />
-            </svg>
-          </div>
-        </div>
-      )}
+      {checked ? <Checkmark color={colors.checkbox.checkmark} /> : null}
     </button>
   );
 }

@@ -1,4 +1,5 @@
 import { ReactNode } from "react";
+import { RADIUS, useThemeOptional } from "@tai-design/components";
 
 export interface GlobalLeftTabProps {
   variant?: "simplified" | "extended";
@@ -9,54 +10,62 @@ export interface GlobalLeftTabProps {
 
 /**
  * 全局左侧标签页 (Global Left Tab)
- * 严格基于产品框架布局规范的实现封装。
+ * 文档站保留布局壳层，但颜色统一由主题 token 提供。
  */
 export function GlobalLeftTab({
   variant = "simplified",
   className = "",
   children,
-  bottomContent
+  bottomContent,
 }: GlobalLeftTabProps) {
+  const { colors } = useThemeOptional();
+
   if (variant === "simplified") {
     return (
       <div className={`relative h-full w-[96px] ${className}`}>
-        <div className="absolute left-0 top-0 bg-[rgba(255,255,255,0.6)] content-stretch flex flex-col gap-[18px] items-start overflow-clip p-[6px] rounded-[117.073px] w-[96px]">
+        <div
+          className="absolute left-0 top-0 flex w-[96px] flex-col items-start gap-[18px] overflow-clip p-[6px]"
+          style={{
+            backgroundColor: colors.bg.glass,
+            borderRadius: 117.073,
+            border: `1px solid ${colors.border.inverse}`,
+            backdropFilter: "blur(12px)",
+          }}
+        >
           {children}
         </div>
-        {bottomContent && (
-          <div className="absolute bottom-[48px] left-0">
-            {bottomContent}
-          </div>
-        )}
+        {bottomContent ? <div className="absolute bottom-[48px] left-0">{bottomContent}</div> : null}
       </div>
     );
   }
 
-  // 扩展版
   return (
-    <div className={`relative rounded-[40px] w-[278px] ${className}`} data-name="Window">
-      <div aria-hidden="true" className="absolute bg-white inset-0 mix-blend-luminosity pointer-events-none rounded-[40px]" />
-      <div className="content-stretch flex flex-col items-center overflow-clip py-[20px] relative rounded-[inherit] size-full">
-        {/* Frame15 */}
-        <div className="flex-[1_0_0] min-h-px relative shrink-0 w-full">
-          <div className="flex flex-col items-center size-full">
-            <div className="content-stretch flex flex-col items-center justify-between px-[20px] relative size-full">
-              {/* Frame14 - 顶部内容区，通常包含出游搭子和组队聊天 */}
-              <div className="content-stretch flex flex-col gap-[20px] flex-[1_0_0] min-h-px items-start relative shrink-0 w-full mb-[20px]">
+    <div
+      className={`relative w-[278px] ${className}`}
+      data-name="Window"
+      style={{
+        borderRadius: 40,
+        backgroundColor: colors.bg.glass,
+        border: `1px solid ${colors.border.inverse}`,
+        backdropFilter: "blur(12px)",
+      }}
+    >
+      <div className="flex size-full flex-col items-center overflow-clip rounded-[inherit] py-[20px]">
+        <div className="relative min-h-px flex-[1_0_0] shrink-0 w-full">
+          <div className="flex size-full flex-col items-center">
+            <div className="relative flex size-full flex-col items-center justify-between px-[20px]">
+              <div className="mb-[20px] flex min-h-px flex-[1_0_0] shrink-0 flex-col items-start gap-[20px] w-full">
                 {children}
               </div>
-              
-              {/* Frame10 - 底部内容区 */}
-              {bottomContent && (
-                <div className="content-stretch flex flex-col gap-[20px] items-center justify-center relative shrink-0 w-full">
+              {bottomContent ? (
+                <div className="relative flex w-full shrink-0 flex-col items-center justify-center gap-[20px]">
                   {bottomContent}
                 </div>
-              )}
+              ) : null}
             </div>
           </div>
         </div>
       </div>
-      <div aria-hidden="true" className="absolute border border-[rgba(255,255,255,0.4)] border-solid inset-0 pointer-events-none rounded-[40px]" />
     </div>
   );
 }
@@ -72,29 +81,22 @@ export function GlobalLeftTabSimplifiedItem({
   active,
   onClick,
   icon,
-  className = ""
+  className = "",
 }: GlobalLeftTabItemProps) {
-  if (active) {
-    return (
-      <button 
-        onClick={onClick}
-        className={`bg-[rgba(0,0,0,0.8)] text-white content-stretch flex items-center overflow-clip p-[21px] relative rounded-[107.692px] shrink-0 cursor-pointer hover:opacity-90 transition-opacity ${className}`}
-      >
-        <div className="relative shrink-0 size-[42px] flex items-center justify-center">
-          {icon}
-        </div>
-      </button>
-    );
-  }
+  const { colors } = useThemeOptional();
 
   return (
-    <button 
+    <button
       onClick={onClick}
-      className={`text-[#444C5C] content-stretch flex items-center overflow-clip p-[21px] relative shrink-0 cursor-pointer hover:bg-[rgba(0,0,0,0.05)] rounded-[107.692px] transition-colors ${className}`}
+      type="button"
+      className={`relative flex shrink-0 items-center overflow-clip p-[21px] transition-colors ${className}`}
+      style={{
+        borderRadius: 107.692,
+        backgroundColor: active ? colors.interactive.default : colors.static.transparent,
+        color: active ? colors.text.inverse : colors.text.secondary,
+      }}
     >
-      <div className="overflow-clip relative shrink-0 size-[42px] flex items-center justify-center">
-        {icon}
-      </div>
+      <div className="relative flex size-[42px] shrink-0 items-center justify-center">{icon}</div>
     </button>
   );
 }
@@ -102,16 +104,24 @@ export function GlobalLeftTabSimplifiedItem({
 export function GlobalLeftTabSimplifiedBottomButton({
   onClick,
   icon,
-  className = ""
+  className = "",
 }: Omit<GlobalLeftTabItemProps, "active">) {
+  const { colors } = useThemeOptional();
+
   return (
-    <button 
+    <button
       onClick={onClick}
-      className={`bg-[rgba(255,255,255,0.6)] content-stretch flex h-[96px] items-center justify-center overflow-clip rounded-[100px] w-[96px] cursor-pointer hover:bg-[rgba(255,255,255,0.8)] transition-colors ${className}`}
+      type="button"
+      className={`flex h-[96px] w-[96px] items-center justify-center overflow-clip transition-colors ${className}`}
+      style={{
+        backgroundColor: colors.bg.glass,
+        borderRadius: 100,
+        color: colors.text.secondary,
+        border: `1px solid ${colors.border.inverse}`,
+        backdropFilter: "blur(12px)",
+      }}
     >
-      <div className="content-stretch flex items-center justify-center relative shrink-0 w-[42px] h-[42px] text-[#5B6472]">
-        {icon}
-      </div>
+      <div className="relative flex h-[42px] w-[42px] shrink-0 items-center justify-center">{icon}</div>
     </button>
   );
 }
@@ -119,18 +129,36 @@ export function GlobalLeftTabSimplifiedBottomButton({
 export function GlobalLeftTabExtendedBottomButton({
   onClick,
   icon,
-  className = ""
+  className = "",
 }: Omit<GlobalLeftTabItemProps, "active">) {
+  const { colors } = useThemeOptional();
+
   return (
-    <button 
+    <button
       onClick={onClick}
-      className={`bg-[#f7f8fa] content-stretch flex h-[80px] items-center justify-center relative rounded-[18px] shrink-0 w-full cursor-pointer hover:brightness-95 transition-all ${className}`}
+      type="button"
+      className={`relative flex h-[80px] w-full shrink-0 items-center justify-center ${className}`}
+      style={{
+        backgroundColor: colors.bg.secondary,
+        borderRadius: RADIUS.xl,
+      }}
     >
-      <div className="bg-[rgba(255,255,255,0.2)] flex-[1_0_0] h-full min-h-px min-w-px relative rounded-[24px]">
-        <div aria-hidden="true" className="absolute border border-[rgba(255,255,255,0.4)] border-solid inset-0 pointer-events-none rounded-[24px]" />
-        <div className="flex flex-row items-center justify-center size-full">
-          <div className="content-stretch flex items-center justify-center py-[30px] relative size-full">
-            <div className="overflow-clip relative shrink-0 size-[48px] flex items-center justify-center text-black">
+      <div
+        className="relative min-h-px min-w-px flex-[1_0_0]"
+        style={{
+          height: "100%",
+          borderRadius: RADIUS.xl,
+          backgroundColor: colors.bg.glass,
+          border: `1px solid ${colors.border.inverse}`,
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        <div className="flex size-full flex-row items-center justify-center">
+          <div className="relative flex size-full items-center justify-center py-[30px]">
+            <div
+              className="relative flex size-[48px] shrink-0 items-center justify-center"
+              style={{ color: colors.text.primary }}
+            >
               {icon}
             </div>
           </div>
@@ -146,8 +174,17 @@ export interface ContentTopTabProps {
 }
 
 export function ContentTopTab({ className = "", children }: ContentTopTabProps) {
+  const { colors } = useThemeOptional();
+
   return (
-    <div className={`bg-[#f6f7fa] content-stretch flex gap-[36px] items-center p-[6px] relative rounded-[50px] shrink-0 w-max ${className}`} data-name="top tab">
+    <div
+      className={`relative flex w-max shrink-0 items-center gap-[36px] p-[6px] ${className}`}
+      data-name="top tab"
+      style={{
+        backgroundColor: colors.bg.secondary,
+        borderRadius: 50,
+      }}
+    >
       {children}
     </div>
   );
@@ -161,29 +198,24 @@ export interface ContentTopTabItemProps {
 }
 
 export function ContentTopTabItem({ active, onClick, label, className = "" }: ContentTopTabItemProps) {
-  if (active) {
-    return (
-      <div 
-        onClick={onClick}
-        className={`bg-[rgba(0,0,0,0.8)] content-stretch flex items-center overflow-clip px-[48px] py-[18px] relative rounded-[100px] shrink-0 cursor-pointer ${className}`} 
-        data-name="State=Active"
-      >
-        <p className="font-['Noto_Sans_SC:Medium',sans-serif] font-medium leading-[28px] relative shrink-0 text-[28px] text-white whitespace-nowrap">
-          {label}
-        </p>
-      </div>
-    );
-  }
+  const { colors } = useThemeOptional();
 
   return (
-    <div 
+    <button
       onClick={onClick}
-      className={`content-stretch flex items-center overflow-clip px-[24px] py-[18px] relative rounded-[100px] shrink-0 cursor-pointer hover:bg-[rgba(0,0,0,0.05)] transition-colors ${className}`} 
-      data-name="State=Default"
+      type="button"
+      className={`relative flex shrink-0 items-center overflow-clip transition-colors ${className}`}
+      style={{
+        padding: active ? "18px 48px" : "18px 24px",
+        borderRadius: 100,
+        backgroundColor: active ? colors.interactive.default : colors.static.transparent,
+        color: active ? colors.text.inverse : colors.text.secondary,
+      }}
+      data-name={active ? "State=Active" : "State=Default"}
     >
-      <p className="font-['Noto_Sans_SC:Regular',sans-serif] font-normal leading-[28px] relative shrink-0 text-[28px] text-[#444c5c] whitespace-nowrap">
+      <p className="relative shrink-0 whitespace-nowrap font-['Noto_Sans_SC:Regular',sans-serif] text-[28px] leading-[28px]">
         {label}
       </p>
-    </div>
+    </button>
   );
 }

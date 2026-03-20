@@ -8,21 +8,7 @@
 // Tokens
 // ============================================================================
 
-export {
-  BLACK,
-  WHITE,
-  COLD_GRAY,
-  BRAND,
-  FUNCTIONAL,
-  STATIC,
-  BG,
-  SPACING,
-  RADIUS,
-  SHADOW,
-  createColors,
-} from "./tokens";
-
-export type { Colors } from "./tokens";
+export * from "./tokens";
 
 // ============================================================================
 // Hooks

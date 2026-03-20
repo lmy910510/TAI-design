@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
+import { useState, CSSProperties } from "react";
 import { ArrowRight, Music } from "lucide-react";
 import {
   Button as TaiButton,
@@ -7,6 +6,8 @@ import {
   BUTTON_SIZE_CONFIG,
   BUTTON_SIZES,
   BUTTON_VARIANTS,
+  RADIUS,
+  useTheme,
   type ButtonIconPosition,
   type ButtonSize,
   type ButtonVariant,
@@ -18,12 +19,63 @@ type PreviewState = ButtonVisualState | "disabled";
 const PREVIEW_STATES: PreviewState[] = ["default", "hover", "pressed", "disabled"];
 
 export function Button() {
-  const { isDark } = useOutletContext<{ isDark: boolean }>();
+  const { colors } = useTheme();
   const [selectedSize, setSelectedSize] = useState<ButtonSize>("large");
   const [selectedVariant, setSelectedVariant] = useState<ButtonVariant>("primary");
   const [selectedIconPosition, setSelectedIconPosition] =
     useState<ButtonIconPosition>("none");
   const [previewState, setPreviewState] = useState<PreviewState>("default");
+
+  const chipStyle: CSSProperties = {
+    display: "inline-block",
+    padding: "6px 12px",
+    marginBottom: 16,
+    borderRadius: 999,
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.secondary,
+    color: colors.text.secondary,
+    fontSize: 14,
+  };
+
+  const panelStyle: CSSProperties = {
+    padding: 24,
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.elevated,
+  };
+
+  const infoPanelStyle: CSSProperties = {
+    marginTop: 24,
+    padding: 18,
+    borderRadius: RADIUS.xl,
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.secondary,
+  };
+
+  const guidePanelStyle: CSSProperties = {
+    padding: 24,
+    marginBottom: 32,
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    background: `linear-gradient(to right, ${colors.bg.secondary}, ${colors.bg.tertiary})`,
+  };
+
+  const getOptionButtonStyle = (active: boolean): CSSProperties => ({
+    width: "100%",
+    padding: "12px 16px",
+    borderRadius: RADIUS.xl,
+    border: `2px solid ${active ? colors.border.focus : colors.static.transparent}`,
+    backgroundColor: active ? colors.bg.secondary : colors.bg.tertiary,
+    color: active ? colors.text.primary : colors.text.secondary,
+    textAlign: "left",
+    transition: "all 150ms ease",
+  });
+
+  const getOptionMetaStyle = (active: boolean): CSSProperties => ({
+    marginTop: 4,
+    fontSize: 12,
+    color: active ? colors.text.secondary : colors.text.tertiary,
+  });
 
   const renderPreviewButton = () => {
     const iconSize = BUTTON_SIZE_CONFIG[selectedSize].iconSize;
@@ -51,27 +103,15 @@ export function Button() {
   return (
     <div>
       <div className="mb-8">
-        <div
-          className={`inline-block px-3 py-1 border rounded-full text-sm mb-4 ${
-            isDark
-              ? "bg-white/10 border-white/20 text-gray-200"
-              : "bg-gray-100 border-gray-300 text-gray-900"
-          }`}
-        >
-          Components / 组件
-        </div>
+        <div style={chipStyle}>Components / 组件</div>
         <h1 className="text-4xl font-bold mb-4">按钮组件</h1>
-        <p className={`text-lg ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+        <p className="text-lg" style={{ color: colors.text.secondary }}>
           车机端设计系统的核心交互组件，提供 4 种尺寸和 5 种样式变体
         </p>
       </div>
 
       <div className="grid grid-cols-2 gap-8 mb-8">
-        <div
-          className={`p-8 border rounded-xl ${
-            isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"
-          }`}
-        >
+        <div style={panelStyle}>
           <h2 className="text-2xl font-bold mb-6">状态预览</h2>
 
           <div className="flex items-center justify-center min-h-[200px] mb-8">
@@ -79,7 +119,7 @@ export function Button() {
           </div>
 
           <div>
-            <h3 className={`text-sm font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <h3 className="text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
               模拟状态
             </h3>
             <div className="grid grid-cols-4 gap-2">
@@ -87,15 +127,7 @@ export function Button() {
                 <button
                   key={state}
                   onClick={() => setPreviewState(state)}
-                  className={`py-2 px-3 rounded-lg text-sm transition-all ${
-                    previewState === state
-                      ? isDark
-                        ? "border-2 border-white bg-white/10 text-white"
-                        : "border-2 border-black bg-gray-100 text-black"
-                      : isDark
-                        ? "bg-white/10 text-gray-300 hover:bg-white/20 border-2 border-transparent"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent"
-                  }`}
+                  style={getOptionButtonStyle(previewState === state)}
                 >
                   {state === "default"
                     ? "默认"
@@ -109,12 +141,8 @@ export function Button() {
             </div>
           </div>
 
-          <div
-            className={`mt-6 p-4 border rounded-lg ${
-              isDark ? "bg-white/5 border-white/10" : "bg-gray-50 border-gray-200"
-            }`}
-          >
-            <div className={`text-xs space-y-1 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+          <div style={infoPanelStyle}>
+            <div className="text-xs space-y-1" style={{ color: colors.text.secondary }}>
               <div className="flex justify-between">
                 <span>尺寸:</span>
                 <span className="font-mono">{BUTTON_SIZE_CONFIG[selectedSize].height}px</span>
@@ -143,113 +171,81 @@ export function Button() {
           </div>
         </div>
 
-        <div
-          className={`p-8 border rounded-xl ${
-            isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"
-          }`}
-        >
+        <div style={panelStyle}>
           <h2 className="text-2xl font-bold mb-6">类型选择</h2>
 
           <div className="mb-6">
-            <h3 className={`text-sm font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <h3 className="text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
               按钮尺寸
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              {BUTTON_SIZES.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => setSelectedSize(size)}
-                  className={`py-3 px-4 rounded-lg text-sm transition-all ${
-                    selectedSize === size
-                      ? isDark
-                        ? "border-2 border-white bg-white/10 text-white"
-                        : "border-2 border-black bg-gray-100 text-black"
-                      : isDark
-                        ? "bg-white/10 text-gray-300 hover:bg-white/20 border-2 border-transparent"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent"
-                  }`}
-                >
-                  <div className="font-medium">
-                    {size === "large"
-                      ? "大"
-                      : size === "medium"
-                        ? "中"
-                        : size === "small"
-                          ? "小"
-                          : "迷你"}
-                  </div>
-                  <div
-                    className={`text-xs mt-1 ${
-                      selectedSize === size
-                        ? isDark
-                          ? "text-white/70"
-                          : "text-black/70"
-                        : "text-gray-500"
-                    }`}
+              {BUTTON_SIZES.map((size) => {
+                const active = selectedSize === size;
+                return (
+                  <button
+                    key={size}
+                    onClick={() => setSelectedSize(size)}
+                    style={getOptionButtonStyle(active)}
                   >
-                    {BUTTON_SIZE_CONFIG[size].height}px
-                  </div>
-                </button>
-              ))}
+                    <div className="font-medium">
+                      {size === "large"
+                        ? "大"
+                        : size === "medium"
+                          ? "中"
+                          : size === "small"
+                            ? "小"
+                            : "迷你"}
+                    </div>
+                    <div style={getOptionMetaStyle(active)}>{BUTTON_SIZE_CONFIG[size].height}px</div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div className="mb-6">
-            <h3 className={`text-sm font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <h3 className="text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
               按钮样式
             </h3>
             <div className="space-y-2">
-              {BUTTON_VARIANTS.map((variant) => (
-                <button
-                  key={variant}
-                  onClick={() => setSelectedVariant(variant)}
-                  className={`w-full py-3 px-4 rounded-lg text-sm text-left transition-all ${
-                    selectedVariant === variant
-                      ? isDark
-                        ? "border-2 border-white bg-white/10 text-white"
-                        : "border-2 border-black bg-gray-100 text-black"
-                      : isDark
-                        ? "bg-white/10 text-gray-300 hover:bg-white/20 border-2 border-transparent"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent"
-                  }`}
-                >
-                  <div className="font-medium">
-                    {variant === "primary"
-                      ? "主要按钮"
-                      : variant === "secondary"
-                        ? "次要按钮"
-                        : variant === "tertiary"
-                          ? "三级按钮"
-                          : variant === "ghost"
-                            ? "幽灵按钮"
-                            : "警示按钮"}
-                  </div>
-                  <div
-                    className={`text-xs mt-1 ${
-                      selectedVariant === variant
-                        ? isDark
-                          ? "text-white/70"
-                          : "text-black/70"
-                        : "text-gray-500"
-                    }`}
+              {BUTTON_VARIANTS.map((variant) => {
+                const active = selectedVariant === variant;
+                return (
+                  <button
+                    key={variant}
+                    onClick={() => setSelectedVariant(variant)}
+                    style={getOptionButtonStyle(active)}
                   >
-                    {variant === "primary"
-                      ? "深色背景，白色文字"
-                      : variant === "secondary"
-                        ? "浅色背景，深色文字"
-                        : variant === "tertiary"
+                    <div className="font-medium">
+                      {variant === "primary"
+                        ? "主要按钮"
+                        : variant === "secondary"
+                          ? "次要按钮"
+                          : variant === "tertiary"
+                            ? "三级按钮"
+                            : variant === "ghost"
+                              ? "幽灵按钮"
+                              : "警示按钮"}
+                    </div>
+                    <div style={getOptionMetaStyle(active)}>
+                      {variant === "primary"
+                        ? "深色背景，白色文字"
+                        : variant === "secondary"
                           ? "浅色背景，深色文字"
-                          : variant === "ghost"
-                            ? "透明背景，带边框"
-                            : "红色主题，警示操作"}
-                  </div>
-                </button>
-              ))}
+                          : variant === "tertiary"
+                            ? "浅色背景，深色文字"
+                            : variant === "ghost"
+                              ? "透明背景，带边框"
+                              : "危险操作的高提醒态"}
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
           <div>
-            <h3 className={`text-sm font-medium mb-3 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
+            <h3 className="text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
               图标位置
             </h3>
             <div className="grid grid-cols-2 gap-3">
@@ -257,15 +253,7 @@ export function Button() {
                 <button
                   key={position}
                   onClick={() => setSelectedIconPosition(position)}
-                  className={`py-3 px-4 rounded-lg text-sm transition-all ${
-                    selectedIconPosition === position
-                      ? isDark
-                        ? "border-2 border-white bg-white/10 text-white"
-                        : "border-2 border-black bg-gray-100 text-black"
-                      : isDark
-                        ? "bg-white/10 text-gray-300 hover:bg-white/20 border-2 border-transparent"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 border-2 border-transparent"
-                  }`}
+                  style={getOptionButtonStyle(selectedIconPosition === position)}
                 >
                   {position === "none"
                     ? "无图标"
@@ -281,16 +269,10 @@ export function Button() {
         </div>
       </div>
 
-      <div
-        className={`p-6 border rounded-xl mb-8 ${
-          isDark
-            ? "bg-gradient-to-r from-blue-600/10 to-purple-600/10 border-blue-500/20"
-            : "bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200"
-        }`}
-      >
+      <div style={guidePanelStyle}>
         <h3 className="text-lg font-semibold mb-3">📐 设计规范</h3>
         <div className="grid grid-cols-2 gap-4">
-          <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+          <div className="text-sm" style={{ color: colors.text.secondary }}>
             <p className="mb-2">
               <strong>尺寸体系：</strong>
             </p>
@@ -301,7 +283,7 @@ export function Button() {
               <li>• <strong>迷你按钮 (48px):</strong> 辅助功能、标签</li>
             </ul>
           </div>
-          <div className={`text-sm ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+          <div className="text-sm" style={{ color: colors.text.secondary }}>
             <p className="mb-2">
               <strong>使用场景：</strong>
             </p>

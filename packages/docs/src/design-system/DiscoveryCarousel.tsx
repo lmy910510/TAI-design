@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useRef, useEffect } from "react";
+import { motion } from "motion/react";
+import { SHADOW, useThemeOptional } from "@tai-design/components";
 
 export interface DiscoveryCard {
   id: string;
@@ -19,40 +20,37 @@ export interface DiscoveryCarouselProps {
 
 /**
  * 随行发现卡片轮播组件
- * 支持横向滑动，中心卡片自动放大，周围卡片缩小
+ * 保留原有轮播结构，但所有展示色值改为主题 token 驱动。
  */
 export function DiscoveryCarousel({ cards, className = "" }: DiscoveryCarouselProps) {
+  const { colors } = useThemeOptional();
   const [activeIndex, setActiveIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // 处理滚动事件，计算当前激活的卡片
   const handleScroll = () => {
     if (!scrollContainerRef.current) return;
-    
+
     const container = scrollContainerRef.current;
     const scrollLeft = container.scrollLeft;
-    const cardWidth = 420 + 48; // 卡片宽度 + 间距
+    const cardWidth = 420 + 48;
     const containerWidth = container.clientWidth;
-    const centerOffset = (containerWidth / 2) - (cardWidth / 2);
-    
-    // 计算最接近中心的卡片索引
+    const centerOffset = containerWidth / 2 - cardWidth / 2;
     const newIndex = Math.round((scrollLeft - centerOffset + cardWidth / 2) / cardWidth);
     setActiveIndex(Math.max(0, Math.min(cards.length - 1, newIndex)));
   };
 
-  // 滚动到指定卡片
   const scrollToCard = (index: number) => {
     if (!scrollContainerRef.current) return;
-    
+
     const container = scrollContainerRef.current;
     const cardWidth = 420 + 48;
     const containerWidth = container.clientWidth;
-    const centerOffset = (containerWidth / 2) - (cardWidth / 2);
+    const centerOffset = containerWidth / 2 - cardWidth / 2;
     const scrollLeft = index * cardWidth - centerOffset;
-    
+
     container.scrollTo({
       left: Math.max(0, scrollLeft),
-      behavior: 'smooth'
+      behavior: "smooth",
     });
   };
 
@@ -64,43 +62,42 @@ export function DiscoveryCarousel({ cards, className = "" }: DiscoveryCarouselPr
       requestAnimationFrame(handleScroll);
     };
 
-    container.addEventListener('scroll', onScroll, { passive: true });
-    
-    // 初始化：滚动到第一张卡片（延迟执行确保容器已渲染）
+    container.addEventListener("scroll", onScroll, { passive: true });
     const timer = setTimeout(() => scrollToCard(0), 200);
 
     return () => {
-      container.removeEventListener('scroll', onScroll);
+      container.removeEventListener("scroll", onScroll);
       clearTimeout(timer);
     };
   }, [cards.length]);
 
   return (
     <div className={`relative w-full ${className}`}>
-      {/* 滚动容器 */}
       <div
         ref={scrollContainerRef}
-        className="overflow-x-scroll overflow-y-hidden scrollbar-hide pb-8"
+        className="scrollbar-hide overflow-x-scroll overflow-y-hidden pb-8"
         style={{
-          scrollSnapType: 'x mandatory',
-          WebkitOverflowScrolling: 'touch',
-          cursor: 'grab',
+          scrollSnapType: "x mandatory",
+          WebkitOverflowScrolling: "touch",
+          cursor: "grab",
         }}
         onMouseDown={(e) => {
-          const container = e.currentTarget;
-          container.style.cursor = 'grabbing';
+          e.currentTarget.style.cursor = "grabbing";
         }}
         onMouseUp={(e) => {
-          const container = e.currentTarget;
-          container.style.cursor = 'grab';
+          e.currentTarget.style.cursor = "grab";
         }}
         onMouseLeave={(e) => {
-          const container = e.currentTarget;
-          container.style.cursor = 'grab';
+          e.currentTarget.style.cursor = "grab";
         }}
       >
-        {/* 内容容器 - 使用 inline-flex 确保内容宽度正确 */}
-        <div className="inline-flex gap-[48px]" style={{ paddingLeft: 'max(48px, calc(50% - 210px))', paddingRight: 'max(48px, calc(50% - 210px))' }}>
+        <div
+          className="inline-flex gap-[48px]"
+          style={{
+            paddingLeft: "max(48px, calc(50% - 210px))",
+            paddingRight: "max(48px, calc(50% - 210px))",
+          }}
+        >
           {cards.map((card, index) => (
             <CardItem
               key={card.id}
@@ -112,23 +109,23 @@ export function DiscoveryCarousel({ cards, className = "" }: DiscoveryCarouselPr
         </div>
       </div>
 
-      {/* 指示器 */}
-      <div className="flex justify-center gap-2 mt-6">
+      <div className="mt-6 flex justify-center gap-2">
         {cards.map((_, index) => (
           <button
             key={index}
             onClick={() => scrollToCard(index)}
-            className={`h-2 rounded-full transition-all ${
-              index === activeIndex 
-                ? 'w-8 bg-blue-600' 
-                : 'w-2 bg-gray-300 hover:bg-gray-400'
-            }`}
+            className="h-2 rounded-full transition-all"
+            style={{
+              width: index === activeIndex ? 32 : 8,
+              backgroundColor:
+                index === activeIndex ? colors.border.brand : colors.border.subtle,
+            }}
             aria-label={`跳转到第 ${index + 1} 张卡片`}
+            type="button"
           />
         ))}
       </div>
 
-      {/* 隐藏滚动条的样式 */}
       <style>{`
         .scrollbar-hide::-webkit-scrollbar {
           display: none;
@@ -149,12 +146,14 @@ interface CardItemProps {
 }
 
 function CardItem({ card, isActive, onClick }: CardItemProps) {
+  const { colors } = useThemeOptional();
+
   return (
     <motion.div
       className="shrink-0 cursor-pointer select-none"
       style={{
-        scrollSnapAlign: 'center',
-        width: '420px',
+        scrollSnapAlign: "center",
+        width: 420,
       }}
       animate={{
         scale: isActive ? 1 : 0.85,
@@ -167,110 +166,136 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
       onClick={onClick}
       onDragStart={(e) => e.preventDefault()}
     >
-      <div className="bg-gradient-to-b from-white to-[#f7f9fa] flex flex-col gap-[24px] h-[596px] p-[24px] rounded-[52px] w-[420px] shadow-[0px_60px_60px_0px_rgba(173,196,213,0.2)] border-2 border-[rgba(255,255,255,0)]">
-        
-        {/* 头图 */}
-        <div className="relative h-[304px] rounded-[31.054px] overflow-hidden">
-          <img 
-            src={card.image} 
+      <div
+        className="flex h-[596px] w-[420px] flex-col gap-[24px] rounded-[52px] border-2 p-[24px]"
+        style={{
+          background: `linear-gradient(180deg, ${colors.bg.primary} 0%, ${colors.bg.secondary} 100%)`,
+          boxShadow: SHADOW.xl,
+          borderColor: colors.static.transparent,
+        }}
+      >
+        <div className="relative h-[304px] overflow-hidden rounded-[31.054px]">
+          <img
+            src={card.image}
             alt={card.title}
-            className="w-full h-full object-cover pointer-events-none"
+            className="pointer-events-none h-full w-full object-cover"
             draggable={false}
           />
-          
-          {/* 距离标签 */}
-          <div className="absolute left-[12px] top-[12px] backdrop-blur-[6.279px] bg-[rgba(46,54,73,0.4)] px-[12px] py-[8px] rounded-[100px] flex items-center gap-[8px]">
-            <LocationIcon />
-            <p className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[22px] text-white whitespace-nowrap">
+
+          <div
+            className="absolute left-[12px] top-[12px] flex items-center gap-[8px] rounded-[100px] px-[12px] py-[8px]"
+            style={{
+              backgroundColor: colors.bg.overlay,
+              backdropFilter: "blur(6px)",
+            }}
+          >
+            <LocationIcon color={colors.static.white} />
+            <p
+              className="whitespace-nowrap font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[22px]"
+              style={{ color: colors.static.white }}
+            >
               {card.distance}
             </p>
           </div>
 
-          {/* 缩略图 */}
-          {card.thumbnails && card.thumbnails.length > 0 && (
+          {card.thumbnails && card.thumbnails.length > 0 ? (
             <div className="absolute left-[18px] top-[236px] flex items-center pr-[16px]">
               {card.thumbnails.slice(0, 3).map((thumb, idx) => (
                 <div
                   key={idx}
-                  className="relative rounded-[12px] size-[50px] mr-[-16px] border-2 border-white overflow-hidden"
+                  className="relative mr-[-16px] size-[50px] overflow-hidden rounded-[12px] border-2"
+                  style={{ borderColor: colors.static.white }}
                 >
-                  <img 
-                    src={thumb} 
-                    alt="" 
-                    className="w-full h-full object-cover pointer-events-none"
+                  <img
+                    src={thumb}
+                    alt=""
+                    className="pointer-events-none h-full w-full object-cover"
                     draggable={false}
                   />
                 </div>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
 
-        {/* 信息内容区 */}
-        <div className="flex-1 flex flex-col gap-[24px]">
-          {/* 标题 */}
+        <div className="flex flex-1 flex-col gap-[24px]">
           <div className="flex flex-col gap-[12px]">
-            <div className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[34px] leading-[34px] text-[#232a3a]">
-              {card.title.split('\n').map((line, idx) => (
-                <p key={idx} className="overflow-hidden text-ellipsis w-full">{line}</p>
+            <div
+              className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[34px] leading-[34px]"
+              style={{ color: colors.text.primary }}
+            >
+              {card.title.split("\n").map((line, idx) => (
+                <p key={idx} className="w-full overflow-hidden text-ellipsis">
+                  {line}
+                </p>
               ))}
             </div>
-            
-            {/* 标签 */}
-            <div className="flex gap-[12px] items-center flex-wrap">
+
+            <div className="flex flex-wrap items-center gap-[12px]">
               {card.tags.map((tag, idx) => (
-                <div key={idx} className="flex gap-[12px] items-center">
-                  <p className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px] text-[#686f7c] whitespace-nowrap">
+                <div key={idx} className="flex items-center gap-[12px]">
+                  <p
+                    className="whitespace-nowrap font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px]"
+                    style={{ color: colors.text.secondary }}
+                  >
                     {tag}
                   </p>
-                  {idx < card.tags.length - 1 && (
-                    <div className="bg-[#444c5c] opacity-20 h-[20px] w-px" />
-                  )}
+                  {idx < card.tags.length - 1 ? (
+                    <div
+                      className="h-[20px] w-px"
+                      style={{ backgroundColor: colors.border.default }}
+                    />
+                  ) : null}
                 </div>
               ))}
             </div>
           </div>
 
-          {/* AI提示词 */}
-          {card.aiPrompt && (
-            <div className="bg-gradient-to-r from-[rgba(52,119,178,0.08)] to-[rgba(123,137,188,0.08)] rounded-[100px] border-[0.947px] border-[rgba(255,255,255,0.1)]">
+          {card.aiPrompt ? (
+            <div
+              className="rounded-[100px] border"
+              style={{
+                backgroundColor: colors.bg.brandSubtle,
+                borderColor: colors.border.inverse,
+              }}
+            >
               <div className="flex items-center justify-center px-[16px] py-[26px]">
-                <div className="flex gap-[8px] items-center">
-                  <AIIcon />
-                  <p className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px] text-[#444c5c] overflow-hidden text-ellipsis whitespace-nowrap">
+                <div className="flex items-center gap-[8px]">
+                  <AIIcon color={colors.text.secondary} />
+                  <p
+                    className="overflow-hidden text-ellipsis whitespace-nowrap font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px]"
+                    style={{ color: colors.text.secondary }}
+                  >
                     {card.aiPrompt}
                   </p>
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </motion.div>
   );
 }
 
-function LocationIcon() {
+function LocationIcon({ color }: { color: string }) {
   return (
     <div className="size-[20px]">
       <svg className="block size-full" fill="none" viewBox="0 0 20 20">
-        <path 
-          d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z" 
-          fill="white" 
+        <path
+          d="M10 2C7.24 2 5 4.24 5 7c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"
+          fill={color}
         />
       </svg>
     </div>
   );
 }
 
-function AIIcon() {
+function AIIcon({ color }: { color: string }) {
   return (
     <div className="size-[22px] opacity-60">
       <svg className="block size-full" fill="none" viewBox="0 0 22 22">
-        <path
-          d="M11 2L13.09 8.26L19 10L13.09 11.74L11 18L8.91 11.74L3 10L8.91 8.26L11 2Z"
-          fill="#828997"
-        />
+        <path d="M11 2L13.09 8.26L19 10L13.09 11.74L11 18L8.91 11.74L3 10L8.91 8.26L11 2Z" fill={color} />
       </svg>
     </div>
   );

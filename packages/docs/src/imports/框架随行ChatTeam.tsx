@@ -9,13 +9,12 @@ import {
   AddIcon,
   UserAddIcon,
   ArrowLeftIcon,
-  AudioFilledIcon,
-  AudioIcon,
-  MemberIcon,
-  ChatOffIcon,
-  ChatDoubleIcon,
+  SoundIcon,
+  UsergroupIcon,
+  CloseCircleIcon,
+  ChatIcon,
   EllipsisIcon,
-  MapSettingIcon,
+  SettingIcon,
 } from "tdesign-icons-react";
 
 // ─── Design tokens ────────────────────────────────────────────────────────────
@@ -206,7 +205,7 @@ function MemberCard({ member, isSpeaking }: { member: MemberInfo; isSpeaking: bo
       </AnimatePresence>
 
       {/* Muted mic (idle) */}
-      {!isSpeaking && <AudioIcon size="28px" style={{ color: T.text40 }} />}
+      {!isSpeaking && <SoundIcon size="28px" style={{ color: T.text40 }} />}
     </motion.div>
   );
 }
@@ -235,7 +234,7 @@ function RoomCard({ room, onJoin }: { room: RoomInfo; onJoin: () => void }) {
             {room.name}
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-            <MemberIcon size="26px" style={{ color: T.text40 }} />
+            <UsergroupIcon size="26px" style={{ color: T.text40 }} />
             <p style={{ fontFamily: T.font, fontSize: 28, fontWeight: 400, color: T.text40, lineHeight: "28px", margin: 0 }}>
               {room.count}/{room.max} 人
             </p>
@@ -324,7 +323,7 @@ function TeamChatPanel() {
                   background: "rgba(0,0,0,0.05)",
                   display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0,
                 }}>
-                  <ChatDoubleIcon size="48px" style={{ color: T.primary }} />
+                  <ChatIcon size="48px" style={{ color: T.primary }} />
                 </div>
                 <div>
                   <p style={{ fontFamily: T.font, fontSize: 42, fontWeight: 500, color: T.text92, lineHeight: "42px", margin: 0 }}>
@@ -415,7 +414,7 @@ function TeamChatPanel() {
 
               {/* Member count pill */}
               <div style={{ display: "flex", alignItems: "center", gap: 10, background: "rgba(0,0,0,0.04)", borderRadius: 30, padding: "12px 28px", flexShrink: 0 }}>
-                <MemberIcon size="28px" style={{ color: T.text60 }} />
+                <UsergroupIcon size="28px" style={{ color: T.text60 }} />
                 <p style={{ fontFamily: T.font, fontSize: 28, fontWeight: 400, color: T.text60, lineHeight: "28px", margin: 0 }}>
                   {isNewRoom ? 1 : MEMBERS.length} 人在线
                 </p>
@@ -434,7 +433,7 @@ function TeamChatPanel() {
                 onMouseOver={(e) => { e.currentTarget.style.background = "rgba(227,77,89,0.06)"; e.currentTarget.style.borderColor = T.red; }}
                 onMouseOut={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.borderColor = "rgba(227,77,89,0.4)"; }}
               >
-                <ChatOffIcon size="28px" style={{ color: T.red }} />
+                <CloseCircleIcon size="28px" style={{ color: T.red }} />
                 <p style={{ fontFamily: T.font, fontSize: 28, fontWeight: 500, color: T.red, lineHeight: "28px", margin: 0 }}>离开</p>
               </button>
             </div>
@@ -492,10 +491,10 @@ function TeamChatPanel() {
                     transition={{ duration: 0.15 }}
                     style={{ display: "flex", alignItems: "center", gap: 18 }}
                   >
-                    {micOn
-                      ? <AudioFilledIcon size="42px" style={{ color: "white" }} />
-                      : <AudioIcon       size="42px" style={{ color: "rgba(0,0,0,0.30)" }} />
-                    }
+                    <SoundIcon
+                      size="42px"
+                      style={{ color: micOn ? "white" : "rgba(0,0,0,0.30)" }}
+                    />
                     <p style={{
                       fontFamily: T.font, fontSize: 36, fontWeight: 500,
                       color: micOn ? "white" : "rgba(0,0,0,0.30)",
@@ -592,7 +591,7 @@ function Sidebar() {
         {/* Bottom buttons */}
         {[
           <EllipsisIcon   key="e" size="36px" style={{ color: T.text60 }} />,
-          <MapSettingIcon key="s" size="36px" style={{ color: T.text60 }} />,
+          <SettingIcon key="s" size="36px" style={{ color: T.text60 }} />,
         ].map((icon, i) => (
           <div key={i} style={{
             background: T.bgCard, borderRadius: 18, height: 80, flexShrink: 0,

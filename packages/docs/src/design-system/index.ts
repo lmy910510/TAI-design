@@ -35,7 +35,7 @@ export type { GlobalLeftTabProps, GlobalLeftTabItemProps } from './TabsComponent
 export { BaseMapComponent } from './BaseMapComponent';
 
 // 反馈组件
-export { TagComponent, TAG_SPECS, COLOR_MAP } from './TagComponent';
+export { TagComponent, TAG_SPECS, resolveTagPalette } from './TagComponent';
 export type { TagComponentProps, TagType, TagLevel, TagSize, TagColor } from './TagComponent';
 
 export { DialogComponent } from './DialogComponent';

@@ -1,292 +1,170 @@
+import type { CSSProperties } from "react";
 import { useState } from "react";
-import { useOutletContext } from "react-router-dom";
 import * as TDesignIcons from "tdesign-icons-react";
+import { Input as TaiInput, RADIUS, SPACING, useTheme } from "@tai-design/components";
 
-// 常用图标分类
 const iconCategories = {
   direction: {
     name: "方向指示",
-    icons: [
-      "ChevronUpIcon",
-      "ChevronDownIcon",
-      "ChevronLeftIcon",
-      "ChevronRightIcon",
-      "ArrowUpIcon",
-      "ArrowDownIcon",
-      "ArrowLeftIcon",
-      "ArrowRightIcon",
-      "ExpandIcon",
-      "ShrinkIcon",
-    ],
+    icons: ["ChevronUpIcon", "ChevronDownIcon", "ChevronLeftIcon", "ChevronRightIcon", "ArrowUpIcon", "ArrowDownIcon", "ArrowLeftIcon", "ArrowRightIcon", "ExpandIcon", "ShrinkIcon"],
   },
   suggestion: {
     name: "提示建议",
-    icons: [
-      "CheckIcon",
-      "CloseIcon",
-      "InfoCircleIcon",
-      "CheckCircleIcon",
-      "CloseCircleIcon",
-      "ErrorCircleIcon",
-      "HelpCircleIcon",
-      "ErrorIcon",
-    ],
+    icons: ["CheckIcon", "CloseIcon", "InfoCircleIcon", "CheckCircleIcon", "CloseCircleIcon", "ErrorCircleIcon", "HelpCircleIcon", "ErrorIcon"],
   },
   edit: {
     name: "编辑类",
-    icons: [
-      "AddIcon",
-      "RemoveIcon",
-      "EditIcon",
-      "DeleteIcon",
-      "SearchIcon",
-      "FilterIcon",
-      "SettingIcon",
-      "RefreshIcon",
-    ],
+    icons: ["AddIcon", "RemoveIcon", "EditIcon", "DeleteIcon", "SearchIcon", "FilterIcon", "SettingIcon", "RefreshIcon"],
   },
   media: {
     name: "多媒体",
-    icons: [
-      "PlayCircleIcon",
-      "PauseCircleIcon",
-      "VideoIcon",
-      "MusicIcon",
-      "ImageIcon",
-      "CameraIcon",
-      "VolumeUpIcon",
-      "VolumeMuteIcon",
-    ],
+    icons: ["PlayCircleIcon", "PauseCircleIcon", "VideoIcon", "MusicIcon", "ImageIcon", "CameraIcon", "VolumeUpIcon", "VolumeMuteIcon"],
   },
   communication: {
     name: "交流",
-    icons: [
-      "MailIcon",
-      "MessageIcon",
-      "ChatIcon",
-      "NotificationIcon",
-      "PhoneIcon",
-      "UserIcon",
-      "UsergroupIcon",
-      "ShareIcon",
-    ],
+    icons: ["MailIcon", "MessageIcon", "ChatIcon", "NotificationIcon", "PhoneIcon", "UserIcon", "UsergroupIcon", "ShareIcon"],
   },
   file: {
     name: "文件",
-    icons: [
-      "FolderIcon",
-      "FolderOpenIcon",
-      "FileIcon",
-      "FileAddIcon",
-      "FileExcelIcon",
-      "FilePdfIcon",
-      "FileWordIcon",
-      "AttachmentIcon",
-    ],
+    icons: ["FolderIcon", "FolderOpenIcon", "FileIcon", "FileAddIcon", "FileExcelIcon", "FilePdfIcon", "FileWordIcon", "AttachmentIcon"],
   },
   navigation: {
     name: "导航",
-    icons: [
-      "HomeIcon",
-      "DashboardIcon",
-      "AppIcon",
-      "ViewListIcon",
-      "ViewModuleIcon",
-      "MenuIcon",
-      "MoreIcon",
-      "EllipsisIcon",
-    ],
+    icons: ["HomeIcon", "DashboardIcon", "AppIcon", "ViewListIcon", "ViewModuleIcon", "MenuIcon", "MoreIcon", "EllipsisIcon"],
   },
   device: {
     name: "设备",
-    icons: [
-      "DesktopIcon",
-      "MobileIcon",
-      "LaptopIcon",
-      "PrintIcon",
-      "QrcodeIcon",
-      "ScanIcon",
-      "BluetoothIcon",
-      "WifiIcon",
-    ],
+    icons: ["DesktopIcon", "MobileIcon", "LaptopIcon", "PrintIcon", "QrcodeIcon", "ScanIcon", "BluetoothIcon", "WifiIcon"],
   },
   business: {
     name: "商业",
-    icons: [
-      "ShopIcon",
-      "CartIcon",
-      "WalletIcon",
-      "CreditCardIcon",
-      "DiscountIcon",
-      "MoneyCircleIcon",
-      "GiftIcon",
-      "TrophyIcon",
-    ],
+    icons: ["ShopIcon", "CartIcon", "WalletIcon", "CreditCardIcon", "DiscountIcon", "MoneyCircleIcon", "GiftIcon", "TrophyIcon"],
   },
   other: {
     name: "其他",
-    icons: [
-      "LocationIcon",
-      "TimeIcon",
-      "CalendarIcon",
-      "LockOnIcon",
-      "LockOffIcon",
-      "EyeOnIcon",
-      "EyeOffIcon",
-      "StarIcon",
-      "HeartIcon",
-      "ThumbUpIcon",
-      "FlagIcon",
-      "BookmarkIcon",
-    ],
+    icons: ["LocationIcon", "TimeIcon", "CalendarIcon", "LockOnIcon", "LockOffIcon", "EyeOnIcon", "EyeOffIcon", "StarIcon", "HeartIcon", "ThumbUpIcon", "FlagIcon", "BookmarkIcon"],
   },
-};
+} as const;
 
 export function Icons() {
-  const { isDark } = useOutletContext<{ isDark: boolean }>();
+  const { colors, isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedIcon, setCopiedIcon] = useState<string | null>(null);
 
-  // 搜索过滤
-  const filteredCategories = Object.entries(iconCategories).reduce(
-    (acc, [key, category]) => {
-      const filteredIcons = category.icons.filter((icon) =>
-        icon.toLowerCase().includes(searchQuery.toLowerCase())
-      );
-      if (filteredIcons.length > 0) {
-        acc[key] = { ...category, icons: filteredIcons };
-      }
-      return acc;
-    },
-    {} as typeof iconCategories
-  );
+  const filteredCategories = Object.entries(iconCategories).reduce((acc, [key, category]) => {
+    const filteredIcons = category.icons.filter((icon) => icon.toLowerCase().includes(searchQuery.toLowerCase()));
+    if (filteredIcons.length > 0) {
+      acc[key as keyof typeof iconCategories] = { ...category, icons: filteredIcons };
+    }
+    return acc;
+  }, {} as typeof iconCategories);
 
-  // 复制图标名称
   const handleCopyIcon = (iconName: string) => {
     navigator.clipboard.writeText(iconName);
     setCopiedIcon(iconName);
-    setTimeout(() => setCopiedIcon(null), 2000);
+    window.setTimeout(() => setCopiedIcon(null), 2000);
+  };
+
+  const chipStyle: CSSProperties = {
+    display: "inline-block",
+    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
+    marginBottom: SPACING["3"],
+    borderRadius: 999,
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.secondary,
+    color: colors.text.secondary,
+    fontSize: 14,
+  };
+
+  const guidePanelStyle: CSSProperties = {
+    padding: SPACING["4"],
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.brand}`,
+    background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+  };
+
+  const categoryCardStyle: CSSProperties = {
+    padding: SPACING["4"],
+    borderRadius: RADIUS["2xl"],
+    border: `1px solid ${colors.border.subtle}`,
+    backgroundColor: colors.bg.elevated,
   };
 
   return (
     <div>
       <div className="mb-8">
-        <div
-          className={`inline-block px-3 py-1 border rounded-full text-sm mb-4 ${
-            isDark
-              ? "bg-white/10 border-white/20 text-gray-200"
-              : "bg-gray-100 border-gray-300 text-gray-900"
-          }`}
-        >
-          Foundation / 基础
-        </div>
+        <div style={chipStyle}>Foundation / 基础</div>
         <h1 className="text-4xl font-bold mb-4">图标库</h1>
-        <p className={`text-lg mb-4 ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-          基于 TDesign Icons 的车机端图标系统
+        <p className="text-lg mb-4" style={{ color: colors.text.secondary }}>
+          基于 TDesign Icons 的车机端图标系统。
         </p>
-        <a
-          href="https://tdesign.tencent.com/icons"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={`text-sm ${
-            isDark ? "text-blue-400 hover:text-blue-300" : "text-blue-600 hover:text-blue-700"
-          }`}
-        >
+        <a href="https://tdesign.tencent.com/icons" target="_blank" rel="noopener noreferrer" style={{ color: colors.text.link, fontSize: 14 }}>
           查看完整图标库 →
         </a>
       </div>
 
-      {/* 搜索框 */}
       <div className="mb-8">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="搜索图标..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className={`w-full px-4 py-3 rounded-lg border ${
-              isDark
-                ? "bg-[#141414] border-[#2a2a2a] text-white placeholder-gray-500"
-                : "bg-white border-gray-200 text-gray-900 placeholder-gray-400"
-            } focus:outline-none focus:ring-2 focus:ring-blue-500`}
-          />
-          <TDesignIcons.SearchIcon
-            className={`absolute right-4 top-1/2 -translate-y-1/2 ${
-              isDark ? "text-gray-500" : "text-gray-400"
-            }`}
-            size={20}
-          />
-        </div>
+        <TaiInput
+          value={searchQuery}
+          onChange={setSearchQuery}
+          placeholder="搜索图标..."
+          prefixIcon={<TDesignIcons.SearchIcon size={20} />}
+          isDark={isDark}
+          style={{ width: "100%" }}
+        />
       </div>
 
-      {/* 使用说明 */}
-      <div
-        className={`mb-8 p-4 border rounded-xl ${
-          isDark
-            ? "bg-gradient-to-r from-blue-600/10 to-cyan-600/10 border-blue-500/20"
-            : "bg-gradient-to-r from-blue-50 to-cyan-50 border-blue-200"
-        }`}
-      >
+      <div style={guidePanelStyle} className="mb-8">
         <h3 className="text-base font-semibold mb-2">💡 使用方法</h3>
-        <div className={`text-sm space-y-1 ${isDark ? "text-gray-300" : "text-gray-700"}`}>
+        <div className="text-sm space-y-1" style={{ color: colors.text.secondary }}>
           <p>
-            <code
-              className={`px-2 py-0.5 rounded ${
-                isDark ? "bg-black/30" : "bg-white/50"
-              }`}
-            >
-              import {"{ IconName }"} from 'tdesign-icons-react'
+            <code style={{ padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`, borderRadius: RADIUS.xl, backgroundColor: colors.bg.elevated }}>
+              import {'{ IconName }'} from 'tdesign-icons-react'
             </code>
           </p>
           <p>• 点击图标可复制名称</p>
-          <p>• 支持通过 size 和 style 属性自定义大小和颜色</p>
+          <p>• 支持通过 `size` 和 `style` 属性自定义大小和颜色</p>
         </div>
       </div>
 
-      {/* 图标分类展示 */}
       <div className="space-y-8">
         {Object.entries(filteredCategories).map(([key, category]) => (
           <div key={key}>
             <h2 className="text-xl font-bold mb-4">{category.name}</h2>
             <div className="grid grid-cols-6 gap-3">
               {category.icons.map((iconName) => {
-                const IconComponent = (TDesignIcons as any)[iconName];
+                const IconComponent = (TDesignIcons as Record<string, React.ComponentType<{ size?: number }>>)[iconName];
                 if (!IconComponent) return null;
 
                 return (
-                  <button
-                    key={iconName}
-                    onClick={() => handleCopyIcon(iconName)}
-                    className={`relative group p-4 border rounded-lg transition-all hover:scale-105 ${
-                      isDark
-                        ? "bg-[#141414] border-[#2a2a2a] hover:border-blue-500/50 hover:bg-[#1a1a1a]"
-                        : "bg-white border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                    }`}
-                  >
+                  <button key={iconName} type="button" onClick={() => handleCopyIcon(iconName)} style={{ ...categoryCardStyle, position: "relative" }}>
                     <div className="flex flex-col items-center gap-2">
-                      <IconComponent size={32} />
-                      <span
-                        className={`text-xs text-center line-clamp-2 ${
-                          isDark ? "text-gray-400" : "text-gray-600"
-                        }`}
-                      >
+                      <div style={{ color: colors.text.primary }}>
+                        <IconComponent size={32} />
+                      </div>
+                      <span className="text-xs text-center line-clamp-2" style={{ color: colors.text.secondary }}>
                         {iconName.replace("Icon", "")}
                       </span>
                     </div>
 
-                    {/* 复制提示 */}
-                    {copiedIcon === iconName && (
+                    {copiedIcon === iconName ? (
                       <div
-                        className={`absolute inset-0 flex items-center justify-center rounded-lg ${
-                          isDark ? "bg-black/80" : "bg-white/90"
-                        }`}
+                        style={{
+                          position: "absolute",
+                          inset: 0,
+                          borderRadius: RADIUS["2xl"],
+                          backgroundColor: colors.bg.glass,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
                       >
-                        <div className="flex items-center gap-1 text-green-500">
+                        <div className="flex items-center gap-1" style={{ color: colors.text.success }}>
                           <TDesignIcons.CheckIcon size={16} />
                           <span className="text-xs font-medium">已复制</span>
                         </div>
                       </div>
-                    )}
+                    ) : null}
                   </button>
                 );
               })}
@@ -295,73 +173,28 @@ export function Icons() {
         ))}
       </div>
 
-      {/* 无结果提示 */}
-      {Object.keys(filteredCategories).length === 0 && (
-        <div className="text-center py-12">
-          <TDesignIcons.SearchIcon
-            className={`mx-auto mb-4 ${isDark ? "text-gray-600" : "text-gray-300"}`}
-            size={48}
-          />
-          <p className={isDark ? "text-gray-500" : "text-gray-400"}>
-            未找到匹配的图标
-          </p>
+      {Object.keys(filteredCategories).length === 0 ? (
+        <div className="py-12 text-center">
+          <div style={{ color: colors.text.tertiary }}>
+            <TDesignIcons.SearchIcon className="mx-auto mb-4" size={48} />
+          </div>
+          <p style={{ color: colors.text.tertiary }}>未找到匹配的图标</p>
         </div>
-      )}
+      ) : null}
 
-      {/* 尺寸示例 */}
       <div className="mt-12">
         <h2 className="text-xl font-bold mb-4">尺寸规范</h2>
-        <div
-          className={`p-6 border rounded-xl ${
-            isDark ? "bg-[#141414] border-[#2a2a2a]" : "bg-white border-gray-200"
-          }`}
-        >
+        <div style={categoryCardStyle}>
           <div className="flex items-center gap-8">
-            <div className="flex flex-col items-center gap-2">
-              <TDesignIcons.HomeIcon size={16} />
-              <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                16px
-              </span>
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-                小图标
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <TDesignIcons.HomeIcon size={20} />
-              <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                20px
-              </span>
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-                常规
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <TDesignIcons.HomeIcon size={24} />
-              <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                24px
-              </span>
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-                标准
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <TDesignIcons.HomeIcon size={32} />
-              <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                32px
-              </span>
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-                大图标
-              </span>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <TDesignIcons.HomeIcon size={48} />
-              <span className={`text-xs ${isDark ? "text-gray-400" : "text-gray-600"}`}>
-                48px
-              </span>
-              <span className={`text-xs ${isDark ? "text-gray-500" : "text-gray-400"}`}>
-                特大
-              </span>
-            </div>
+            {[16, 20, 24, 32, 48].map((size) => (
+              <div key={size} className="flex flex-col items-center gap-2">
+                <TDesignIcons.HomeIcon size={size} />
+                <span className="text-xs" style={{ color: colors.text.secondary }}>{size}px</span>
+                <span className="text-xs" style={{ color: colors.text.tertiary }}>
+                  {size === 16 ? "小图标" : size === 20 ? "常规" : size === 24 ? "标准" : size === 32 ? "大图标" : "特大"}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

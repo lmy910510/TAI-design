@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import { useThemeOptional } from "@tai-design/components";
 
 interface SwitchComponentProps {
   checked: boolean;
@@ -6,19 +7,20 @@ interface SwitchComponentProps {
   disabled?: boolean;
 }
 
-// 开关尺寸配置 - 基于车机端标准
 const SWITCH_CONFIG = {
   width: 90,
   height: 54,
   circleSize: 40,
   padding: 7,
-};
+} as const;
 
 export function SwitchComponent({
   checked,
   onChange,
   disabled = false,
 }: SwitchComponentProps) {
+  const { colors } = useThemeOptional();
+
   const circleOffset = checked
     ? SWITCH_CONFIG.width - SWITCH_CONFIG.circleSize - SWITCH_CONFIG.padding
     : SWITCH_CONFIG.padding;
@@ -29,37 +31,31 @@ export function SwitchComponent({
       disabled={disabled}
       className="relative cursor-pointer disabled:cursor-not-allowed disabled:opacity-50"
       style={{
-        width: `${SWITCH_CONFIG.width}px`,
-        height: `${SWITCH_CONFIG.height}px`,
+        width: SWITCH_CONFIG.width,
+        height: SWITCH_CONFIG.height,
       }}
+      type="button"
+      aria-pressed={checked}
     >
-      {/* 背景 */}
       <motion.div
         className="absolute inset-0 rounded-full"
         animate={{
-          backgroundColor: checked
-            ? "rgba(0, 0, 0, 0.8)"
-            : "rgba(0, 0, 0, 0.24)",
+          backgroundColor: checked ? colors.switch.on : colors.switch.off,
         }}
         transition={{ duration: 0.2 }}
       />
 
-      {/* 圆形滑块 */}
       <motion.div
-        className="absolute bg-white rounded-full shadow-sm"
+        className="absolute rounded-full"
         style={{
-          width: `${SWITCH_CONFIG.circleSize}px`,
-          height: `${SWITCH_CONFIG.circleSize}px`,
-          top: `${SWITCH_CONFIG.padding}px`,
+          width: SWITCH_CONFIG.circleSize,
+          height: SWITCH_CONFIG.circleSize,
+          top: SWITCH_CONFIG.padding,
+          backgroundColor: colors.switch.thumb,
+          boxShadow: `0 2px 6px ${colors.bg.overlay}`,
         }}
-        animate={{
-          left: `${circleOffset}px`,
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 500,
-          damping: 30,
-        }}
+        animate={{ left: circleOffset }}
+        transition={{ type: "spring", stiffness: 500, damping: 30 }}
       />
     </button>
   );

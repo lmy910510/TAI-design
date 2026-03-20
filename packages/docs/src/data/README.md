@@ -4,14 +4,13 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  Component Layer (组件层)                                        │
-│  └── 组件直接使用语义 Token                                       │
+│  Docs Compatibility Layer                                       │
+│  └── colorTokens.ts（仅保留历史导入路径）                        │
 ├─────────────────────────────────────────────────────────────────┤
-│  Semantic Layer (语义层) - semanticTokens.ts                     │
-│  └── text / icon / surface / border / action / status / state   │
-├─────────────────────────────────────────────────────────────────┤
-│  Primitive Layer (基础层) - primitives.ts                        │
-│  └── alpha / blueGray / status / theme / static                 │
+│  @tai-design/components / tokens                                │
+│  ├── semanticTokens.ts   # 语义 Token                           │
+│  ├── legacyColors.ts     # 组件运行时兼容色值结构               │
+│  └── primitives.ts       # alpha / blueGray / status / theme   │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -52,12 +51,14 @@ function MyComponent({ themeName = 'darkBlue' }: { themeName?: ThemeName }) {
   const tokens = getTokens(isDark, themeName);
   
   return (
-    <button style={{ 
-      backgroundColor: tokens.action.primary.bg,
-      color: tokens.action.primary.text,
-    }}>
-      品牌按钮
-    </button>
+    <a
+      style={{
+        color: tokens.text.link,
+        borderBottom: `1px solid ${tokens.border.brand}`,
+      }}
+    >
+      品牌语义链接
+    </a>
   );
 }
 ```

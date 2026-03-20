@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { Loader2 } from 'lucide-react';
+import { useTheme } from '@tai-design/components';
 
 export type LoadingSize = "small" | "medium" | "large";
 
@@ -15,19 +16,14 @@ export interface LoadingComponentProps {
 }
 
 const SIZE_MAP = {
-  small: { spinner: 32, text: 24, gap: 16 },
+  small: { spinner: 32, text: 24, gap: 12 },
   medium: { spinner: 48, text: 28, gap: 24 },
   large: { spinner: 64, text: 32, gap: 30 },
-};
+} as const;
 
 /**
  * 加载组件 (Loading)
  * 用于页面和区块的加载状态
- * 
- * 设计规范：
- * - 图标颜色：#2965ff
- * - 文字颜色：rgba(0,0,0,0.72)
- * - 旋转动画：1秒一圈，ease-in-out
  */
 export function LoadingComponent({
   children = "加载中...",
@@ -35,22 +31,25 @@ export function LoadingComponent({
   showText = true,
   className = "",
 }: LoadingComponentProps) {
+  const { colors } = useTheme();
   const sizeConfig = SIZE_MAP[size];
 
   return (
     <div className={`flex flex-col items-center justify-center ${className}`}>
-      <Loader2 
-        size={sizeConfig.spinner} 
-        className="text-[#2965ff] animate-spin"
+      <Loader2
+        size={sizeConfig.spinner}
+        className="animate-spin"
+        style={{ color: colors.loading.spinner }}
         strokeWidth={2.5}
       />
       {showText && (
-        <div 
-          className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[rgba(0,0,0,0.72)] text-center"
-          style={{ 
-            fontSize: `${sizeConfig.text}px`, 
+        <div
+          className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-center"
+          style={{
+            color: colors.loading.text,
+            fontSize: `${sizeConfig.text}px`,
             marginTop: `${sizeConfig.gap}px`,
-            lineHeight: 1.5 
+            lineHeight: 1.5,
           }}
         >
           {children}
