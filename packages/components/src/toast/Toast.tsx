@@ -5,7 +5,7 @@ import {
   ErrorCircleFilledIcon,
   InfoCircleFilledIcon,
 } from "tdesign-icons-react";
-import { RADIUS, SHADOW, SPACING, createColors } from "../tokens";
+import { RADIUS, SHADOW, SPACING } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 type ToastType = "text" | "success" | "error" | "info";
@@ -18,8 +18,8 @@ const TOAST_CONFIG = {
   paddingX: SPACING["6"],
   paddingY: SPACING["4"],
   gap: SPACING["4"],
-  fontSize: 32,
   iconSize: 42,
+  fontSize: 32,   // → typography.title.card.fontSize
 };
 
 export interface ToastProps {
@@ -78,7 +78,7 @@ export const Toast = ({
 }: ToastProps) => {
   const theme = useThemeOptional();
   const isDark = isDarkProp ?? theme.isDark;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const tokens = theme.tokens;
 
   useEffect(() => {
     if (!visible || duration <= 0) {
@@ -112,16 +112,16 @@ export const Toast = ({
       paddingBottom: TOAST_CONFIG.paddingY,
       boxSizing: "border-box",
       borderRadius: RADIUS["2xl"],
-      backgroundColor: colors.toast.bg,
-      color: colors.toast.text,
+      backgroundColor: tokens.toast.bg,
+      color: tokens.toast.text,
       fontSize: TOAST_CONFIG.fontSize,
-      fontWeight: 500,
-      lineHeight: 1.5,
+      fontWeight: tokens.typography.title.card.fontWeight,
+      lineHeight: tokens.typography.title.card.lineHeight,
       textAlign: "center",
       boxShadow: SHADOW.xl,
       wordBreak: "break-word",
     }),
-    [colors.toast.bg, colors.toast.text]
+    [tokens.toast.bg, tokens.toast.text]
   );
 
   const resolvedIcon = useMemo(() => {
@@ -135,7 +135,7 @@ export const Toast = ({
           <CheckCircleFilledIcon
             style={{
               fontSize: TOAST_CONFIG.iconSize,
-              color: colors.functional.success.main,
+              color: tokens.functionalColor.success.main,
               flexShrink: 0,
             }}
           />
@@ -145,7 +145,7 @@ export const Toast = ({
           <ErrorCircleFilledIcon
             style={{
               fontSize: TOAST_CONFIG.iconSize,
-              color: colors.functional.danger.main,
+              color: tokens.functionalColor.error.main,
               flexShrink: 0,
             }}
           />
@@ -155,7 +155,7 @@ export const Toast = ({
           <InfoCircleFilledIcon
             style={{
               fontSize: TOAST_CONFIG.iconSize,
-              color: colors.functional.info.main,
+              color: tokens.functionalColor.info.main,
               flexShrink: 0,
             }}
           />
@@ -164,7 +164,7 @@ export const Toast = ({
       default:
         return null;
     }
-  }, [colors.functional.danger.main, colors.functional.info.main, colors.functional.success.main, icon, type]);
+  }, [tokens.functionalColor.error.main, tokens.functionalColor.info.main, tokens.functionalColor.success.main, icon, type]);
 
   const motionVariants = useMemo(
     () => ({

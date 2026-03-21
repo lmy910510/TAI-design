@@ -103,3 +103,10 @@ export type { VideoProps, VideoVariant } from "./video";
 
 export { AudioPlayer } from "./audio-player";
 export type { AudioPlayerProps, AudioPlayerVariant } from "./audio-player";
+
+export { ChoicePicker } from "./choice-picker";
+export type {
+  ChoicePickerProps,
+  ChoicePickerMode,
+  ChoiceOption,
+} from "./choice-picker";

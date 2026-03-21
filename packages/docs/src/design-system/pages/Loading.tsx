@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import svgPaths from "../../assets/svg-data/svg-yxp5sj61sx";
-import { RADIUS, SHADOW, SPACING, useTheme } from "@tai-design/components";
+import { RADIUS, SHADOW, SPACING, STATIC, useTheme } from "@tai-design/components";
+import { DocPageHeader } from "../DocComponents";
 
 function SpinnerLine({ color, className = "" }: { color: string; className?: string }) {
   return (
@@ -19,24 +20,24 @@ function SpinnerCircle({ color, className = "" }: { color: string; className?: s
 }
 
 export function Loading() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
 
   const chipStyle: CSSProperties = {
     display: "inline-block",
     padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
     marginBottom: SPACING["3"],
     borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
+    color: tokens.textColor.secondary,
     fontSize: 14,
   };
 
   const sectionPanelStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   const skeletonCanvasStyle: CSSProperties = {
@@ -44,19 +45,19 @@ export function Loading() {
     maxWidth: 900,
     aspectRatio: "1300 / 487.5",
     borderRadius: RADIUS.xl,
-    backgroundColor: colors.bg.tertiary,
+    backgroundColor: tokens.bgColor.secondaryContainer,
     position: "relative",
     overflow: "hidden",
     boxShadow: SHADOW.xl,
   };
 
-  const ruleBorderColor = colors.loading.spinner;
+  const ruleBorderColor = tokens.loading.spinner;
   const helperPillStyle: CSSProperties = {
     width: 20,
     height: 20,
     borderRadius: 999,
-    backgroundColor: colors.loading.spinner,
-    color: colors.static.white,
+    backgroundColor: tokens.loading.spinner,
+    color: STATIC.white,
     fontSize: 12,
     fontWeight: 700,
     display: "flex",
@@ -66,27 +67,21 @@ export function Loading() {
 
   return (
     <div>
-      <div className="mb-8">
-        <div style={chipStyle}>Components / 组件</div>
-        <h1 className="text-4xl font-bold mb-4">加载</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          在网络较慢或数据量较大时，用一致的主题 token 表达加载中的状态反馈。
-        </p>
-      </div>
+      <DocPageHeader category="Components / 组件" title="加载" description="在网络较慢或数据量较大时，用一致的主题 token 表达加载中的状态反馈。" />
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">类型一：全局加载 / Toast 加载</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>类型一：全局加载 / Toast 加载</h2>
         <div className="flex items-center justify-center" style={sectionPanelStyle}>
           <div
             className="flex items-center gap-6 px-12 py-6"
             style={{
               borderRadius: RADIUS["2xl"],
-              backgroundColor: colors.toast.bg,
+              backgroundColor: tokens.toast.bg,
               boxShadow: SHADOW.xl,
             }}
           >
-            <SpinnerLine className="w-12 h-12 [animation:spin_0.8s_linear_infinite]" color={colors.toast.text} />
-            <span className="text-[32px] font-medium leading-none font-['Noto_Sans_S_Chinese']" style={{ color: colors.toast.text }}>
+            <SpinnerLine className="w-12 h-12 [animation:spin_0.8s_linear_infinite]" color={tokens.toast.text} />
+            <span className="text-[32px] font-medium leading-none font-['Noto_Sans_S_Chinese']" style={{ color: tokens.toast.text }}>
               加载中...
             </span>
           </div>
@@ -94,7 +89,7 @@ export function Loading() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">类型二：全局加载 / 组合骨架屏</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>类型二：全局加载 / 组合骨架屏</h2>
         <style>
           {`
             @keyframes skeleton-shine {
@@ -111,7 +106,7 @@ export function Loading() {
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: `linear-gradient(175deg, ${colors.bg.brandSubtle} 0%, ${colors.bg.secondary} 30.76%)`,
+                background: `linear-gradient(175deg, ${tokens.bgColor.brandLight} 0%, ${tokens.bgColor.container} 30.76%)`,
               }}
             />
 
@@ -123,12 +118,12 @@ export function Loading() {
                 width: "93.75%",
                 height: "70.83%",
                 borderRadius: `${RADIUS.xl}px`,
-                backgroundColor: colors.bg.primary,
+                backgroundColor: tokens.bgColor.page,
               }}
             />
 
-            <div className="absolute" style={{ left: "3.125%", top: "6.25%", width: "15.93%", height: "8.333%", backgroundColor: colors.bg.secondary }} />
-            <div className="absolute rounded-full" style={{ left: "90.3125%", top: "4.56%", width: "4.375%", height: "11.666%", backgroundColor: colors.bg.secondary }} />
+            <div className="absolute" style={{ left: "3.125%", top: "6.25%", width: "15.93%", height: "8.333%", backgroundColor: tokens.bgColor.container }} />
+            <div className="absolute rounded-full" style={{ left: "90.3125%", top: "4.56%", width: "4.375%", height: "11.666%", backgroundColor: tokens.bgColor.container }} />
 
             <div
               className="absolute inset-0 z-10"
@@ -141,12 +136,12 @@ export function Loading() {
                 WebkitMaskRepeat: "no-repeat",
               }}
             >
-              <div className="absolute inset-0" style={{ backgroundColor: colors.bg.secondary }} />
+              <div className="absolute inset-0" style={{ backgroundColor: tokens.bgColor.container }} />
               <div
                 className="absolute top-0 bottom-0 z-20 pointer-events-none"
                 style={{
                   width: 200,
-                  background: `linear-gradient(90deg, transparent, ${colors.bg.glass}, transparent)`,
+                  background: `linear-gradient(90deg, transparent, ${tokens.bgColor.glass}, transparent)`,
                   animation: "skeleton-shine 2000ms cubic-bezier(0.42, 0, 0.58, 1) infinite",
                 }}
               />
@@ -156,11 +151,11 @@ export function Loading() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">类型三：局部加载 / 图标 + 文字</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>类型三：局部加载 / 图标 + 文字</h2>
         <div className="flex items-center justify-center" style={sectionPanelStyle}>
           <div className="flex items-center gap-3">
-            <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={colors.loading.spinner} />
-            <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: colors.loading.text }}>
+            <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.loading.spinner} />
+            <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.loading.text }}>
               松开加载下一页
             </span>
           </div>
@@ -168,11 +163,11 @@ export function Loading() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">规则</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>规则</h2>
         <div className="flex items-center justify-center gap-24" style={sectionPanelStyle}>
           <div className="flex items-center gap-2 relative">
             <div className="relative p-1" style={{ border: `1px solid ${ruleBorderColor}` }}>
-              <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={colors.loading.spinner} />
+              <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.loading.spinner} />
               <div className="absolute left-1/2 -bottom-8 -translate-x-1/2 flex flex-col items-center">
                 <div className="w-[1px] h-6" style={{ backgroundColor: ruleBorderColor }} />
                 <div style={helperPillStyle}>1</div>
@@ -180,7 +175,7 @@ export function Loading() {
             </div>
 
             <div className="relative p-1" style={{ border: `1px solid ${ruleBorderColor}` }}>
-              <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: colors.loading.text }}>
+              <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.loading.text }}>
                 松开加载下一页
               </span>
               <div className="absolute left-1/2 -bottom-8 -translate-x-1/2 flex flex-col items-center">
@@ -194,16 +189,16 @@ export function Loading() {
             <div className="flex items-start gap-4">
               <div style={helperPillStyle}>1</div>
               <div>
-                <div className="text-xl font-medium" style={{ color: colors.text.primary }}>进度指示</div>
-                <div className="text-lg" style={{ color: colors.text.secondary }}>采用图标动效</div>
+                <div className="text-xl font-medium" style={{ color: tokens.textColor.primary }}>进度指示</div>
+                <div className="text-lg" style={{ color: tokens.textColor.secondary }}>采用图标动效</div>
               </div>
             </div>
 
             <div className="flex items-start gap-4">
               <div style={helperPillStyle}>2</div>
               <div>
-                <div className="text-xl font-medium" style={{ color: colors.text.primary }}>文字说明（模糊性加载方式）</div>
-                <div className="text-lg" style={{ color: colors.text.secondary }}>显示当前加载状态</div>
+                <div className="text-xl font-medium" style={{ color: tokens.textColor.primary }}>文字说明（模糊性加载方式）</div>
+                <div className="text-lg" style={{ color: tokens.textColor.secondary }}>显示当前加载状态</div>
               </div>
             </div>
           </div>
@@ -214,17 +209,133 @@ export function Loading() {
         style={{
           padding: SPACING["4"],
           borderRadius: RADIUS["2xl"],
-          border: `1px solid ${colors.border.brand}`,
-          background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+          border: `1px solid ${tokens.borderColor.brand}`,
+          background: `linear-gradient(to right, ${tokens.bgColor.brandLight}, ${tokens.bgColor.container})`,
         }}
       >
         <h3 className="text-base font-semibold mb-3">💡 设计原则</h3>
-        <ul className="text-sm space-y-2" style={{ color: colors.text.secondary }}>
+        <ul className="text-sm space-y-2" style={{ color: tokens.textColor.secondary }}>
           <li>• 加载反馈应优先表达进度感，避免静止元素造成不确定性。</li>
           <li>• 骨架屏适合结构清晰的内容区，能帮助用户预判即将出现的信息布局。</li>
           <li>• Toast / 模态加载应减少层级噪音，聚焦状态反馈本身。</li>
-          <li>• 页面示例直接复用 `colors.loading.*` 和背景语义 token。</li>
+          <li>• 页面示例直接复用 `tokens.loading.*` 和背景语义 token。</li>
         </ul>
+      </div>
+
+      <div className="mt-8">
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>🎨 Token 使用清单</h2>
+        <div
+          style={{
+            padding: SPACING["4"],
+            borderRadius: RADIUS["2xl"],
+            border: `1px solid ${tokens.borderColor.level1}`,
+            backgroundColor: tokens.bgColor.container,
+          }}
+        >
+          <div style={{ overflowX: "auto" }}>
+            <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
+              <thead>
+                <tr style={{ borderBottom: `2px solid ${tokens.borderColor.level1}` }}>
+                  {["部位", "组件级 Token", "公开语义 Token", "用途说明"].map((h) => (
+                    <th key={h} style={{ textAlign: "left", padding: "10px 14px", color: tokens.textColor.secondary, fontWeight: 600 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {([
+                  { part: "旋转图标", compToken: "tokens.loading.spinner", pubToken: "functionalColor.brand.main", desc: "加载动画主色", color: tokens.loading.spinner },
+                  { part: "提示文字", compToken: "tokens.loading.text", pubToken: "textColor.secondary", desc: "加载提示文案", color: tokens.loading.text },
+                  { part: "遮罩背景", compToken: "tokens.bgColor.overlay", pubToken: "bgColor.overlay", desc: "全局加载遮罩层", color: tokens.bgColor.overlay },
+                  { part: "Toast 背景（全局加载）", compToken: "tokens.toast.bg", pubToken: "bgColor.secondaryContainer", desc: "全局加载弹层背景", color: tokens.toast.bg },
+                  { part: "Toast 文字（全局加载）", compToken: "tokens.toast.text", pubToken: "textColor.anti", desc: "全局加载弹层文字", color: tokens.toast.text },
+                ] as const).map((row) => (
+                  <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
+                    <td style={{ padding: "10px 14px", fontWeight: 500, color: tokens.textColor.primary }}>{row.part}</td>
+                    <td style={{ padding: "10px 14px" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <div style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: row.color, border: `1px solid ${tokens.borderColor.level1}`, flexShrink: 0 }} />
+                        <code style={{ fontSize: 12, color: tokens.textColor.link }}>{row.compToken}</code>
+                      </div>
+                    </td>
+                    <td style={{ padding: "10px 14px" }}><code style={{ fontSize: 12, color: tokens.textColor.secondary }}>{row.pubToken}</code></td>
+                    <td style={{ padding: "10px 14px", color: tokens.textColor.tertiary }}>{row.desc}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ marginTop: SPACING["4"], padding: SPACING["3"], borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, border: `1px solid ${tokens.borderColor.level1}` }}>
+            <p style={{ fontSize: 13, color: tokens.textColor.secondary, lineHeight: 1.6 }}>
+              <strong>排版 Token：</strong>加载文字行高使用 <code>tokens.typography.body.primary.lineHeight</code> (1.4)。
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>颜色规范</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: SPACING["4"] }}>
+          <div
+            style={{
+              padding: SPACING["4"],
+              borderRadius: RADIUS["2xl"],
+              border: `1px solid ${tokens.borderColor.level1}`,
+              backgroundColor: tokens.bgColor.container,
+            }}
+          >
+            <h3 className="text-lg font-semibold mb-4">加载动画</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.loading.spinner, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.loading.spinner}</div>
+              <div>Spinner 颜色（<code>functionalColor.brand.main</code>）</div>
+            </div>
+          </div>
+          <div
+            style={{
+              padding: SPACING["4"],
+              borderRadius: RADIUS["2xl"],
+              border: `1px solid ${tokens.borderColor.level1}`,
+              backgroundColor: tokens.bgColor.container,
+            }}
+          >
+            <h3 className="text-lg font-semibold mb-4">加载文字</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.loading.text, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.loading.text}</div>
+              <div>加载提示文字（<code>textColor.secondary</code>）</div>
+            </div>
+          </div>
+          <div
+            style={{
+              padding: SPACING["4"],
+              borderRadius: RADIUS["2xl"],
+              border: `1px solid ${tokens.borderColor.level1}`,
+              backgroundColor: tokens.bgColor.container,
+            }}
+          >
+            <h3 className="text-lg font-semibold mb-4">Toast 背景</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.bg, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.toast.bg}</div>
+              <div>全局加载背景（<code>bgColor.secondaryContainer</code>）</div>
+            </div>
+          </div>
+          <div
+            style={{
+              padding: SPACING["4"],
+              borderRadius: RADIUS["2xl"],
+              border: `1px solid ${tokens.borderColor.level1}`,
+              backgroundColor: tokens.bgColor.container,
+            }}
+          >
+            <h3 className="text-lg font-semibold mb-4">Toast 文字</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.text, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level1}` }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.toast.text}</div>
+              <div>全局加载文字（<code>textColor.anti</code>）</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -105,14 +105,14 @@ const navigationGroups = [
 
 export function DesignSystemLayout() {
   const location = useLocation();
-  const { colors, isDark, toggle } = useTheme();
+  const { tokens, isDark, toggle } = useTheme();
 
   return (
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: colors.bg.secondary,
-        color: colors.text.primary,
+        backgroundColor: tokens.bgColor.container,
+        color: tokens.textColor.primary,
       }}
     >
       <aside
@@ -122,8 +122,8 @@ export function DesignSystemLayout() {
           left: 0,
           bottom: 0,
           width: SIDEBAR_WIDTH,
-          borderRight: `1px solid ${colors.border.default}`,
-          backgroundColor: colors.bg.primary,
+          borderRight: `1px solid ${tokens.borderColor.level2}`,
+          backgroundColor: tokens.bgColor.page,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
@@ -134,8 +134,8 @@ export function DesignSystemLayout() {
           style={{
             flexShrink: 0,
             padding: `${SPACING["4"]}px ${SPACING["4"]}px ${SPACING["3"]}px`,
-            borderBottom: `1px solid ${colors.border.default}`,
-            backgroundColor: colors.bg.primary,
+            borderBottom: `1px solid ${tokens.borderColor.level2}`,
+            backgroundColor: tokens.bgColor.page,
           }}
         >
           <Link
@@ -147,9 +147,9 @@ export function DesignSystemLayout() {
               width: "fit-content",
               padding: `${SPACING["2"]}px ${SPACING["3"]}px`,
               borderRadius: RADIUS.xl,
-              border: `1px solid ${colors.border.subtle}`,
-              backgroundColor: colors.bg.secondary,
-              color: colors.text.primary,
+              border: `1px solid ${tokens.borderColor.level1}`,
+              backgroundColor: tokens.bgColor.container,
+              color: tokens.textColor.primary,
               textDecoration: "none",
               fontSize: 16,
               lineHeight: "16px",
@@ -175,7 +175,7 @@ export function DesignSystemLayout() {
               <h1 style={{ margin: 0, fontSize: 30, lineHeight: "36px", fontWeight: 700 }}>
                 TAI Design 规范库
               </h1>
-              <p style={{ margin: 0, color: colors.text.tertiary, fontSize: 16, lineHeight: "22px" }}>
+              <p style={{ margin: 0, color: tokens.textColor.tertiary, fontSize: 16, lineHeight: "22px" }}>
                 In-Vehicle Design System
               </p>
             </div>
@@ -193,7 +193,7 @@ export function DesignSystemLayout() {
                     style={{
                       margin: `0 0 ${SPACING["2"]}px 0`,
                       padding: `0 ${SPACING["2"]}px`,
-                      color: colors.text.tertiary,
+                      color: tokens.textColor.tertiary,
                       fontSize: 11,
                       lineHeight: "16px",
                       fontWeight: 600,
@@ -221,9 +221,9 @@ export function DesignSystemLayout() {
                             borderRadius: RADIUS.xl,
                             textDecoration: "none",
                             transition: "background-color 150ms ease, color 150ms ease",
-                            backgroundColor: isActive ? colors.button.primary.bg : colors.bg.primary,
-                            color: isActive ? colors.button.primary.text : colors.text.secondary,
-                            border: `1px solid ${isActive ? colors.button.primary.bg : colors.border.subtle}`,
+                            backgroundColor: isActive ? tokens.textColor.primary : tokens.bgColor.page,
+                            color: isActive ? tokens.textColor.anti : tokens.textColor.secondary,
+                            border: `1px solid ${isActive ? tokens.textColor.primary : tokens.borderColor.level1}`,
                           }}
                         >
                           <Icon size={16} style={{ flexShrink: 0 }} />
@@ -245,8 +245,8 @@ export function DesignSystemLayout() {
                                 lineHeight: "12px",
                                 padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
                                 borderRadius: RADIUS.xl,
-                                backgroundColor: isActive ? colors.button.primary.text : colors.bg.secondary,
-                                color: isActive ? colors.button.primary.bg : colors.text.tertiary,
+                                backgroundColor: isActive ? tokens.textColor.anti : tokens.bgColor.container,
+                                color: isActive ? tokens.textColor.primary : tokens.textColor.tertiary,
                               }}
                             >
                               Ext
@@ -263,7 +263,7 @@ export function DesignSystemLayout() {
             <div
               style={{
                 paddingTop: SPACING["4"],
-                borderTop: `1px solid ${colors.border.default}`,
+                borderTop: `1px solid ${tokens.borderColor.level2}`,
                 display: "flex",
                 flexDirection: "column",
                 gap: SPACING["3"],
@@ -272,7 +272,7 @@ export function DesignSystemLayout() {
               <Button variant="secondary" size="extraSmall" fullWidth onClick={toggle}>
                 {isDark ? "切换浅色模式" : "切换深色模式"}
               </Button>
-              <div style={{ color: colors.text.tertiary, fontSize: 12, lineHeight: "18px" }}>
+              <div style={{ color: tokens.textColor.tertiary, fontSize: 12, lineHeight: "18px" }}>
                 <p style={{ margin: 0 }}>版本: 1.0.0</p>
                 <p style={{ margin: `${SPACING["2"]}px 0 0 0` }}>更新日期: 2026-03-10</p>
               </div>

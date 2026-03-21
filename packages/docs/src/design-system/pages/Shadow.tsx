@@ -1,6 +1,7 @@
 import { CSSProperties } from "react";
 import svgPaths from "../../assets/svg-data/svg-y5u7qpt8mc";
-import { RADIUS, useTheme } from "@tai-design/components";
+import { RADIUS, SPACING, STATIC, useTheme } from "@tai-design/components";
+import { DocPageHeader } from "../DocComponents";
 
 const shadowLevels = [
   {
@@ -48,83 +49,77 @@ const shadowLevels = [
 ] as const;
 
 export function Shadow() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
 
   const chipStyle: CSSProperties = {
     display: "inline-block",
     padding: "6px 12px",
     marginBottom: 16,
     borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
+    color: tokens.textColor.secondary,
     fontSize: 14,
   };
 
   const panelStyle: CSSProperties = {
     padding: 24,
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const gradientPanelStyle: CSSProperties = {
     ...panelStyle,
-    background: `linear-gradient(to right, ${colors.bg.secondary}, ${colors.bg.tertiary})`,
+    background: `linear-gradient(to right, ${tokens.bgColor.container}, ${tokens.bgColor.secondaryContainer})`,
   };
 
   const displayAreaStyle: CSSProperties = {
     padding: 36,
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   const floatingSurfaceStyle: CSSProperties = {
-    backgroundColor: colors.bg.primary,
+    backgroundColor: tokens.bgColor.page,
     borderRadius: RADIUS["2xl"],
   };
 
-  const tableBorderColor = colors.border.subtle;
+  const tableBorderColor = tokens.borderColor.level1;
   const tableHeaderStyle: CSSProperties = {
-    backgroundColor: colors.brand.blue,
-    color: colors.static.white,
+    backgroundColor: tokens._meta.brandColor,
+    color: STATIC.white,
   };
 
   const helperCardStyle: CSSProperties = {
     padding: 24,
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const innerSampleStyle: CSSProperties = {
     padding: 24,
     borderRadius: RADIUS.xl,
-    backgroundColor: colors.bg.primary,
+    backgroundColor: tokens.bgColor.page,
   };
 
   return (
     <div>
-      <div className="mb-8">
-        <div style={chipStyle}>Foundation / 基础</div>
-        <h1 className="text-4xl font-bold mb-4">投影规范</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          通过投影营造层次感，让界面元素具有空间深度
-        </p>
-      </div>
+      <DocPageHeader category="Foundation / 基础" title="投影规范" description="通过投影营造层次感，让界面元素具有空间深度" />
 
       <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">定义</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>定义</h2>
         <div style={gradientPanelStyle}>
-          <p className="text-base leading-relaxed" style={{ color: colors.text.secondary }}>
+          <p className="text-base leading-relaxed" style={{ color: tokens.textColor.secondary }}>
             投影是营造界面层次感的重要手段，通过不同程度的投影可以区分元素的层级关系，引导用户注意力。合理使用投影能让界面更有空间感和立体感，同时避免过度使用造成视觉混乱。
           </p>
         </div>
       </div>
 
       <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">投影层级</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>投影层级</h2>
         <div style={displayAreaStyle}>
           <div className="flex items-center justify-between gap-8 mb-8">
             {shadowLevels.map((item, index) => (
@@ -143,19 +138,19 @@ export function Shadow() {
 
           <div className="relative h-[40px] mb-6">
             <svg className="absolute w-full h-full" viewBox="0 0 1600 40" fill="none" preserveAspectRatio="none">
-              <path d={svgPaths.p3bfbbb0} fill={colors.brand.blue} />
+              <path d={svgPaths.p3bfbbb0} fill={tokens._meta.brandColor} />
             </svg>
           </div>
 
           <div className="flex items-start justify-between gap-8">
             {shadowLevels.map((item, index) => (
               <div key={index} className="flex flex-col items-center text-center flex-1" style={{ maxWidth: 160 }}>
-                <p className="text-xl font-semibold mb-2" style={{ color: colors.text.primary }}>
+                <p className="text-xl font-semibold mb-2" style={{ color: tokens.textColor.primary }}>
                   {item.level}
                   {item.level !== "-" && <span className="ml-2 text-base">{item.name}</span>}
                   {item.level === "-" && <span className="ml-2 text-base">无投影</span>}
                 </p>
-                <p className="text-xs leading-relaxed" style={{ color: colors.text.secondary }}>
+                <p className="text-xs leading-relaxed" style={{ color: tokens.textColor.secondary }}>
                   {item.usage}
                 </p>
               </div>
@@ -165,7 +160,7 @@ export function Shadow() {
       </div>
 
       <div className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">投影参数</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>投影参数</h2>
         <div className="border rounded-lg overflow-hidden" style={{ borderColor: tableBorderColor }}>
           <div className="grid grid-cols-4" style={tableHeaderStyle}>
             <div className="px-6 py-4 text-center border-r border-black/10">
@@ -187,29 +182,29 @@ export function Shadow() {
               key={index}
               className="grid grid-cols-4"
               style={{
-                backgroundColor: colors.bg.elevated,
+                backgroundColor: tokens.bgColor.elevated,
                 borderBottom: index !== shadowLevels.length - 1 ? `1px solid ${tableBorderColor}` : undefined,
               }}
             >
               <div className="px-6 py-4 flex items-center justify-center border-r" style={{ borderColor: tableBorderColor }}>
-                <p className="text-base font-semibold" style={{ color: colors.text.primary }}>{item.level}</p>
+                <p className="text-base font-semibold" style={{ color: tokens.textColor.primary }}>{item.level}</p>
               </div>
               <div className="px-6 py-4 flex items-center justify-center border-r" style={{ borderColor: tableBorderColor }}>
-                <p className="text-sm" style={{ color: colors.text.secondary }}>{item.name}</p>
+                <p className="text-sm" style={{ color: tokens.textColor.secondary }}>{item.name}</p>
               </div>
               <div className="px-6 py-4 flex items-center justify-center border-r" style={{ borderColor: tableBorderColor }}>
                 <code
                   className="text-xs px-3 py-1 rounded"
                   style={{
-                    backgroundColor: colors.bg.secondary,
-                    color: colors.text.secondary,
+                    backgroundColor: tokens.bgColor.container,
+                    color: tokens.textColor.secondary,
                   }}
                 >
                   {item.cssValue}
                 </code>
               </div>
               <div className="px-6 py-4 flex items-center justify-center">
-                <p className="text-xs" style={{ color: colors.text.secondary }}>{item.usage}</p>
+                <p className="text-xs" style={{ color: tokens.textColor.secondary }}>{item.usage}</p>
               </div>
             </div>
           ))}
@@ -217,45 +212,45 @@ export function Shadow() {
       </div>
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold mb-4">应用示例</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>应用示例</h2>
         <div className="grid grid-cols-3 gap-6">
           <div style={helperCardStyle}>
-            <h3 className="text-base font-semibold mb-4" style={{ color: colors.text.primary }}>
+            <h3 className="text-base font-semibold mb-4" style={{ color: tokens.textColor.primary }}>
               XS - 小型悬浮组件
             </h3>
             <div className="flex flex-col gap-3">
               <div style={{ ...innerSampleStyle, boxShadow: shadowLevels[1].shadow }}>
-                <p className="text-sm" style={{ color: colors.text.secondary }}>Badge标签</p>
+                <p className="text-sm" style={{ color: tokens.textColor.secondary }}>Badge标签</p>
               </div>
               <div style={{ ...innerSampleStyle, boxShadow: shadowLevels[1].shadow }}>
-                <p className="text-sm" style={{ color: colors.text.secondary }}>Tooltip提示</p>
+                <p className="text-sm" style={{ color: tokens.textColor.secondary }}>Tooltip提示</p>
               </div>
             </div>
           </div>
 
           <div style={helperCardStyle}>
-            <h3 className="text-base font-semibold mb-4" style={{ color: colors.text.primary }}>
+            <h3 className="text-base font-semibold mb-4" style={{ color: tokens.textColor.primary }}>
               M - 常规卡片
             </h3>
             <div style={{ ...innerSampleStyle, boxShadow: shadowLevels[3].shadow }}>
-              <h4 className="text-sm font-semibold mb-2" style={{ color: colors.text.primary }}>卡片标题</h4>
-              <p className="text-xs" style={{ color: colors.text.secondary }}>这是卡片内容示例</p>
+              <h4 className="text-sm font-semibold mb-2" style={{ color: tokens.textColor.primary }}>卡片标题</h4>
+              <p className="text-xs" style={{ color: tokens.textColor.secondary }}>这是卡片内容示例</p>
             </div>
           </div>
 
           <div style={helperCardStyle}>
-            <h3 className="text-base font-semibold mb-4" style={{ color: colors.text.primary }}>
+            <h3 className="text-base font-semibold mb-4" style={{ color: tokens.textColor.primary }}>
               XL - 全局弹窗
             </h3>
             <div style={{ ...innerSampleStyle, boxShadow: shadowLevels[5].shadow }}>
-              <h4 className="text-sm font-semibold mb-2" style={{ color: colors.text.primary }}>模态弹窗</h4>
-              <p className="text-xs mb-4" style={{ color: colors.text.secondary }}>最强的视觉层级</p>
+              <h4 className="text-sm font-semibold mb-2" style={{ color: tokens.textColor.primary }}>模态弹窗</h4>
+              <p className="text-xs mb-4" style={{ color: tokens.textColor.secondary }}>最强的视觉层级</p>
               <div className="flex gap-2">
                 <button
                   className="px-3 py-1 rounded text-xs"
                   style={{
-                    backgroundColor: colors.brand.primary,
-                    color: colors.static.white,
+                    backgroundColor: tokens._meta.brandColor,
+                    color: STATIC.white,
                   }}
                 >
                   确定
@@ -263,9 +258,9 @@ export function Shadow() {
                 <button
                   className="px-3 py-1 rounded border text-xs"
                   style={{
-                    borderColor: colors.border.default,
-                    color: colors.text.secondary,
-                    backgroundColor: colors.bg.primary,
+                    borderColor: tokens.borderColor.level2,
+                    color: tokens.textColor.secondary,
+                    backgroundColor: tokens.bgColor.page,
                   }}
                 >
                   取消
@@ -278,10 +273,10 @@ export function Shadow() {
 
       {isDark && (
         <div style={gradientPanelStyle} className="mb-8">
-          <h3 className="text-base font-semibold mb-3" style={{ color: colors.brand.blue }}>
+          <h3 className="text-base font-semibold mb-3" style={{ color: tokens._meta.brandColor }}>
             💡 暗色模式投影提示
           </h3>
-          <p className="text-sm leading-relaxed" style={{ color: colors.text.secondary }}>
+          <p className="text-sm leading-relaxed" style={{ color: tokens.textColor.secondary }}>
             在暗色模式下，投影效果可能不如浅色模式明显。建议配合边框或背景色差异来增强层次感，必要时可以适当增加投影的不透明度或使用发光效果。
           </p>
         </div>
@@ -289,7 +284,7 @@ export function Shadow() {
 
       <div style={gradientPanelStyle}>
         <h3 className="text-base font-semibold mb-3">💡 设计原则</h3>
-        <ul className="text-sm space-y-2" style={{ color: colors.text.secondary }}>
+        <ul className="text-sm space-y-2" style={{ color: tokens.textColor.secondary }}>
           <li>• 投影应遵循从小到大的层级原则，避免跳跃式使用</li>
           <li>• 同一界面中不要使用过多不同层级的投影，保持简洁</li>
           <li>• 投影方向应保持一致，建议从上往下（Y轴正向）</li>

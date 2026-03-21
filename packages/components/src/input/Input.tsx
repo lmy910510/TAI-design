@@ -8,7 +8,9 @@ import {
   CSSProperties,
 } from "react";
 import { InputProps } from "./Input.types";
-import { createColors } from "../tokens";
+import { STATIC } from "../tokens/primitives";
+import { SPACING } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -18,7 +20,7 @@ const INPUT_CONFIG = {
   height: 84,
   paddingX: 24,
   radius: 24,
-  fontSize: 32,
+  fontSize: 32,   // → typography.label.input.fontSize
   iconSize: 36,
   clearButtonSize: 36,
 };
@@ -38,7 +40,7 @@ const ClearIcon = ({ size, color }: { size: number; color: string }) => (
     <circle cx="12" cy="12" r="10" fill={color} />
     <path
       d="M8 8L16 16M16 8L8 16"
-      stroke="white"
+      stroke={STATIC.white}
       strokeWidth="2"
       strokeLinecap="round"
     />
@@ -82,8 +84,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const isControlled = valueProp !== undefined;
     const currentValue = isControlled ? valueProp : internalValue;
 
-    const isDark = isDarkProp;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
 
     const showClear =
       clearable &&
@@ -134,12 +137,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         paddingLeft: INPUT_CONFIG.paddingX,
         paddingRight: INPUT_CONFIG.paddingX,
         borderRadius: INPUT_CONFIG.radius,
-        backgroundColor: colors.input.bg,
+        backgroundColor: tokens.input.bg,
         transition: "box-shadow 150ms ease",
-        boxShadow: isFocused ? `inset 0 0 0 2px ${colors.input.ring}` : "none",
+        boxShadow: isFocused ? `inset 0 0 0 2px ${tokens.input.ring}` : "none",
         ...style,
       }),
-      [colors, isFocused, style]
+      [tokens, isFocused, style]
     );
 
     const inputStyle = useMemo<CSSProperties>(
@@ -149,12 +152,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         padding: 0,
         border: "none",
         outline: "none",
-        backgroundColor: "transparent",
-        fontSize: INPUT_CONFIG.fontSize,
-        color: disabled ? colors.text.disabled : colors.input.text,
-        caretColor: colors.input.text,
+        backgroundColor: STATIC.transparent,
+        fontSize: tokens.typography.label.input.fontSize,
+        color: disabled ? tokens.textColor.disabled : tokens.input.text,
+        caretColor: tokens.input.text,
       }),
-      [colors, disabled]
+      [tokens, disabled]
     );
 
     const iconStyle = useMemo<CSSProperties>(
@@ -165,9 +168,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         width: INPUT_CONFIG.iconSize,
         height: INPUT_CONFIG.iconSize,
         flexShrink: 0,
-        color: colors.text.tertiary,
+        color: tokens.textColor.tertiary,
       }),
-      [colors]
+      [tokens]
     );
 
     const clearStyle = useMemo<CSSProperties>(
@@ -219,7 +222,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           >
             <ClearIcon
               size={INPUT_CONFIG.clearButtonSize}
-              color={colors.input.clearIcon}
+              color={tokens.input.clearIcon}
             />
           </span>
         )}

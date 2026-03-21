@@ -6,7 +6,7 @@ import {
   type ReactNode,
 } from "react";
 import { useNavigate } from "react-router-dom";
-import { Button, RADIUS, SPACING, useTheme } from "@tai-design/components";
+import { Button, RADIUS, SPACING, statusBlue, statusGreen, statusOrange, useTheme } from "@tai-design/components";
 import { blueGray } from "../data/colorTokens";
 import {
   APP_ROUTES,
@@ -33,7 +33,7 @@ type FramePreviewCanvas = {
 };
 
 function FrameWorkspaceFallback() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
 
   return (
     <div
@@ -41,11 +41,11 @@ function FrameWorkspaceFallback() {
         width: FRAME_CANVAS_WIDTH,
         height: FRAME_CANVAS_HEIGHT,
         borderRadius: RADIUS["2xl"],
-        backgroundColor: colors.bg.secondary,
+        backgroundColor: tokens.bgColor.container,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: colors.text.secondary,
+        color: tokens.textColor.secondary,
         fontSize: 18,
         lineHeight: "24px",
       }}
@@ -58,28 +58,28 @@ function FrameWorkspaceFallback() {
 function getReadinessColor(
   readiness: string,
   isDark: boolean,
-  colors: ReturnType<typeof useTheme>["colors"]
+  tokens: import("@tai-design/components").SemanticTokens
 ) {
   if (readiness === "已就绪") {
     return {
-      backgroundColor: colors.functional.success[12],
-      color: colors.functional.success.main,
-      borderColor: colors.functional.success[30],
+      backgroundColor: tokens.functionalColor.success.light,
+      color: tokens.functionalColor.success.main,
+      borderColor: statusGreen[30],
     };
   }
 
   if (readiness === "待接入") {
     return {
-      backgroundColor: colors.functional.notice[12],
-      color: colors.functional.notice.main,
-      borderColor: colors.functional.notice[30],
+      backgroundColor: tokens.functionalColor.warning.light,
+      color: tokens.functionalColor.warning.main,
+      borderColor: statusOrange[30],
     };
   }
 
   return {
     backgroundColor: isDark ? blueGray[90] : blueGray[10],
     color: isDark ? blueGray[30] : blueGray[80],
-    borderColor: colors.border.default,
+    borderColor: tokens.borderColor.level2,
   };
 }
 
@@ -92,7 +92,7 @@ function FrameWorkspacePreview({
   note: string;
   frames: FramePreviewCanvas[];
 }) {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
   const framesMinWidth =
     frames.length * FRAME_STAGE_WIDTH + (frames.length - 1) * SPACING["3"];
 
@@ -112,9 +112,9 @@ function FrameWorkspacePreview({
             alignItems: "center",
             padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
             borderRadius: RADIUS.xl,
-            backgroundColor: colors.functional.info[12],
-            color: colors.functional.info.main,
-            border: `1px solid ${colors.functional.info[24]}`,
+            backgroundColor: tokens.functionalColor.info.light,
+            color: tokens.functionalColor.info.main,
+            border: `1px solid ${statusBlue[20]}`,
             fontSize: 12,
             lineHeight: "12px",
             fontWeight: 500,
@@ -128,9 +128,9 @@ function FrameWorkspacePreview({
             alignItems: "center",
             padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
             borderRadius: RADIUS.xl,
-            backgroundColor: colors.bg.secondary,
-            color: colors.text.secondary,
-            border: `1px solid ${colors.border.subtle}`,
+            backgroundColor: tokens.bgColor.container,
+            color: tokens.textColor.secondary,
+            border: `1px solid ${tokens.borderColor.level1}`,
             fontSize: 12,
             lineHeight: "12px",
             fontWeight: 500,
@@ -144,9 +144,9 @@ function FrameWorkspacePreview({
             alignItems: "center",
             padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
             borderRadius: RADIUS.xl,
-            backgroundColor: colors.functional.notice[12],
-            color: colors.functional.notice.main,
-            border: `1px solid ${colors.functional.notice[24]}`,
+            backgroundColor: tokens.functionalColor.warning.light,
+            color: tokens.functionalColor.warning.main,
+            border: `1px solid ${statusOrange[20]}`,
             fontSize: 12,
             lineHeight: "12px",
             fontWeight: 500,
@@ -179,8 +179,8 @@ function FrameWorkspacePreview({
                 gap: SPACING["2"],
                 padding: SPACING["2"],
                 borderRadius: RADIUS["2xl"],
-                backgroundColor: colors.bg.secondary,
-                border: `1px solid ${colors.border.subtle}`,
+                backgroundColor: tokens.bgColor.container,
+                border: `1px solid ${tokens.borderColor.level1}`,
               }}
             >
               <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] }}>
@@ -189,7 +189,7 @@ function FrameWorkspacePreview({
                     fontSize: 14,
                     lineHeight: "18px",
                     fontWeight: 600,
-                    color: colors.text.primary,
+                    color: tokens.textColor.primary,
                   }}
                 >
                   {title}
@@ -201,9 +201,9 @@ function FrameWorkspacePreview({
                     width: "fit-content",
                     padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
                     borderRadius: RADIUS.xl,
-                    backgroundColor: colors.bg.primary,
-                    color: colors.text.secondary,
-                    border: `1px solid ${colors.border.subtle}`,
+                    backgroundColor: tokens.bgColor.page,
+                    color: tokens.textColor.secondary,
+                    border: `1px solid ${tokens.borderColor.level1}`,
                     fontSize: 12,
                     lineHeight: "12px",
                     fontWeight: 500,
@@ -249,7 +249,7 @@ function FrameWorkspacePreview({
           margin: 0,
           fontSize: 12,
           lineHeight: "18px",
-          color: colors.text.secondary,
+          color: tokens.textColor.secondary,
         }}
       >
         {note}
@@ -267,15 +267,15 @@ function PlaceholderPreview({
   shortTitle: string;
   isDark: boolean;
 }) {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
 
   return (
     <div
       style={{
         minHeight: 540,
         borderRadius: RADIUS["2xl"],
-        backgroundColor: colors.bg.secondary,
-        border: `1px solid ${colors.border.subtle}`,
+        backgroundColor: tokens.bgColor.container,
+        border: `1px solid ${tokens.borderColor.level1}`,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -313,10 +313,10 @@ function PlaceholderPreview({
 
 export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }) {
   const navigate = useNavigate();
-  const { colors, isDark, toggle } = useTheme();
+  const { tokens, isDark, toggle } = useTheme();
   const entry = productEntryMap[entryKey];
   const Icon = entry.icon;
-  const readinessStyle = getReadinessColor(entry.readiness, isDark, colors);
+  const readinessStyle = getReadinessColor(entry.readiness, isDark, tokens);
 
   const framePreviewConfig =
     entryKey === "discovery"
@@ -366,8 +366,8 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: colors.bg.secondary,
-        color: colors.text.primary,
+        backgroundColor: tokens.bgColor.container,
+        color: tokens.textColor.primary,
         padding: SPACING["6"],
       }}
     >
@@ -413,8 +413,8 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
 
         <div
           style={{
-            backgroundColor: colors.bg.primary,
-            border: `1px solid ${colors.border.subtle}`,
+            backgroundColor: tokens.bgColor.page,
+            border: `1px solid ${tokens.borderColor.level1}`,
             borderRadius: RADIUS["2xl"],
             padding: SPACING["4"],
             display: "flex",
@@ -459,7 +459,7 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
                   style={{
                     fontSize: 12,
                     lineHeight: "12px",
-                    color: colors.text.tertiary,
+                    color: tokens.textColor.tertiary,
                   }}
                 >
                   Preview Workspace
@@ -501,7 +501,7 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
                 margin: 0,
                 fontSize: 14,
                 lineHeight: "24px",
-                color: colors.text.secondary,
+                color: tokens.textColor.secondary,
               }}
             >
               {entry.description}
@@ -511,7 +511,7 @@ export function ProductWorkspacePage({ entryKey }: { entryKey: ProductEntryKey }
                 margin: 0,
                 fontSize: 12,
                 lineHeight: "18px",
-                color: colors.text.tertiary,
+                color: tokens.textColor.tertiary,
               }}
             >
               {entry.demoHint}

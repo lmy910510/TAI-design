@@ -1,13 +1,12 @@
 import {
   CSSProperties,
   forwardRef,
-  useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import { ThemeContext } from "../hooks/ThemeContext";
-import { RADIUS, SPACING, createColors } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
+import { RADIUS, SPACING } from "../tokens";
 import { ImageProps, ImageRadius } from "./Image.types";
 
 function resolveRadius(radius: ImageRadius) {
@@ -51,9 +50,9 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
     },
     ref
   ) => {
-    const ctx = useContext(ThemeContext);
-    const isDark = isDarkProp ?? ctx?.isDark ?? false;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
     const [hasError, setHasError] = useState(false);
 
     useEffect(() => {
@@ -70,12 +69,12 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: colors.bg.tertiary,
+        backgroundColor: tokens.bgColor.secondaryContainer,
         borderRadius: resolveRadius(radius),
-        border: showBorder ? `1px solid ${colors.border.subtle}` : undefined,
+        border: showBorder ? `1px solid ${tokens.borderColor.level1}` : undefined,
         ...style,
       }),
-      [width, height, aspectRatio, colors, radius, showBorder, style]
+      [width, height, aspectRatio, tokens, radius, showBorder, style]
     );
 
     const actualImgStyle = useMemo<CSSProperties>(
@@ -98,10 +97,10 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
         alignItems: "center",
         justifyContent: "center",
         gap: SPACING["2"],
-        color: colors.text.disabled,
-        backgroundColor: colors.bg.tertiary,
+        color: tokens.textColor.disabled,
+        backgroundColor: tokens.bgColor.secondaryContainer,
       }),
-      [colors]
+      [tokens]
     );
 
     const showNativeImage = Boolean(src) && !hasError;
@@ -124,8 +123,8 @@ export const Image = forwardRef<HTMLDivElement, ImageProps>(
           <div style={placeholderStyle} aria-label={alt || placeholderLabel}>
             {placeholder ?? (
               <>
-                <PlaceholderIcon color={colors.text.disabled} />
-                <span style={{ fontSize: 24, lineHeight: 1.2, color: colors.text.disabled }}>
+                <PlaceholderIcon color={tokens.textColor.disabled} />
+                <span style={{ fontSize: tokens.typography.meta.caption.fontSize, lineHeight: tokens.typography.meta.caption.lineHeight, color: tokens.textColor.disabled }}>
                   {placeholderLabel}
                 </span>
               </>

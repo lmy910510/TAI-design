@@ -6,7 +6,7 @@ import {
   useMemo,
   ReactNode,
 } from "react";
-import { createColors, Colors } from "../tokens";
+import { getTokens, type SemanticTokens } from "../tokens/semanticTokens";
 
 // ============================================================================
 // Types
@@ -16,7 +16,7 @@ export interface ThemeContextValue {
   isDark: boolean;
   setIsDark: (value: boolean) => void;
   toggle: () => void;
-  colors: Colors;
+  tokens: SemanticTokens;
 }
 
 export interface ThemeProviderProps {
@@ -44,16 +44,16 @@ export function ThemeProvider({
     setIsDark((prev) => !prev);
   }, []);
 
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const tokens = useMemo(() => getTokens(isDark), [isDark]);
 
   const value = useMemo<ThemeContextValue>(
     () => ({
       isDark,
       setIsDark,
       toggle,
-      colors,
+      tokens,
     }),
-    [isDark, toggle, colors]
+    [isDark, toggle, tokens]
   );
 
   return (
@@ -93,7 +93,7 @@ export function useThemeOptional(): ThemeContextValue {
     toggle: () => {
       console.warn("[TAI Design] toggle called outside ThemeProvider");
     },
-    colors: createColors(false),
+    tokens: getTokens(false),
   };
 }
 
@@ -103,10 +103,10 @@ export function useThemeOptional(): ThemeContextValue {
 export function resolveTheme(
   isDarkProp?: boolean,
   isDarkContext?: boolean
-): { isDark: boolean; colors: Colors } {
+): { isDark: boolean; tokens: SemanticTokens } {
   const isDark = isDarkProp ?? isDarkContext ?? false;
   return {
     isDark,
-    colors: createColors(isDark),
+    tokens: getTokens(isDark),
   };
 }

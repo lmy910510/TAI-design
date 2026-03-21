@@ -31,7 +31,7 @@ export function LoadingComponent({
   showText = true,
   className = "",
 }: LoadingComponentProps) {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
   const sizeConfig = SIZE_MAP[size];
 
   return (
@@ -39,14 +39,14 @@ export function LoadingComponent({
       <Loader2
         size={sizeConfig.spinner}
         className="animate-spin"
-        style={{ color: colors.loading.spinner }}
+        style={{ color: tokens.loading.spinner }}
         strokeWidth={2.5}
       />
       {showText && (
         <div
           className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-center"
           style={{
-            color: colors.loading.text,
+            color: tokens.loading.text,
             fontSize: `${sizeConfig.text}px`,
             marginTop: `${sizeConfig.gap}px`,
             lineHeight: 1.5,

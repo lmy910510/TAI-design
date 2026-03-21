@@ -1,5 +1,5 @@
 import React, { ReactNode, CSSProperties } from 'react';
-import { STATIC, useTheme, type Colors } from '@tai-design/components';
+import { STATIC, statusRed, statusOrange, statusGreen, useTheme, type SemanticTokens } from '@tai-design/components';
 
 export type TagType = "regular" | "combined";
 export type TagLevel = "high" | "medium" | "low";
@@ -45,19 +45,19 @@ type TagPalette = {
   divider: string;
 };
 
-export const resolveTagPalette = (colors: Colors, color: TagColor): TagPalette => {
-  const inverseText = colors.static.white;
-  const mutedText = colors.text.secondary;
-  const secondaryBg = colors.bg.primary;
-  const divider = colors.border.subtle;
+export const resolveTagPalette = (tokens: SemanticTokens, color: TagColor): TagPalette => {
+  const inverseText = STATIC.white;
+  const mutedText = tokens.textColor.secondary;
+  const secondaryBg = tokens.bgColor.page;
+  const divider = tokens.borderColor.level1;
 
   if (color === "warning") {
     return {
-      main: colors.functional.danger.main,
-      bg: colors.functional.danger[6],
-      border: colors.functional.danger[30],
-      borderLow: colors.functional.danger[12],
-      lightBg: colors.functional.danger[12],
+      main: tokens.functionalColor.error.main,
+      bg: statusRed[0],
+      border: statusRed[30],
+      borderLow: statusRed[10],
+      lightBg: statusRed[10],
       inverseText,
       mutedText,
       secondaryBg,
@@ -67,11 +67,11 @@ export const resolveTagPalette = (colors: Colors, color: TagColor): TagPalette =
 
   if (color === "notice") {
     return {
-      main: colors.functional.notice.main,
-      bg: colors.functional.notice[6],
-      border: colors.functional.notice[30],
-      borderLow: colors.functional.notice[12],
-      lightBg: colors.functional.notice[12],
+      main: tokens.functionalColor.warning.main,
+      bg: statusOrange[0],
+      border: statusOrange[30],
+      borderLow: tokens.functionalColor.warning.light,
+      lightBg: tokens.functionalColor.warning.light,
       inverseText,
       mutedText,
       secondaryBg,
@@ -81,11 +81,11 @@ export const resolveTagPalette = (colors: Colors, color: TagColor): TagPalette =
 
   if (color === "success") {
     return {
-      main: colors.functional.success.main,
-      bg: colors.functional.success[6],
-      border: colors.functional.success[30],
-      borderLow: colors.functional.success[12],
-      lightBg: colors.functional.success[12],
+      main: tokens.functionalColor.success.main,
+      bg: statusGreen[0],
+      border: statusGreen[30],
+      borderLow: tokens.functionalColor.success.light,
+      lightBg: tokens.functionalColor.success.light,
       inverseText,
       mutedText,
       secondaryBg,
@@ -95,11 +95,11 @@ export const resolveTagPalette = (colors: Colors, color: TagColor): TagPalette =
 
   if (color === "regular") {
     return {
-      main: colors.brand.primary,
-      bg: colors.bg.brandSubtle,
-      border: colors.border.brand,
-      borderLow: colors.border.brand,
-      lightBg: colors.bg.brandSubtle,
+      main: tokens._meta.brandColor,
+      bg: tokens.bgColor.brandLight,
+      border: tokens.borderColor.brand,
+      borderLow: tokens.borderColor.brand,
+      lightBg: tokens.bgColor.brandLight,
       inverseText,
       mutedText,
       secondaryBg,
@@ -108,11 +108,11 @@ export const resolveTagPalette = (colors: Colors, color: TagColor): TagPalette =
   }
 
   return {
-    main: colors.tag.default.main,
-    bg: colors.tag.default[6],
-    border: colors.tag.default[30],
-    borderLow: colors.tag.default[12],
-    lightBg: colors.tag.default[12],
+    main: tokens.tag.default.main,
+    bg: tokens.tag.default[6],
+    border: tokens.tag.default[30],
+    borderLow: tokens.tag.default[12],
+    lightBg: tokens.tag.default[12],
     inverseText,
     mutedText,
     secondaryBg,
@@ -136,9 +136,9 @@ export function TagComponent({
   solidBorder = true,
   className = "",
 }: TagComponentProps) {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
   const spec = TAG_SPECS[size];
-  const palette = resolveTagPalette(colors, color);
+  const palette = resolveTagPalette(tokens, color);
 
   if (type === "regular") {
     let style: CSSProperties = {};

@@ -27,7 +27,7 @@ export function PageSubNavBar({
   onBack,
   actions = [],
 }: PageSubNavBarProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
   const displayActions = actions.slice(0, 2);
 
   const backIcon = (
@@ -38,9 +38,9 @@ export function PageSubNavBar({
             <path
               clipRule="evenodd"
               d={svgPaths.p121bd180}
-              fill={colors.text.primary}
+              fill={tokens.textColor.primary}
               fillRule="evenodd"
-              style={{ fill: colors.text.primary, fillOpacity: "1" }}
+              style={{ fill: tokens.textColor.primary, fillOpacity: "1" }}
             />
           </svg>
         </div>
@@ -59,7 +59,7 @@ export function PageSubNavBar({
         <div className="content-stretch flex flex-col h-[84px] justify-center leading-[0] not-italic relative shrink-0">
           <p
             className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] leading-[42px] text-[42px]"
-            style={{ color: colors.text.primary }}
+            style={{ color: tokens.textColor.primary }}
           >
             {title}
           </p>

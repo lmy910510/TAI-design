@@ -1,37 +1,27 @@
 import type { CSSProperties } from "react";
 import { useState } from "react";
 import { RADIUS, SPACING, useTheme } from "@tai-design/components";
+import { DocPageHeader } from "../DocComponents";
 
 const GAP_OPTIONS = [6, 12, 18, 24, 30, 36] as const;
 
 export function ColumnPage() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
   const [selectedGap, setSelectedGap] = useState<(typeof GAP_OPTIONS)[number]>(24);
-
-  const chipStyle: CSSProperties = {
-    display: "inline-block",
-    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
-    marginBottom: SPACING["3"],
-    borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
-    fontSize: 14,
-  };
 
   const panelStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const selectorStyle = (active: boolean): CSSProperties => ({
     padding: `${SPACING["2"]}px ${SPACING["3"]}px`,
     borderRadius: RADIUS.xl,
-    border: `1px solid ${active ? colors.button.primary.border : colors.border.subtle}`,
-    backgroundColor: active ? colors.button.primary.bg : colors.bg.secondary,
-    color: active ? colors.button.primary.text : colors.text.secondary,
+    border: `1px solid ${active ? tokens.textColor.primary : tokens.borderColor.level1}`,
+    backgroundColor: active ? tokens.textColor.primary : tokens.bgColor.container,
+    color: active ? tokens.textColor.anti : tokens.textColor.secondary,
     fontSize: 14,
     fontWeight: 600,
   });
@@ -39,27 +29,25 @@ export function ColumnPage() {
   const codeBlockStyle: CSSProperties = {
     padding: SPACING["4"],
     borderRadius: RADIUS.xl,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.code,
-    color: colors.text.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.code,
+    color: tokens.textColor.secondary,
     overflowX: "auto",
   };
 
   return (
     <div className="max-w-4xl">
-      <div className="mb-8">
-        <div style={chipStyle}>A. 布局类 (Layout)</div>
-        <h1 className="text-4xl font-bold mb-4">Column 垂直排列</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          基于 Flexbox 的垂直布局容器，遵循车机端 6px 栅格系统管理纵向堆叠的元素间距。
-        </p>
-      </div>
+      <DocPageHeader
+        category="A. 布局类 (Layout)"
+        title="Column 垂直排列"
+        description="基于 Flexbox 的垂直布局容器，遵循车机端 6px 栅格系统管理纵向堆叠的元素间距。"
+      />
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">互动演示</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>互动演示</h2>
         <div style={panelStyle}>
           <div className="mb-6">
-            <label className="block text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>间距 (Gap)</label>
+            <label className="block text-sm font-medium mb-3" style={{ color: tokens.textColor.secondary }}>间距 (Gap)</label>
             <div className="flex flex-wrap gap-2">
               {GAP_OPTIONS.map((gap) => (
                 <button key={gap} type="button" style={selectorStyle(selectedGap === gap)} onClick={() => setSelectedGap(gap)}>
@@ -69,7 +57,7 @@ export function ColumnPage() {
             </div>
           </div>
 
-          <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, border: `1px dashed ${colors.border.default}`, backgroundColor: colors.bg.secondary, minHeight: 400 }}>
+          <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, border: `1px dashed ${tokens.borderColor.level2}`, backgroundColor: tokens.bgColor.container, minHeight: 400 }}>
             <div style={{ display: "flex", flexDirection: "column", gap: selectedGap }}>
               {[1, 2, 3, 4].map((item) => (
                 <div
@@ -78,9 +66,9 @@ export function ColumnPage() {
                     width: "100%",
                     height: 72,
                     borderRadius: RADIUS.xl,
-                    border: `1px solid ${colors.border.subtle}`,
-                    backgroundColor: colors.bg.primary,
-                    color: colors.text.primary,
+                    border: `1px solid ${tokens.borderColor.level1}`,
+                    backgroundColor: tokens.bgColor.page,
+                    color: tokens.textColor.primary,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
@@ -96,17 +84,17 @@ export function ColumnPage() {
       </section>
 
       <section className="mb-12">
-        <h2 className="text-2xl font-bold mb-4">垂直间距规则</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>垂直间距规则</h2>
         <div style={{ ...panelStyle, padding: 0, overflow: "hidden" }}>
           <table className="w-full text-left text-sm">
-            <thead style={{ backgroundColor: colors.bg.secondary, color: colors.text.secondary }}>
+            <thead style={{ backgroundColor: tokens.bgColor.container, color: tokens.textColor.secondary }}>
               <tr>
                 <th className="px-6 py-4 font-medium">参数值 (n)</th>
                 <th className="px-6 py-4 font-medium">像素 (px)</th>
                 <th className="px-6 py-4 font-medium">推荐场景</th>
               </tr>
             </thead>
-            <tbody style={{ color: colors.text.secondary }}>
+            <tbody style={{ color: tokens.textColor.secondary }}>
               {[
                 ["n", "6px", "输入框与提示文案之间的极紧凑间距。"],
                 ["2n", "12px", "列表项内上下结构或短文本堆叠。"],
@@ -114,8 +102,8 @@ export function ColumnPage() {
                 ["4n", "24px", "默认标准段落间距与表单项间距。"],
                 ["5n", "30px", "主要内容区块之间的垂直分隔。"],
               ].map(([token, value, usage], index) => (
-                <tr key={token} style={{ borderTop: index === 0 ? undefined : `1px solid ${colors.border.subtle}` }}>
-                  <td className="px-6 py-4 font-mono font-medium" style={{ color: colors.text.primary }}>{token}</td>
+                <tr key={token} style={{ borderTop: index === 0 ? undefined : `1px solid ${tokens.borderColor.level1}` }}>
+                  <td className="px-6 py-4 font-mono font-medium" style={{ color: tokens.textColor.primary }}>{token}</td>
                   <td className="px-6 py-4">{value}</td>
                   <td className="px-6 py-4">{usage}</td>
                 </tr>
@@ -126,7 +114,7 @@ export function ColumnPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-4">代码示例</h2>
+        <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>代码示例</h2>
         <div style={codeBlockStyle}>
           <pre>{`<div style={{ display: "flex", flexDirection: "column", gap: 18 }}>
   <SectionTitle>Vehicle Status</SectionTitle>

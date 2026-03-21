@@ -28,13 +28,7 @@ export {
   getTokens,
   lightTokens,
   darkTokens,
-  fieldNameMapping,
-  variantMapping,
-  toLegacyButtonColorConfig,
-  getLegacyButtonColors,
-  deprecatedPatterns,
-  recommendedPatterns,
-  migrationExamples,
+  PRESSED_OVERLAY,
 } from "@tai-design/components";
 
 export type {
@@ -50,9 +44,18 @@ export type {
   ColorMode,
   SemanticTokensConfig,
   SemanticTokens,
-  InteractiveActionToken,
-  ActionTokens,
-  LegacyButtonColorConfig,
+  // TDesign 风格新命名（车机端4类）
+  TextColorTokens,
+  BgColorTokens,
+  BorderColorTokens,
+  FunctionalColorLevel,
+  FunctionalColorTokens,
+  // 向后兼容别名
+  ContentTokens,
+  SurfaceTokens,
+  BorderTokens,
+  FeedbackTokens,
+  FeedbackLevel,
 } from "@tai-design/components";
 
 export { getTokens as default } from "@tai-design/components";

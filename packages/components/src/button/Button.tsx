@@ -1,12 +1,13 @@
-import { forwardRef, useMemo, useContext, CSSProperties, useState } from "react";
+import { forwardRef, useMemo, CSSProperties, useState } from "react";
 import {
   ButtonProps,
   ButtonVariant,
   ButtonSize,
   ButtonVisualState,
 } from "./Button.types";
-import { createColors, Colors } from "../tokens";
-import { ThemeContext } from "../hooks/ThemeContext";
+import { type SemanticTokens, PRESSED_OVERLAY } from "../tokens/semanticTokens";
+import { STATIC } from "../tokens/primitives";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 尺寸配置
@@ -18,66 +19,112 @@ export const BUTTON_SIZE_CONFIG: Record<
     height: number;
     paddingX: number;
     radius: number;
-    fontSize: number;
     iconSize: number;
     iconGap: number;
+    /** 对应 tokens.typography.label 中的语义 key */
+    typographyKey: "buttonLarge" | "buttonMedium" | "buttonSmall" | "buttonMini";
   }
 > = {
   large: {
     height: 84,
     paddingX: 42,
     radius: 42,
-    fontSize: 32,
     iconSize: 36,
     iconGap: 12,
+    typographyKey: "buttonLarge",
   },
   medium: {
     height: 72,
     paddingX: 36,
     radius: 36,
-    fontSize: 30,
     iconSize: 32,
     iconGap: 10,
+    typographyKey: "buttonMedium",
   },
   small: {
     height: 60,
     paddingX: 30,
     radius: 30,
-    fontSize: 28,
     iconSize: 28,
     iconGap: 8,
+    typographyKey: "buttonSmall",
   },
   extraSmall: {
     height: 48,
     paddingX: 24,
     radius: 24,
-    fontSize: 24,
     iconSize: 24,
     iconGap: 6,
+    typographyKey: "buttonMini",
   },
 };
 
 // ============================================================================
-// 工具函数
+// 变体配色 — 完全从公开语义层 token 派生，不再自建独立 token
+//
+// 车机端交互模型：
+// - 无鼠标 hover（hover 态仅用于文档预览）
+// - 按下态 = 默认底色 + pressedOverlay 蒙层叠加
+// - 禁用态 = 降低不透明度
 // ============================================================================
 
-function getVariantColors(colors: Colors, variant: ButtonVariant) {
-  const btnColors = colors.button[variant];
-  return {
-    bg: btnColors.bg,
-    bgHover: btnColors.bgHover,
-    bgActive: btnColors.bgActive,
-    bgDisabled: btnColors.bgDisabled,
-    text: btnColors.text,
-    textHover: btnColors.textHover,
-    textActive: btnColors.textActive,
-    textDisabled: btnColors.textDisabled,
-    icon: btnColors.icon,
-    iconHover: btnColors.iconHover,
-    iconActive: btnColors.iconActive,
-    iconDisabled: btnColors.iconDisabled,
-    border: btnColors.border,
-  };
+interface VariantColors {
+  bg: string;
+  text: string;
+  icon: string;
+  border?: string;
+  /** 按下态背景（默认使用 pressedOverlay 叠加） */
+  bgPressed?: string;
+  /** 禁用态背景 */
+  bgDisabled: string;
+  /** 禁用态文字/图标 */
+  textDisabled: string;
+}
+
+function resolveVariantColors(tokens: SemanticTokens, variant: ButtonVariant): VariantColors {
+  switch (variant) {
+    case "primary":
+      return {
+        bg: tokens.bgColor.brand,             // 主按钮底色 = 品牌色背景
+        text: tokens.textColor.anti,          // 反色文字
+        icon: tokens.textColor.anti,
+        bgDisabled: tokens.bgColor.componentDisabled,
+        textDisabled: tokens.textColor.disabled,
+      };
+    case "secondary":
+      return {
+        bg: tokens.bgColor.component,         // 二级按钮底色 = 组件背景
+        text: tokens.textColor.primary,
+        icon: tokens.textColor.primary,
+        bgDisabled: tokens.bgColor.componentDisabled,
+        textDisabled: tokens.textColor.disabled,
+      };
+    case "ghost":
+      return {
+        bg: STATIC.transparent,
+        text: tokens.textColor.primary,
+        icon: tokens.textColor.primary,
+        border: tokens.borderColor.level2,
+        bgDisabled: STATIC.transparent,
+        textDisabled: tokens.textColor.disabled,
+      };
+    case "danger":
+      return {
+        bg: tokens.functionalColor.error.light,
+        text: tokens.functionalColor.error.main,
+        icon: tokens.functionalColor.error.main,
+        bgDisabled: tokens.bgColor.componentDisabled,
+        textDisabled: tokens.functionalColor.error.disabled,
+      };
+    default:
+      return {
+        bg: tokens.bgColor.component,
+        text: tokens.textColor.primary,
+        icon: tokens.textColor.primary,
+        bgDisabled: tokens.bgColor.componentDisabled,
+        textDisabled: tokens.textColor.disabled,
+      };
+  }
 }
 
 function resolveVisualState(
@@ -125,34 +172,28 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const ctx = useContext(ThemeContext);
-    const isDark = isDarkProp ?? ctx?.isDark ?? false;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
     const [isHovered, setIsHovered] = useState(false);
     const [isPressed, setIsPressed] = useState(false);
 
     const sizeConfig = BUTTON_SIZE_CONFIG[size];
-    const colorConfig = getVariantColors(colors, variant);
+    const variantColors = resolveVariantColors(tokens, variant);
     const visualState = resolveVisualState(disabled, forceState, isPressed, isHovered);
 
     const buttonStyle = useMemo<CSSProperties>(() => {
       const isIconOnly = iconPosition === "only";
-      const backgroundColor =
-        visualState === "disabled"
-          ? colorConfig.bgDisabled
-          : visualState === "pressed"
-            ? colorConfig.bgActive
-            : visualState === "hover"
-              ? colorConfig.bgHover
-              : colorConfig.bg;
-      const textColor =
-        visualState === "disabled"
-          ? colorConfig.textDisabled
-          : visualState === "pressed"
-            ? colorConfig.textActive
-            : visualState === "hover"
-              ? colorConfig.textHover
-              : colorConfig.text;
+      const isDisabled = visualState === "disabled";
+      const isPressedState = visualState === "pressed";
+
+      const backgroundColor = isDisabled
+        ? variantColors.bgDisabled
+        : variantColors.bg;
+      const textColor = isDisabled
+        ? variantColors.textDisabled
+        : variantColors.text;
+      const borderColor = variantColors.border;
 
       return {
         // 尺寸
@@ -162,21 +203,25 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         paddingLeft: isIconOnly ? 0 : sizeConfig.paddingX,
         paddingRight: isIconOnly ? 0 : sizeConfig.paddingX,
         borderRadius: sizeConfig.radius,
-        // 字体
-        fontSize: sizeConfig.fontSize,
-        fontWeight: 500,
-        lineHeight: 1,
+        // 字体 — 语义排版 token
+        fontSize: tokens.typography.label[sizeConfig.typographyKey].fontSize,
+        fontWeight: tokens.typography.label[sizeConfig.typographyKey].fontWeight,
+        lineHeight: tokens.typography.label[sizeConfig.typographyKey].lineHeight,
         // 颜色
         backgroundColor,
         color: textColor,
-        border: colorConfig.border ? `2px solid ${colorConfig.border}` : "none",
+        border: borderColor ? `2px solid ${isDisabled ? tokens.borderColor.level1 : borderColor}` : "none",
+        // 按下态：统一叠加蒙层（车机端标准交互）
+        backgroundImage: isPressedState ? `linear-gradient(${PRESSED_OVERLAY}, ${PRESSED_OVERLAY})` : undefined,
         // 布局
+        position: "relative" as const,
         display: "inline-flex",
         alignItems: "center",
         justifyContent: "center",
         gap: sizeConfig.iconGap,
         // 交互
         cursor: disabled ? "not-allowed" : "pointer",
+        opacity: isDisabled ? 1 : undefined,
         transition:
           "background-color 150ms ease, color 150ms ease, transform 100ms ease, border-color 150ms ease",
         outline: "none",
@@ -185,17 +230,12 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         // 继承
         ...style,
       };
-    }, [sizeConfig, colorConfig, iconPosition, fullWidth, disabled, style, visualState]);
+    }, [sizeConfig, variantColors, tokens.borderColor.level1, iconPosition, fullWidth, disabled, style, visualState]);
 
     const iconStyle = useMemo<CSSProperties>(() => {
-      const iconColor =
-        visualState === "disabled"
-          ? colorConfig.iconDisabled
-          : visualState === "pressed"
-            ? colorConfig.iconActive
-            : visualState === "hover"
-              ? colorConfig.iconHover
-              : colorConfig.icon;
+      const iconColor = visualState === "disabled"
+        ? variantColors.textDisabled
+        : variantColors.icon;
 
       return {
         width: sizeConfig.iconSize,
@@ -206,7 +246,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         flexShrink: 0,
         color: iconColor,
       };
-    }, [sizeConfig.iconSize, colorConfig, visualState]);
+    }, [sizeConfig.iconSize, variantColors, visualState]);
 
     const renderIcon = () => {
       if (!icon || iconPosition === "none") return null;

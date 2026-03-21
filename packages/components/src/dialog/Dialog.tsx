@@ -1,6 +1,8 @@
 import { useMemo, useState, useEffect, useCallback, CSSProperties } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createColors, RADIUS, SHADOW } from "../tokens";
+import { Button } from "../button";
+import { RADIUS, SHADOW } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -13,12 +15,6 @@ const SIZE_CONFIG: Record<DialogSize, { width: number; padding: number }> = {
   small: { width: 540, padding: 48 },
   large: { width: 720, padding: 60 },
 };
-
-const BUTTON_HEIGHT = 84;
-const BUTTON_RADIUS = 42;
-const TITLE_FONT_SIZE = 36;
-const CONTENT_FONT_SIZE = 28;
-const BUTTON_FONT_SIZE = 32;
 
 // ============================================================================
 // 类型
@@ -79,8 +75,9 @@ export const Dialog = ({
   className = "",
 }: DialogProps) => {
   const [countdown, setCountdown] = useState<number | null>(null);
-  const isDark = isDarkProp;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
   const sizeConfig = SIZE_CONFIG[size];
 
   useEffect(() => {
@@ -133,10 +130,10 @@ export const Dialog = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: overlay ? colors.dialog.overlay : "transparent",
+      backgroundColor: overlay ? tokens.dialog.overlay : "transparent",
       zIndex: 1000,
     }),
-    [overlay, colors]
+    [overlay, tokens]
   );
 
   const dialogStyle = useMemo<CSSProperties>(
@@ -145,34 +142,34 @@ export const Dialog = ({
       padding: sizeConfig.padding,
       paddingBottom: sizeConfig.padding - 12,
       borderRadius: RADIUS["4xl"],
-      backgroundColor: colors.dialog.bg,
+      backgroundColor: tokens.dialog.bg,
       boxShadow: SHADOW.xl,
       display: "flex",
       flexDirection: "column",
       gap: 24,
     }),
-    [sizeConfig, colors]
+    [sizeConfig, tokens]
   );
 
   const titleStyle = useMemo<CSSProperties>(
     () => ({
-      fontSize: TITLE_FONT_SIZE,
-      fontWeight: 600,
-      color: colors.dialog.title,
+      fontSize: tokens.typography.title.section.fontSize,
+      fontWeight: tokens.typography.title.section.fontWeight,
+      color: tokens.dialog.title,
       textAlign: "center",
-      lineHeight: 1.3,
+      lineHeight: tokens.typography.title.section.lineHeight,
     }),
-    [colors]
+    [tokens]
   );
 
   const contentStyle = useMemo<CSSProperties>(
     () => ({
-      fontSize: CONTENT_FONT_SIZE,
-      color: colors.dialog.content,
+      fontSize: tokens.typography.body.primary.fontSize,
+      color: tokens.dialog.content,
       textAlign: "center",
-      lineHeight: 1.5,
+      lineHeight: tokens.typography.body.primary.lineHeight,
     }),
-    [colors]
+    [tokens]
   );
 
   const buttonContainerStyle = useMemo<CSSProperties>(
@@ -182,38 +179,6 @@ export const Dialog = ({
       marginTop: 12,
     }),
     []
-  );
-
-  const primaryButtonStyle = useMemo<CSSProperties>(
-    () => ({
-      flex: 1,
-      height: BUTTON_HEIGHT,
-      borderRadius: BUTTON_RADIUS,
-      border: "none",
-      backgroundColor: colors.button.primary.bg,
-      color: colors.button.primary.text,
-      fontSize: BUTTON_FONT_SIZE,
-      fontWeight: 500,
-      cursor: "pointer",
-      transition: "background-color 150ms ease",
-    }),
-    [colors]
-  );
-
-  const secondaryButtonStyle = useMemo<CSSProperties>(
-    () => ({
-      flex: 1,
-      height: BUTTON_HEIGHT,
-      borderRadius: BUTTON_RADIUS,
-      border: "none",
-      backgroundColor: colors.button.secondary.bg,
-      color: colors.button.secondary.text,
-      fontSize: BUTTON_FONT_SIZE,
-      fontWeight: 500,
-      cursor: "pointer",
-      transition: "background-color 150ms ease",
-    }),
-    [colors]
   );
 
   const primaryText = useMemo(() => {
@@ -248,13 +213,25 @@ export const Dialog = ({
             {content && <div style={contentStyle}>{content}</div>}
             <div style={buttonContainerStyle}>
               {type === "confirm" && (
-                <button style={secondaryButtonStyle} onClick={onSecondaryClick}>
+                <Button
+                  variant="secondary"
+                  size="large"
+                  isDark={isDark}
+                  onClick={onSecondaryClick}
+                  style={{ flex: 1 }}
+                >
                   {secondaryButtonText}
-                </button>
+                </Button>
               )}
-              <button style={primaryButtonStyle} onClick={onPrimaryClick}>
+              <Button
+                variant="primary"
+                size="large"
+                isDark={isDark}
+                onClick={onPrimaryClick}
+                style={{ flex: 1 }}
+              >
                 {primaryText}
-              </button>
+              </Button>
             </div>
           </motion.div>
         </motion.div>

@@ -1,5 +1,5 @@
 import { useMemo, ReactNode, CSSProperties } from "react";
-import { createColors } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -13,9 +13,9 @@ const SIZE_CONFIG: Record<
   TagSize,
   { height: number; paddingX: number; fontSize: number; radius: number }
 > = {
-  large: { height: 48, paddingX: 18, fontSize: 26, radius: 8 },
-  medium: { height: 40, paddingX: 14, fontSize: 24, radius: 6 },
-  small: { height: 32, paddingX: 10, fontSize: 22, radius: 4 },
+  large: { height: 48, paddingX: 18, fontSize: 26, radius: 8 },    // fontSize → typography.body.secondary
+  medium: { height: 40, paddingX: 14, fontSize: 24, radius: 6 },   // fontSize → typography.label.tag
+  small: { height: 32, paddingX: 10, fontSize: 22, radius: 4 },    // fontSize → typography.meta.time
 };
 
 // ============================================================================
@@ -79,20 +79,20 @@ export const Tag = ({
   className = "",
   children,
 }: TagProps) => {
-  const isDark = isDarkProp;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
   const sizeConfig = SIZE_CONFIG[size];
 
   const colorConfig = useMemo(() => {
-    const tagColors = colors.tag[color];
+    const tagColors = tokens.tag[color];
     return {
       main: tagColors.main,
       bg6: tagColors[6],
       bg12: tagColors[12],
-      bg24: (tagColors as { 24?: string })[24] ?? tagColors[12],
-      bg30: tagColors[30] ?? (tagColors as { 24?: string })[24] ?? tagColors[12],
+      bg30: tagColors[30],
     };
-  }, [colors, color]);
+  }, [tokens, color]);
 
   const containerStyle = useMemo<CSSProperties>(() => {
     if (variant === "combined" && prefix) {
@@ -102,7 +102,7 @@ export const Tag = ({
         borderRadius: sizeConfig.radius,
         overflow: "hidden",
         fontSize: sizeConfig.fontSize,
-        fontWeight: 500,
+        fontWeight: tokens.typography.label.tag.fontWeight,
       };
     }
 
@@ -132,10 +132,10 @@ export const Tag = ({
       backgroundColor: bgColor,
       color: textColor,
       fontSize: sizeConfig.fontSize,
-      fontWeight: 500,
-      lineHeight: 1,
+      fontWeight: tokens.typography.label.tag.fontWeight,
+      lineHeight: tokens.typography.label.tag.lineHeight,
     };
-  }, [variant, prefix, sizeConfig, colorConfig]);
+  }, [variant, prefix, sizeConfig, colorConfig, tokens]);
 
   if (variant === "combined" && prefix) {
     const prefixStyle: CSSProperties = {

@@ -2,14 +2,13 @@ import {
   useState,
   useMemo,
   useCallback,
-  useContext,
   useRef,
   useEffect,
   CSSProperties,
 } from "react";
 import { TabsProps, TabsSize, TabsVariant } from "./Tabs.types";
-import { createColors, SPACING, RADIUS } from "../tokens";
-import { ThemeContext } from "../hooks/ThemeContext";
+import { SPACING, RADIUS, SHADOW } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 import { motion } from "framer-motion";
 
 // ============================================================================
@@ -29,21 +28,21 @@ const SIZE_CONFIG: Record<
   large: {
     height: 72,
     paddingX: 36,
-    fontSize: 30,
+    fontSize: 30,  // → tokens.typography.label.tab (large 变体)
     gap: SPACING["2"],
     iconSize: 32,
   },
   medium: {
     height: 60,
     paddingX: 30,
-    fontSize: 28,
+    fontSize: 28,  // → tokens.typography.label.tab
     gap: SPACING["2"],
     iconSize: 28,
   },
   small: {
     height: 48,
     paddingX: 24,
-    fontSize: 24,
+    fontSize: 24,  // → tokens.typography.meta.caption
     gap: 6,
     iconSize: 24,
   },
@@ -68,9 +67,9 @@ export function Tabs({
   tabBarStyle,
   contentStyle,
 }: TabsProps) {
-  const ctx = useContext(ThemeContext);
-  const isDark = isDarkProp ?? ctx?.isDark ?? false;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
 
   // 受控/非受控模式
   const [internalKey, setInternalKey] = useState(
@@ -126,19 +125,19 @@ export function Tabs({
     };
 
     if (variant === "card") {
-      base.backgroundColor = colors.bg.secondary;
+      base.backgroundColor = tokens.bgColor.container;
       base.borderRadius = RADIUS.xl;
       base.padding = 6;
     }
 
     if (variant === "pill") {
-      base.backgroundColor = colors.bg.secondary;
+      base.backgroundColor = tokens.bgColor.container;
       base.borderRadius = RADIUS["4xl"];
       base.padding = 6;
     }
 
     return { ...base, ...tabBarStyle };
-  }, [variant, colors, tabBarStyle]);
+  }, [variant, tokens, tabBarStyle]);
 
   // 单个标签样式
   const getTabStyle = useCallback(
@@ -152,7 +151,7 @@ export function Tabs({
         paddingLeft: sizeConfig.paddingX,
         paddingRight: sizeConfig.paddingX,
         fontSize: sizeConfig.fontSize,
-        fontWeight: isActive ? 600 : 400,
+        fontWeight: isActive ? tokens.typography.label.badge.fontWeight : tokens.typography.label.tab.fontWeight,
         cursor: disabled ? "not-allowed" : "pointer",
         border: "none",
         background: "transparent",
@@ -167,27 +166,25 @@ export function Tabs({
 
       // 颜色
       if (disabled) {
-        base.color = colors.text.disabled;
+        base.color = tokens.textColor.disabled;
       } else if (isActive) {
-        base.color = colors.text.primary;
+        base.color = tokens.textColor.primary;
       } else {
-        base.color = colors.text.tertiary;
+        base.color = tokens.textColor.tertiary;
       }
 
       // 变体特定样式
       if (variant === "card" || variant === "pill") {
         if (isActive && !disabled) {
-          base.backgroundColor = colors.bg.elevated;
+          base.backgroundColor = tokens.bgColor.elevated;
           base.borderRadius = variant === "pill" ? RADIUS["4xl"] : RADIUS.xl;
-          base.boxShadow = isDark
-            ? "0 2px 8px rgba(0, 0, 0, 0.3)"
-            : "0 2px 8px rgba(0, 0, 0, 0.08)";
+          base.boxShadow = SHADOW.xl;
         }
       }
 
       return base;
     },
-    [sizeConfig, colors, variant, fullWidth, isDark]
+    [sizeConfig, tokens, variant, fullWidth]
   );
 
   // 图标样式
@@ -210,11 +207,11 @@ export function Tabs({
       bottom: 0,
       left: 0,
       height: 4,
-      backgroundColor: colors.text.primary,
+      backgroundColor: tokens.textColor.primary,
       borderRadius: 2,
       transition: "transform 200ms ease, width 200ms ease",
     }),
-    [colors]
+    [tokens]
   );
 
   // 内容区域样式

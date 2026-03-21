@@ -5,6 +5,8 @@ import {
   Card,
   RADIUS,
   SPACING,
+  statusGreen,
+  statusOrange,
   useTheme,
 } from "@tai-design/components";
 import { ArrowRightIcon } from "tdesign-icons-react";
@@ -32,34 +34,34 @@ function getPortalLayout(viewportWidth: number): PortalLayoutMode {
 function getReadinessColor(
   readiness: string,
   isDark: boolean,
-  colors: ReturnType<typeof useTheme>["colors"]
+  tokens: import("@tai-design/components").SemanticTokens
 ) {
   if (readiness === "已就绪") {
     return {
-      backgroundColor: colors.functional.success[12],
-      color: colors.functional.success.main,
-      borderColor: colors.functional.success[30],
+      backgroundColor: tokens.functionalColor.success.light,
+      color: tokens.functionalColor.success.main,
+      borderColor: statusGreen[30],
     };
   }
 
   if (readiness === "待接入") {
     return {
-      backgroundColor: colors.functional.notice[12],
-      color: colors.functional.notice.main,
-      borderColor: colors.functional.notice[30],
+      backgroundColor: tokens.functionalColor.warning.light,
+      color: tokens.functionalColor.warning.main,
+      borderColor: statusOrange[30],
     };
   }
 
   return {
     backgroundColor: isDark ? blueGray[90] : blueGray[10],
     color: isDark ? blueGray[30] : blueGray[80],
-    borderColor: colors.border.default,
+    borderColor: tokens.borderColor.level2,
   };
 }
 
 export function WelcomePage() {
   const navigate = useNavigate();
-  const { colors, isDark, toggle } = useTheme();
+  const { tokens, isDark, toggle } = useTheme();
   const [viewportWidth, setViewportWidth] = useState(() =>
     typeof window === "undefined" ? CONTENT_MAX_WIDTH : window.innerWidth
   );
@@ -85,8 +87,8 @@ export function WelcomePage() {
     <div
       style={{
         minHeight: "100vh",
-        backgroundColor: colors.bg.secondary,
-        color: colors.text.primary,
+        backgroundColor: tokens.bgColor.container,
+        color: tokens.textColor.primary,
         padding: SPACING["6"],
       }}
     >
@@ -113,7 +115,7 @@ export function WelcomePage() {
               style={{
                 fontSize: 14,
                 lineHeight: "14px",
-                color: colors.text.tertiary,
+                color: tokens.textColor.tertiary,
               }}
             >
               TAI Portal
@@ -152,7 +154,7 @@ export function WelcomePage() {
         >
           {portalEntries.map((entry) => {
             const Icon = entry.icon;
-            const readinessStyle = getReadinessColor(entry.readiness, isDark, colors);
+            const readinessStyle = getReadinessColor(entry.readiness, isDark, tokens);
             const isDesignSystem = entry.key === "design-system";
             const isHeroCard = isDesignSystem && isFeaturedLayout;
             const isWideCard = isDesignSystem && isSplitLayout;
@@ -165,8 +167,8 @@ export function WelcomePage() {
                 variant="white"
                 onClick={() => navigate(entry.path)}
                 style={{
-                  backgroundColor: colors.bg.primary,
-                  border: `1px solid ${colors.border.subtle}`,
+                  backgroundColor: tokens.bgColor.page,
+                  border: `1px solid ${tokens.borderColor.level1}`,
                   minHeight: CARD_MIN_HEIGHT,
                   display: "flex",
                   flexDirection: "column",
@@ -223,7 +225,7 @@ export function WelcomePage() {
                     style={{
                       fontSize: isHeroCard ? 14 : 12,
                       lineHeight: isHeroCard ? "18px" : "12px",
-                      color: colors.text.tertiary,
+                      color: tokens.textColor.tertiary,
                     }}
                   >
                     {isDesignSystem ? "规范库" : "产品入口"}
@@ -243,7 +245,7 @@ export function WelcomePage() {
                       style={{
                         margin: 0,
                         maxWidth: 360,
-                        color: colors.text.secondary,
+                        color: tokens.textColor.secondary,
                         fontSize: 16,
                         lineHeight: "24px",
                       }}

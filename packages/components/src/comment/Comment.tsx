@@ -11,7 +11,7 @@ import {
   ThumbUpIcon,
   TimeIcon,
 } from "tdesign-icons-react";
-import { RADIUS, SPACING, createColors } from "../tokens";
+import { RADIUS, SPACING } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 export interface CommentAction {
@@ -57,13 +57,13 @@ const COMMENT_CONFIG = {
   avatarSize: 72,
   imageHeight: 180,
   actionHeight: 42,
-  authorFontSize: 28,
-  contentFontSize: 28,
-  metaFontSize: 24,
+  authorFontSize: 28,    // → typography.body.primary.fontSize
+  contentFontSize: 28,   // → typography.body.long.fontSize
+  metaFontSize: 24,      // → typography.meta.caption.fontSize
 };
 
 function getDefaultActionIcon(key?: string, color?: string) {
-  const iconStyle = { fontSize: 24, color };
+  const iconStyle = { fontSize: 24, color }; // 图标尺寸 24
 
   switch (key) {
     case "like":
@@ -99,7 +99,7 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
   ) => {
     const theme = useThemeOptional();
     const isDark = isDarkProp ?? theme.isDark;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const tokens = theme.tokens;
 
     const containerStyle = useMemo<CSSProperties>(
       () => ({
@@ -109,11 +109,11 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
         width: "100%",
         paddingTop: SPACING["4"],
         paddingBottom: SPACING["4"],
-        borderBottom: divided ? `1px solid ${colors.border.subtle}` : undefined,
+        borderBottom: divided ? `1px solid ${tokens.borderColor.level1}` : undefined,
         boxSizing: "border-box",
         ...style,
       }),
-      [colors.border.subtle, divided, style]
+      [tokens.borderColor.level1, divided, style]
     );
 
     const avatarStyle = useMemo<CSSProperties>(
@@ -123,25 +123,25 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
         borderRadius: RADIUS.xl,
         flexShrink: 0,
         overflow: "hidden",
-        backgroundColor: colors.bg.tertiary,
-        color: colors.text.secondary,
+        backgroundColor: tokens.bgColor.secondaryContainer,
+        color: tokens.textColor.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        fontSize: 24,
+        fontSize: 24,   // 头像 fallback 文字
         fontWeight: 600,
       }),
-      [colors.bg.tertiary, colors.text.secondary]
+      [tokens.bgColor.secondaryContainer, tokens.textColor.secondary]
     );
 
     const authorStyle = useMemo<CSSProperties>(
       () => ({
         fontSize: COMMENT_CONFIG.authorFontSize,
-        lineHeight: 1.5,
-        fontWeight: 600,
-        color: colors.text.primary,
+        lineHeight: tokens.typography.body.primary.lineHeight,
+        fontWeight: tokens.typography.title.section.fontWeight, // semibold 600 用于作者名强调
+        color: tokens.textColor.primary,
       }),
-      [colors.text.primary]
+      [tokens]
     );
 
     const metaStyle = useMemo<CSSProperties>(
@@ -149,22 +149,22 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
         display: "flex",
         alignItems: "center",
         gap: SPACING["2"],
-        color: colors.text.tertiary,
+        color: tokens.textColor.tertiary,
         fontSize: COMMENT_CONFIG.metaFontSize,
-        lineHeight: 1.5,
+        lineHeight: tokens.typography.meta.caption.lineHeight,
         flexWrap: "wrap",
       }),
-      [colors.text.tertiary]
+      [tokens]
     );
 
     const contentStyle = useMemo<CSSProperties>(
       () => ({
         fontSize: COMMENT_CONFIG.contentFontSize,
-        lineHeight: 1.6,
-        color: colors.text.primary,
+        lineHeight: tokens.typography.body.long.lineHeight,
+        color: tokens.textColor.primary,
         wordBreak: "break-word",
       }),
-      [colors.text.primary]
+      [tokens]
     );
 
     const tagStyle = useMemo<CSSProperties>(
@@ -176,24 +176,24 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
         paddingLeft: SPACING["2"],
         paddingRight: SPACING["2"],
         borderRadius: RADIUS.xl,
-        backgroundColor: colors.bg.tertiary,
-        color: colors.text.secondary,
-        fontSize: 24,
-        lineHeight: 1.5,
+        backgroundColor: tokens.bgColor.secondaryContainer,
+        color: tokens.textColor.secondary,
+        fontSize: tokens.typography.label.tag.fontSize,
+        lineHeight: tokens.typography.label.tag.lineHeight,
       }),
-      [colors.bg.tertiary, colors.text.secondary]
+      [tokens]
     );
 
     const replyStyle = useMemo<CSSProperties>(
       () => ({
         padding: SPACING["4"],
         borderRadius: RADIUS.xl,
-        backgroundColor: colors.bg.secondary,
-        color: colors.text.secondary,
-        fontSize: 24,
-        lineHeight: 1.6,
+        backgroundColor: tokens.bgColor.container,
+        color: tokens.textColor.secondary,
+        fontSize: tokens.typography.meta.caption.fontSize,
+        lineHeight: tokens.typography.body.long.lineHeight,
       }),
-      [colors.bg.secondary, colors.text.secondary]
+      [tokens]
     );
 
     const actionButtonStyle = useMemo<CSSProperties>(
@@ -205,12 +205,12 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
         padding: 0,
         border: "none",
         background: "transparent",
-        color: colors.text.tertiary,
+        color: tokens.textColor.tertiary,
         cursor: "pointer",
-        fontSize: 24,
-        lineHeight: 1.5,
+        fontSize: tokens.typography.meta.caption.fontSize,
+        lineHeight: tokens.typography.meta.caption.lineHeight,
       }),
-      [colors.text.tertiary]
+      [tokens]
     );
 
     const avatarContent = useMemo(() => {
@@ -263,7 +263,7 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
               <div style={metaStyle}>
                 {time ? (
                   <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
-                    <TimeIcon style={{ fontSize: 24, color: colors.text.tertiary }} />
+                    <TimeIcon style={{ fontSize: 24, color: tokens.textColor.tertiary }} />
                     {time}
                   </span>
                 ) : null}
@@ -300,7 +300,7 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
                     height: COMMENT_CONFIG.imageHeight,
                     borderRadius: RADIUS.xl,
                     overflow: "hidden",
-                    backgroundColor: colors.bg.tertiary,
+                    backgroundColor: tokens.bgColor.secondaryContainer,
                   }}
                 >
                   <img
@@ -324,7 +324,7 @@ export const Comment = forwardRef<HTMLDivElement, CommentProps>(
                   style={actionButtonStyle}
                   onClick={action.onClick}
                 >
-                  {action.icon ?? getDefaultActionIcon(action.key, colors.text.tertiary)}
+                  {action.icon ?? getDefaultActionIcon(action.key, tokens.textColor.tertiary)}
                   <span>{action.label}</span>
                 </button>
               ))}

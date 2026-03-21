@@ -22,7 +22,7 @@ interface BaseMapComponentProps {
 }
 
 export function BaseMapComponent({ className, style, mapStyleId }: BaseMapComponentProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapInstanceRef = useRef<any>(null);
   const [loadError, setLoadError] = useState("");
@@ -138,8 +138,8 @@ export function BaseMapComponent({ className, style, mapStyleId }: BaseMapCompon
     justifyContent: "center",
     padding: 24,
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   if (loadError) {
@@ -150,13 +150,13 @@ export function BaseMapComponent({ className, style, mapStyleId }: BaseMapCompon
             <p
               style={{
                 marginBottom: 12,
-                color: colors.functional.danger.main,
+                color: tokens.functionalColor.error.main,
                 fontWeight: 600,
               }}
             >
               ⚠️ {loadError}
             </p>
-            <p style={{ color: colors.text.secondary }}>
+            <p style={{ color: tokens.textColor.secondary }}>
               请检查网络连接或补充本地环境变量配置
             </p>
           </div>

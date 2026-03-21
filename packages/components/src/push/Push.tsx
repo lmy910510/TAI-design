@@ -15,7 +15,7 @@ import {
   NotificationFilledIcon,
 } from "tdesign-icons-react";
 import { Button } from "../button";
-import { RADIUS, SHADOW, SPACING, createColors } from "../tokens";
+import { RADIUS, SHADOW, SPACING } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 type PushTone = "success" | "warning" | "error" | "info";
@@ -53,8 +53,8 @@ const PUSH_CONFIG = {
   iconSize: 42,
   iconContainer: 72,
   closeSize: 48,
-  titleFontSize: 28,
-  descriptionFontSize: 24,
+  titleFontSize: 28,        // → typography.body.primary.fontSize
+  descriptionFontSize: 24,  // → typography.meta.caption.fontSize
 };
 
 export const Push = forwardRef<HTMLDivElement, PushProps>(
@@ -79,7 +79,7 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
   ) => {
     const theme = useThemeOptional();
     const isDark = isDarkProp ?? theme.isDark;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const tokens = theme.tokens;
 
     useEffect(() => {
       if (!visible || duration <= 0) {
@@ -97,31 +97,31 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
       switch (tone) {
         case "success":
           return {
-            main: colors.functional.success.main,
-            subtle: colors.functional.success[12],
-            icon: <CheckCircleFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: colors.functional.success.main }} />,
+            main: tokens.functionalColor.success.main,
+            subtle: tokens.functionalColor.success.light,
+            icon: <CheckCircleFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: tokens.functionalColor.success.main }} />,
           };
         case "warning":
           return {
-            main: colors.functional.notice.main,
-            subtle: colors.functional.notice[12],
-            icon: <NotificationFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: colors.functional.notice.main }} />,
+            main: tokens.functionalColor.warning.main,
+            subtle: tokens.functionalColor.warning.light,
+            icon: <NotificationFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: tokens.functionalColor.warning.main }} />,
           };
         case "error":
           return {
-            main: colors.functional.danger.main,
-            subtle: colors.functional.danger[12],
-            icon: <ErrorCircleFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: colors.functional.danger.main }} />,
+            main: tokens.functionalColor.error.main,
+            subtle: tokens.functionalColor.error.light,
+            icon: <ErrorCircleFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: tokens.functionalColor.error.main }} />,
           };
         case "info":
         default:
           return {
-            main: colors.functional.info.main,
-            subtle: colors.functional.info[12],
-            icon: <NotificationFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: colors.functional.info.main }} />,
+            main: tokens.functionalColor.info.main,
+            subtle: tokens.functionalColor.info.light,
+            icon: <NotificationFilledIcon style={{ fontSize: PUSH_CONFIG.iconSize, color: tokens.functionalColor.info.main }} />,
           };
       }
-    }, [colors.functional.danger, colors.functional.info, colors.functional.notice, colors.functional.success, tone]);
+    }, [tokens.functionalColor, tone]);
 
     const wrapperStyle = useMemo<CSSProperties>(() => {
       if (position === "top") {
@@ -153,12 +153,12 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
         paddingBottom: SPACING["4"],
         boxSizing: "border-box",
         borderRadius: RADIUS["2xl"],
-        backgroundColor: colors.push.bg,
-        border: `1px solid ${colors.border.subtle}`,
+        backgroundColor: tokens.push.bg,
+        border: `1px solid ${tokens.borderColor.level1}`,
         boxShadow: SHADOW.xl,
         ...style,
       }),
-      [colors.border.subtle, colors.push.bg, style]
+      [tokens.borderColor.level1, tokens.push.bg, style]
     );
 
     if (!visible) {
@@ -208,9 +208,9 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
               <div
                 style={{
                   fontSize: PUSH_CONFIG.titleFontSize,
-                  lineHeight: 1.5,
-                  fontWeight: 600,
-                  color: colors.push.title,
+                  lineHeight: tokens.typography.body.primary.lineHeight,
+                  fontWeight: tokens.typography.title.section.fontWeight,
+                  color: tokens.push.title,
                   wordBreak: "break-word",
                 }}
               >
@@ -220,8 +220,8 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
                 <div
                   style={{
                     fontSize: PUSH_CONFIG.descriptionFontSize,
-                    lineHeight: 1.5,
-                    color: colors.push.content,
+                    lineHeight: tokens.typography.meta.caption.lineHeight,
+                    color: tokens.push.content,
                     wordBreak: "break-word",
                   }}
                 >
@@ -257,12 +257,12 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
                   justifyContent: "center",
                   borderRadius: RADIUS.xl,
                   border: "none",
-                  backgroundColor: colors.bg.secondary,
-                  color: colors.text.secondary,
+                  backgroundColor: tokens.bgColor.container,
+                  color: tokens.textColor.secondary,
                   cursor: "pointer",
                 }}
               >
-                <CloseIcon style={{ fontSize: 24, color: colors.text.secondary }} />
+                <CloseIcon style={{ fontSize: 24, color: tokens.textColor.secondary }} />
               </button>
             ) : null}
           </motion.div>

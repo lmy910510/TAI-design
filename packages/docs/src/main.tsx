@@ -89,7 +89,7 @@ const legacyDesignSystemPaths = [
 ] as const;
 
 function PageFallback() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
 
   return (
     <div
@@ -98,7 +98,7 @@ function PageFallback() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: colors.text.secondary,
+        color: tokens.textColor.secondary,
         fontSize: 18,
         padding: SPACING['6'],
       }}

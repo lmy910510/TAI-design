@@ -1,6 +1,8 @@
 import { useMemo, useState, useCallback, CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { createColors } from "../tokens";
+import { STATIC } from "../tokens/primitives";
+import { useThemeOptional } from "../hooks/ThemeContext";
+
 
 // ============================================================================
 // 配置
@@ -11,7 +13,7 @@ const CHECKBOX_CONFIG = {
   radius: 12,
   iconStrokeWidth: 3,
   labelGap: 12,
-  labelFontSize: 28,
+  labelFontSize: 28,   // → typography.body.primary.fontSize
 };
 
 // ============================================================================
@@ -76,8 +78,9 @@ export const Checkbox = ({
   const isControlled = checkedProp !== undefined;
   const isChecked = isControlled ? checkedProp : internalChecked;
 
-  const isDark = isDarkProp;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
 
   const handleToggle = useCallback(() => {
     if (disabled) return;
@@ -104,25 +107,25 @@ export const Checkbox = ({
       width: CHECKBOX_CONFIG.size,
       height: CHECKBOX_CONFIG.size,
       borderRadius: CHECKBOX_CONFIG.radius,
-      backgroundColor: isChecked ? colors.checkbox.checked : "transparent",
-      border: isChecked ? "none" : `2px solid ${colors.checkbox.unchecked}`,
+      backgroundColor: isChecked ? tokens.checkbox.checked : STATIC.transparent,
+      border: isChecked ? "none" : `2px solid ${tokens.checkbox.unchecked}`,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
       transition: "background-color 150ms ease, border-color 150ms ease",
       flexShrink: 0,
     }),
-    [isChecked, colors]
+    [isChecked, tokens]
   );
 
   const labelStyle = useMemo<CSSProperties>(
     () => ({
       fontSize: CHECKBOX_CONFIG.labelFontSize,
-      color: colors.text.primary,
-      lineHeight: 1.4,
+      color: tokens.textColor.primary,
+      lineHeight: tokens.typography.body.primary.lineHeight,
       userSelect: "none",
     }),
-    [colors]
+    [tokens]
   );
 
   return (
@@ -143,7 +146,7 @@ export const Checkbox = ({
       }}
     >
       <div style={boxStyle}>
-        {isChecked && <CheckmarkIcon color={colors.checkbox.checkmark} />}
+        {isChecked && <CheckmarkIcon color={tokens.checkbox.checkmark} />}
       </div>
       {label && <span style={labelStyle}>{label}</span>}
     </div>

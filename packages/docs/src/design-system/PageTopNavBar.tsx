@@ -26,7 +26,7 @@ export function PageTopNavBar({
   showTitle = true,
   actions = [],
 }: PageTopNavBarProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
   const displayActions = actions.slice(0, 3);
 
   return (
@@ -38,7 +38,7 @@ export function PageTopNavBar({
         <div className="content-stretch flex flex-col h-[84px] justify-center leading-[0] not-italic relative shrink-0">
           <p
             className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] leading-[42px] text-[42px]"
-            style={{ color: colors.text.primary }}
+            style={{ color: tokens.textColor.primary }}
           >
             {title}
           </p>

@@ -1,6 +1,6 @@
-import { CSSProperties, forwardRef, useContext, useMemo } from "react";
-import { ThemeContext } from "../hooks/ThemeContext";
-import { BLACK, RADIUS, SPACING, WHITE, createColors } from "../tokens";
+import { CSSProperties, forwardRef, useMemo } from "react";
+import { useThemeOptional } from "../hooks/ThemeContext";
+import { BLACK, RADIUS, SPACING, WHITE, STATIC } from "../tokens";
 import { Image } from "../image";
 import { VideoProps } from "./Video.types";
 
@@ -48,9 +48,9 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
     },
     ref
   ) => {
-    const ctx = useContext(ThemeContext);
-    const isDark = isDarkProp ?? ctx?.isDark ?? false;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
     const safeProgress = clampProgress(progress);
 
     const containerStyle = useMemo<CSSProperties>(
@@ -60,11 +60,11 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
         aspectRatio,
         overflow: "hidden",
         borderRadius: RADIUS["2xl"],
-        backgroundColor: colors.bg.tertiary,
-        border: `1px solid ${colors.border.subtle}`,
+        backgroundColor: tokens.bgColor.secondaryContainer,
+        border: `1px solid ${tokens.borderColor.level1}`,
         ...style,
       }),
-      [aspectRatio, colors, style]
+      [aspectRatio, tokens, style]
     );
 
     const playButtonStyle = useMemo<CSSProperties>(
@@ -93,9 +93,9 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
         display: "flex",
         alignItems: "center",
         gap: SPACING["3"],
-        color: colors.static.white,
+        color: STATIC.white,
       }),
-      [colors, isDark]
+      [isDark]
     );
 
     const renderMedia = () => {
@@ -136,12 +136,12 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
             }}
           >
             <div style={playButtonStyle}>
-              <PlayIcon color={colors.static.white} />
+              <PlayIcon color={STATIC.white} />
             </div>
           </div>
         ) : null}
         <div style={bottomBarStyle}>
-          <span style={{ fontSize: 24, lineHeight: 1 }}>{currentTime}</span>
+          <span style={{ fontSize: tokens.typography.meta.caption.fontSize, lineHeight: tokens.typography.meta.time.lineHeight }}>{currentTime}</span>
           <div
             style={{
               flex: 1,
@@ -155,12 +155,12 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
               style={{
                 width: `${safeProgress}%`,
                 height: "100%",
-                backgroundColor: colors.static.white,
+                backgroundColor: STATIC.white,
                 borderRadius: 9999,
               }}
             />
           </div>
-          <span style={{ fontSize: 24, lineHeight: 1 }}>{duration}</span>
+          <span style={{ fontSize: tokens.typography.meta.caption.fontSize, lineHeight: tokens.typography.meta.time.lineHeight }}>{duration}</span>
         </div>
       </>
     );
@@ -188,7 +188,7 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
                 backgroundColor: BLACK[42],
               }}
             >
-              <PlayIcon color={colors.static.white} />
+              <PlayIcon color={STATIC.white} />
             </div>
           </div>
         ) : null}
@@ -200,9 +200,9 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
             padding: `${SPACING["2"]}px`,
             borderRadius: RADIUS.xl,
             backgroundColor: BLACK[60],
-            color: colors.static.white,
-            fontSize: 18,
-            lineHeight: 1,
+            color: STATIC.white,
+            fontSize: tokens.typography.meta.footnote.fontSize,
+            lineHeight: tokens.typography.meta.footnote.lineHeight,
           }}
         >
           {duration}
@@ -221,15 +221,15 @@ export const Video = forwardRef<HTMLDivElement, VideoProps>(
           justifyContent: "center",
           gap: SPACING["3"],
           padding: SPACING["6"],
-          backgroundColor: colors.bg.overlay,
+          backgroundColor: tokens.bgColor.overlay,
           textAlign: "center",
         }}
       >
-        <LockIcon color={colors.static.white} />
-        <div style={{ fontSize: 30, lineHeight: 1.2, fontWeight: 600, color: colors.static.white }}>
+        <LockIcon color={STATIC.white} />
+        <div style={{ fontSize: tokens.typography.title.subsection.fontSize, lineHeight: tokens.typography.title.subsection.lineHeight, fontWeight: tokens.typography.title.section.fontWeight, color: STATIC.white }}>
           {lockTitle}
         </div>
-        <div style={{ fontSize: 24, lineHeight: 1.4, color: WHITE[72] }}>
+        <div style={{ fontSize: tokens.typography.meta.caption.fontSize, lineHeight: tokens.typography.body.primary.lineHeight, color: WHITE[72] }}>
           {lockDescription}
         </div>
       </div>

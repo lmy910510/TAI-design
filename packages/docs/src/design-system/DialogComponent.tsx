@@ -59,7 +59,7 @@ export function DialogComponent({
   isOpen = true,
   className = "",
 }: DialogComponentProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   if (!isOpen) return null;
 
@@ -71,7 +71,7 @@ export function DialogComponent({
       style={{
         width: "100%",
         maxWidth: DIALOG_WIDTH[size],
-        backgroundColor: colors.dialog.bg,
+        backgroundColor: tokens.dialog.bg,
         borderRadius: RADIUS["4xl"],
         boxShadow: SHADOW.xl,
       }}
@@ -111,7 +111,7 @@ export function DialogComponent({
               fontSize: 36,
               lineHeight: "36px",
               fontWeight: 600,
-              color: colors.dialog.title,
+              color: tokens.dialog.title,
             }}
           >
             {title}
@@ -124,7 +124,7 @@ export function DialogComponent({
                 textAlign: size === "large" ? "left" : "center",
                 fontSize: 28,
                 lineHeight: "42px",
-                color: colors.dialog.content,
+                color: tokens.dialog.content,
               }}
             >
               {content}

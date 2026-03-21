@@ -3,12 +3,11 @@ import {
   useMemo,
   useCallback,
   useEffect,
-  useContext,
   ReactNode,
   CSSProperties,
 } from "react";
-import { createColors, SPACING, RADIUS } from "../tokens";
-import { ThemeContext } from "../hooks/ThemeContext";
+import { SPACING, RADIUS } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 类型
@@ -80,9 +79,9 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
     },
     ref
   ) => {
-    const ctx = useContext(ThemeContext);
-    const isDark = isDarkProp ?? ctx?.isDark ?? false;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
 
     const handleClose = useCallback(() => {
       onClose?.();
@@ -134,12 +133,12 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
         left: 0,
         right: 0,
         bottom: 0,
-        backgroundColor: colors.bg.overlay,
+        backgroundColor: tokens.bgColor.overlay,
         zIndex: 1000,
         animation: "tai-actionsheet-overlay-in 200ms ease",
         ...overlayStyle,
       }),
-      [colors, overlayStyle]
+      [tokens, overlayStyle]
     );
 
     const containerStyle = useMemo<CSSProperties>(
@@ -158,11 +157,11 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
 
     const panelStyle = useMemo<CSSProperties>(
       () => ({
-        backgroundColor: colors.bg.secondary,
+        backgroundColor: tokens.bgColor.container,
         borderRadius: RADIUS["2xl"],
         overflow: "hidden",
       }),
-      [colors]
+      [tokens]
     );
 
     const headerStyle = useMemo<CSSProperties>(
@@ -171,29 +170,29 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
         textAlign: "center",
         borderBottom:
           title || description
-            ? `1px solid ${colors.border.subtle}`
+            ? `1px solid ${tokens.borderColor.level1}`
             : undefined,
       }),
-      [title, description, colors]
+      [title, description, tokens]
     );
 
     const titleStyle = useMemo<CSSProperties>(
       () => ({
-        fontSize: 32,
-        fontWeight: 600,
-        color: colors.text.primary,
+        fontSize: tokens.typography.title.card.fontSize,
+        fontWeight: tokens.typography.title.section.fontWeight,
+        color: tokens.textColor.primary,
         margin: 0,
       }),
-      [colors]
+      [tokens]
     );
 
     const descriptionStyle = useMemo<CSSProperties>(
       () => ({
-        fontSize: 26,
-        color: colors.text.secondary,
+        fontSize: tokens.typography.body.secondary.fontSize,
+        color: tokens.textColor.secondary,
         marginTop: title ? SPACING["2"] : 0,
       }),
-      [colors, title]
+      [tokens, title]
     );
 
     const actionItemStyle = (action: ActionSheetAction): CSSProperties => ({
@@ -203,16 +202,16 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
       gap: SPACING["3"],
       height: 100,
       padding: `0 ${SPACING["6"]}px`,
-      fontSize: 32,
-      fontWeight: 500,
+      fontSize: tokens.typography.title.card.fontSize,
+      fontWeight: tokens.typography.title.card.fontWeight,
       color: action.danger
-        ? colors.functional.danger.main
+        ? tokens.functionalColor.error.main
         : action.disabled
-        ? colors.text.disabled
-        : colors.text.primary,
+        ? tokens.textColor.disabled
+        : tokens.textColor.primary,
       backgroundColor: "transparent",
       border: "none",
-      borderTop: `1px solid ${colors.border.subtle}`,
+      borderTop: `1px solid ${tokens.borderColor.level1}`,
       cursor: action.disabled ? "not-allowed" : "pointer",
       transition: "background-color 150ms ease",
       width: "100%",
@@ -222,11 +221,11 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
     const cancelContainerStyle = useMemo<CSSProperties>(
       () => ({
         marginTop: SPACING["3"],
-        backgroundColor: colors.bg.secondary,
+        backgroundColor: tokens.bgColor.container,
         borderRadius: RADIUS["2xl"],
         overflow: "hidden",
       }),
-      [colors]
+      [tokens]
     );
 
     const cancelButtonStyle = useMemo<CSSProperties>(
@@ -236,15 +235,15 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
         justifyContent: "center",
         height: 100,
         width: "100%",
-        fontSize: 32,
-        fontWeight: 500,
-        color: colors.text.primary,
+        fontSize: tokens.typography.label.buttonLarge.fontSize,
+        fontWeight: tokens.typography.label.buttonLarge.fontWeight,
+        color: tokens.textColor.primary,
         backgroundColor: "transparent",
         border: "none",
         cursor: "pointer",
         transition: "background-color 150ms ease",
       }),
-      [colors]
+      [tokens]
     );
 
     return (
@@ -260,7 +259,7 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
             to { transform: translateY(0); }
           }
           .tai-actionsheet-item:active {
-            background-color: ${colors.bg.tertiary} !important;
+            background-color: ${tokens.bgColor.secondaryContainer} !important;
           }
         `}
         </style>
@@ -306,8 +305,8 @@ export const ActionSheet = forwardRef<HTMLDivElement, ActionSheetProps>(
                 {action.description && (
                   <span
                     style={{
-                      fontSize: 24,
-                      color: colors.text.tertiary,
+                      fontSize: tokens.typography.meta.caption.fontSize,
+                      color: tokens.textColor.tertiary,
                       marginLeft: SPACING["2"],
                     }}
                   >

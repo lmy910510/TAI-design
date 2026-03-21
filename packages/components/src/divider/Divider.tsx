@@ -5,7 +5,7 @@ import {
   forwardRef,
   useMemo,
 } from "react";
-import { SPACING, createColors } from "../tokens";
+import { SPACING } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 type DividerOrientation = "horizontal" | "vertical";
@@ -53,7 +53,7 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
   ) => {
     const theme = useThemeOptional();
     const isDark = isDarkProp ?? theme.isDark;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const tokens = theme.tokens;
 
     const margin = SPACING[spacing];
     const startInset = inset === "start" || inset === "both" ? SPACING["4"] : 0;
@@ -90,10 +90,10 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
           width: thickness,
           height: length ?? "100%",
           minHeight: typeof length === "number" ? length : 72,
-          backgroundColor: colors.border.subtle,
+          backgroundColor: tokens.borderColor.level1,
           backgroundImage:
             variant === "dashed"
-              ? `repeating-linear-gradient(to bottom, ${colors.border.subtle}, ${colors.border.subtle} 6px, transparent 6px, transparent 12px)`
+              ? `repeating-linear-gradient(to bottom, ${tokens.borderColor.level1}, ${tokens.borderColor.level1} 6px, transparent 6px, transparent 12px)`
               : undefined,
         };
       }
@@ -102,23 +102,23 @@ export const Divider = forwardRef<HTMLDivElement, DividerProps>(
         flex: 1,
         minWidth: 0,
         height: thickness,
-        backgroundColor: colors.border.subtle,
+        backgroundColor: tokens.borderColor.level1,
         backgroundImage:
           variant === "dashed"
-            ? `repeating-linear-gradient(to right, ${colors.border.subtle}, ${colors.border.subtle} 6px, transparent 6px, transparent 12px)`
+            ? `repeating-linear-gradient(to right, ${tokens.borderColor.level1}, ${tokens.borderColor.level1} 6px, transparent 6px, transparent 12px)`
             : undefined,
       };
-    }, [colors.border.subtle, length, orientation, thickness, variant]);
+    }, [tokens.borderColor.level1, length, orientation, thickness, variant]);
 
     const labelStyle = useMemo<CSSProperties>(
       () => ({
         flexShrink: 0,
-        color: colors.text.tertiary,
-        fontSize: 24,
-        lineHeight: 1.5,
+        color: tokens.textColor.tertiary,
+        fontSize: tokens.typography.meta.caption.fontSize,
+        lineHeight: tokens.typography.meta.caption.lineHeight,
         whiteSpace: "nowrap",
       }),
-      [colors.text.tertiary]
+      [tokens]
     );
 
     if (orientation === "vertical") {

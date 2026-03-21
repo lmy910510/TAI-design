@@ -1,7 +1,8 @@
 import { useState, CSSProperties } from "react";
 import { ThumbsUp } from "lucide-react";
-import { RADIUS, Switch, useTheme } from "@tai-design/components";
+import { RADIUS, SPACING, STATIC, Switch, useTheme } from "@tai-design/components";
 import { TagComponent, TagType, TagLevel, TagSize, TagColor, resolveTagPalette } from "../TagComponent";
+import { DocPageHeader, DocTokenTable } from "../DocComponents";
 
 const COLOR_LABELS: Record<TagColor, string> = {
   warning: "警示、强调",
@@ -12,7 +13,7 @@ const COLOR_LABELS: Record<TagColor, string> = {
 };
 
 export function Tag() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
 
   const [selectedType, setSelectedType] = useState<TagType>("regular");
   const [selectedLevel, setSelectedLevel] = useState<TagLevel>("high");
@@ -21,55 +22,44 @@ export function Tag() {
   const [hasIcon, setHasIcon] = useState<boolean>(true);
   const [isSolidBorder, setIsSolidBorder] = useState<boolean>(true);
 
-  const palette = resolveTagPalette(colors, selectedColor);
-
-  const chipStyle: CSSProperties = {
-    display: "inline-block",
-    padding: "6px 12px",
-    marginBottom: 16,
-    borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
-    fontSize: 14,
-  };
+  const palette = resolveTagPalette(tokens, selectedColor);
 
   const panelStyle: CSSProperties = {
-    padding: 24,
+    padding: SPACING["4"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const previewStageStyle: CSSProperties = {
     minHeight: 300,
-    marginBottom: 24,
+    marginBottom: SPACING["4"],
     borderRadius: RADIUS["2xl"],
-    border: `1px dashed ${colors.border.default}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px dashed ${tokens.borderColor.level2}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   const summaryStyle: CSSProperties = {
-    padding: 18,
+    padding: SPACING["3"],
     borderRadius: RADIUS.xl,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   const sectionLabelStyle: CSSProperties = {
-    marginBottom: 12,
-    fontSize: 14,
+    marginBottom: SPACING["2"],
+    fontSize: 18,
     fontWeight: 500,
-    color: colors.text.secondary,
+    color: tokens.textColor.secondary,
   };
 
   const getOptionButtonStyle = (active: boolean, disabled = false): CSSProperties => ({
     width: "100%",
     padding: "12px 16px",
     borderRadius: RADIUS.xl,
-    border: `2px solid ${active ? colors.border.focus : colors.static.transparent}`,
-    backgroundColor: active ? colors.bg.secondary : colors.bg.tertiary,
-    color: active ? colors.text.primary : colors.text.secondary,
+    border: `2px solid ${active ? tokens.borderColor.focus : STATIC.transparent}`,
+    backgroundColor: active ? tokens.bgColor.container : tokens.bgColor.secondaryContainer,
+    color: active ? tokens.textColor.primary : tokens.textColor.secondary,
     opacity: disabled ? 0.35 : 1,
     cursor: disabled ? "not-allowed" : "pointer",
     transition: "all 150ms ease",
@@ -77,17 +67,11 @@ export function Tag() {
 
   return (
     <div>
-      <div className="mb-8">
-        <div style={chipStyle}>Components / 组件</div>
-        <h1 className="text-4xl font-bold mb-4">标签组件 (Tag)</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          用于表明主体的类目、属性或状态；是静态文本，不具有交互功能。提供常规和组合两类标签，支持多层级、尺寸和颜色。
-        </p>
-      </div>
+      <DocPageHeader category="Components / 组件" title="标签组件 (Tag)" description="用于表明主体的类目、属性或状态；是静态文本，不具有交互功能。提供常规和组合两类标签，支持多层级、尺寸和颜色。" />
 
       <div className="grid grid-cols-2 gap-8 mb-8">
         <div style={panelStyle}>
-          <h2 className="text-2xl font-bold mb-6">实时预览</h2>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>实时预览</h2>
 
           <div className="flex-1 flex flex-col items-center justify-center" style={previewStageStyle}>
             <TagComponent
@@ -99,7 +83,7 @@ export function Tag() {
               icon={
                 <ThumbsUp
                   size={22}
-                  color={selectedLevel === "high" ? colors.static.white : palette.main}
+                  color={selectedLevel === "high" ? STATIC.white : palette.main}
                   strokeWidth={2.5}
                 />
               }
@@ -110,7 +94,7 @@ export function Tag() {
           </div>
 
           <div style={summaryStyle}>
-            <div className="text-xs space-y-2" style={{ color: colors.text.secondary }}>
+            <div className="text-xs space-y-2" style={{ color: tokens.textColor.secondary }}>
               <div className="flex justify-between">
                 <span>类型:</span>
                 <span className="font-mono">{selectedType === "regular" ? "常规标签" : "组合标签"}</span>
@@ -140,7 +124,7 @@ export function Tag() {
         </div>
 
         <div className="overflow-y-auto max-h-[800px]" style={panelStyle}>
-          <h2 className="text-2xl font-bold mb-6">属性配置</h2>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>属性配置</h2>
 
           <div className="mb-6">
             <h3 style={sectionLabelStyle}>类型 (Type)</h3>
@@ -202,7 +186,7 @@ export function Tag() {
             <h3 style={sectionLabelStyle}>语义颜色 (Color)</h3>
             <div className="grid grid-cols-2 gap-2">
               {(["warning", "notice", "success", "regular", "default"] as TagColor[]).map((color) => {
-                const colorPalette = resolveTagPalette(colors, color);
+                const colorPalette = resolveTagPalette(tokens, color);
                 return (
                   <button
                     key={color}
@@ -224,19 +208,121 @@ export function Tag() {
 
               <label className="flex items-center gap-3 cursor-pointer">
                 <Switch checked={hasIcon} onChange={setHasIcon} isDark={isDark} />
-                <span className="text-sm" style={{ color: colors.text.primary }}>显示图标</span>
+                <span className="text-sm" style={{ color: tokens.textColor.primary }}>显示图标</span>
               </label>
 
               {selectedLevel === "medium" && (
                 <label className="flex items-center gap-3 cursor-pointer">
                   <Switch checked={isSolidBorder} onChange={setIsSolidBorder} isDark={isDark} />
-                  <span className="text-sm" style={{ color: colors.text.primary }}>
+                  <span className="text-sm" style={{ color: tokens.textColor.primary }}>
                     实线描边风格 (Solid Border)
                   </span>
                 </label>
               )}
             </div>
           )}
+        </div>
+      </div>
+
+      <div className="mt-8">
+        <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>🎨 Token 使用清单</h2>
+        <DocTokenTable
+          rows={[
+            { part: "高级标签文字 (danger)", compToken: "tokens.tag.danger.main", pubToken: "functionalColor.error.main", desc: "高级标签主色 / 文字色", color: tokens.tag.danger.main },
+            { part: "中级标签背景 (danger)", compToken: "tokens.tag.danger[12]", pubToken: "bgColor.errorLight", desc: "12% 浅底背景", color: tokens.tag.danger[12] },
+            { part: "低级标签背景 (danger)", compToken: "tokens.tag.danger[6]", pubToken: "bgColor.errorLight", desc: "6% 最浅底背景", color: tokens.tag.danger[6] },
+            { part: "高级标签文字 (notice)", compToken: "tokens.tag.notice.main", pubToken: "functionalColor.warning.main", desc: "提示/警告标签主色", color: tokens.tag.notice.main },
+            { part: "高级标签文字 (success)", compToken: "tokens.tag.success.main", pubToken: "functionalColor.success.main", desc: "成功标签主色", color: tokens.tag.success.main },
+            { part: "高级标签文字 (info)", compToken: "tokens.tag.info.main", pubToken: "functionalColor.info.main", desc: "信息标签主色", color: tokens.tag.info.main },
+            { part: "高级标签文字 (default)", compToken: "tokens.tag.default.main", pubToken: "textColor.tertiary", desc: "默认灰色标签主色", color: tokens.tag.default.main },
+          ]}
+          note={
+            <p style={{ fontSize: 13, color: tokens.textColor.secondary, lineHeight: 1.6, margin: 0 }}>
+              <strong>层级规则：</strong>高级 (high) 使用 <code>main</code> 色做文字/图标 + 白色背景；中级 (medium) 使用 <code>[12]</code> 做背景 + <code>main</code> 做文字；低级 (low) 使用 <code>[6]</code> 做背景 + <code>main</code> 做文字。
+              <br />
+              <strong>排版 Token：</strong>标签文字使用 <code>tokens.typography.label.tag</code> (24px/500/1)。
+              <br />
+              <strong>每种颜色均有 4 个透明度档位：</strong><code>main</code>、<code>[6]</code>（约 6%）、<code>[12]</code>（12%）、<code>[30]</code>（30%）。
+            </p>
+          }
+        />
+      </div>
+
+      <div className="mt-8">
+        <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>颜色规范</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, minmax(0, 1fr))", gap: 18 }}>
+          {(["warning", "notice", "success", "regular", "default"] as TagColor[]).map((color) => {
+            const p = resolveTagPalette(tokens, color);
+            const tokenNames: Record<TagColor, { main: string; "6": string; "12": string; "30": string }> = {
+              warning: {
+                main: "functionalColor.warning.main",
+                "6": "bgColor.warningLight",
+                "12": "bgColor.warningLight",
+                "30": "functionalColor.warning.disabled",
+              },
+              notice: {
+                main: "functionalColor.warning.main",
+                "6": "bgColor.warningLight",
+                "12": "bgColor.warningLight",
+                "30": "functionalColor.warning.disabled",
+              },
+              success: {
+                main: "functionalColor.success.main",
+                "6": "bgColor.successLight",
+                "12": "bgColor.successLight",
+                "30": "functionalColor.success.disabled",
+              },
+              regular: {
+                main: "functionalColor.info.main",
+                "6": "bgColor.infoLight",
+                "12": "bgColor.infoLight",
+                "30": "functionalColor.info.disabled",
+              },
+              default: {
+                main: "textColor.tertiary",
+                "6": "bgColor.infoLight",
+                "12": "bgColor.infoLight",
+                "30": "functionalColor.info.disabled",
+              },
+            };
+            const names = tokenNames[color];
+            return (
+              <div
+                key={color}
+                style={{
+                  padding: 18,
+                  borderRadius: RADIUS["2xl"],
+                  border: `1px solid ${tokens.borderColor.level1}`,
+                  backgroundColor: tokens.bgColor.elevated,
+                }}
+              >
+                <h3 className="font-semibold mb-4 flex items-center gap-2" style={{ fontSize: 16 }}>
+                  <div className="w-4 h-4 rounded-full" style={{ backgroundColor: p.main }} />
+                  {COLOR_LABELS[color]}
+                </h3>
+                <div className="space-y-3">
+                  {(["main", "6", "12", "30"] as const).map((level) => (
+                    <div key={level} className="flex items-center gap-2">
+                      <div
+                        style={{
+                          width: 24,
+                          height: 24,
+                          borderRadius: 6,
+                          backgroundColor: p[level] as string,
+                          border: `1px solid ${tokens.borderColor.level1}`,
+                          flexShrink: 0,
+                        }}
+                      />
+                      <div style={{ minWidth: 0 }}>
+                        <div className="text-xs font-mono" style={{ color: tokens.textColor.primary }}>{p[level] as string}</div>
+                        <div className="text-xs" style={{ color: tokens.textColor.tertiary }}>{level === "main" ? "main" : `${level}%`} → <code>{names[level]}</code></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

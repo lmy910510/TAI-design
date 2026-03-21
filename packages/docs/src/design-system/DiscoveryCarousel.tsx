@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "motion/react";
-import { SHADOW, useThemeOptional } from "@tai-design/components";
+import { SHADOW, STATIC, useThemeOptional } from "@tai-design/components";
 
 export interface DiscoveryCard {
   id: string;
@@ -23,8 +23,7 @@ export interface DiscoveryCarouselProps {
  * 保留原有轮播结构，但所有展示色值改为主题 token 驱动。
  */
 export function DiscoveryCarousel({ cards, className = "" }: DiscoveryCarouselProps) {
-  const { colors } = useThemeOptional();
-  const [activeIndex, setActiveIndex] = useState(0);
+  const { tokens } = useThemeOptional();
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = () => {
@@ -118,7 +117,7 @@ export function DiscoveryCarousel({ cards, className = "" }: DiscoveryCarouselPr
             style={{
               width: index === activeIndex ? 32 : 8,
               backgroundColor:
-                index === activeIndex ? colors.border.brand : colors.border.subtle,
+                index === activeIndex ? tokens.borderColor.brand : tokens.borderColor.level1,
             }}
             aria-label={`跳转到第 ${index + 1} 张卡片`}
             type="button"
@@ -146,7 +145,7 @@ interface CardItemProps {
 }
 
 function CardItem({ card, isActive, onClick }: CardItemProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <motion.div
@@ -169,9 +168,9 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
       <div
         className="flex h-[596px] w-[420px] flex-col gap-[24px] rounded-[52px] border-2 p-[24px]"
         style={{
-          background: `linear-gradient(180deg, ${colors.bg.primary} 0%, ${colors.bg.secondary} 100%)`,
+          background: `linear-gradient(180deg, ${tokens.bgColor.page} 0%, ${tokens.bgColor.container} 100%)`,
           boxShadow: SHADOW.xl,
-          borderColor: colors.static.transparent,
+          borderColor: STATIC.transparent,
         }}
       >
         <div className="relative h-[304px] overflow-hidden rounded-[31.054px]">
@@ -185,14 +184,14 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
           <div
             className="absolute left-[12px] top-[12px] flex items-center gap-[8px] rounded-[100px] px-[12px] py-[8px]"
             style={{
-              backgroundColor: colors.bg.overlay,
+              backgroundColor: tokens.bgColor.overlay,
               backdropFilter: "blur(6px)",
             }}
           >
-            <LocationIcon color={colors.static.white} />
+            <LocationIcon color={STATIC.white} />
             <p
               className="whitespace-nowrap font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[22px]"
-              style={{ color: colors.static.white }}
+              style={{ color: STATIC.white }}
             >
               {card.distance}
             </p>
@@ -204,7 +203,7 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
                 <div
                   key={idx}
                   className="relative mr-[-16px] size-[50px] overflow-hidden rounded-[12px] border-2"
-                  style={{ borderColor: colors.static.white }}
+                  style={{ borderColor: STATIC.white }}
                 >
                   <img
                     src={thumb}
@@ -222,7 +221,7 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
           <div className="flex flex-col gap-[12px]">
             <div
               className="font-['Noto_Sans_S_Chinese:Medium',sans-serif] text-[34px] leading-[34px]"
-              style={{ color: colors.text.primary }}
+              style={{ color: tokens.textColor.primary }}
             >
               {card.title.split("\n").map((line, idx) => (
                 <p key={idx} className="w-full overflow-hidden text-ellipsis">
@@ -236,14 +235,14 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
                 <div key={idx} className="flex items-center gap-[12px]">
                   <p
                     className="whitespace-nowrap font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px]"
-                    style={{ color: colors.text.secondary }}
+                    style={{ color: tokens.textColor.secondary }}
                   >
                     {tag}
                   </p>
                   {idx < card.tags.length - 1 ? (
                     <div
                       className="h-[20px] w-px"
-                      style={{ backgroundColor: colors.border.default }}
+                      style={{ backgroundColor: tokens.borderColor.level2 }}
                     />
                   ) : null}
                 </div>
@@ -255,16 +254,16 @@ function CardItem({ card, isActive, onClick }: CardItemProps) {
             <div
               className="rounded-[100px] border"
               style={{
-                backgroundColor: colors.bg.brandSubtle,
-                borderColor: colors.border.inverse,
+                backgroundColor: tokens.bgColor.brandLight,
+                borderColor: tokens.borderColor.inverse,
               }}
             >
               <div className="flex items-center justify-center px-[16px] py-[26px]">
                 <div className="flex items-center gap-[8px]">
-                  <AIIcon color={colors.text.secondary} />
+                  <AIIcon color={tokens.textColor.secondary} />
                   <p
                     className="overflow-hidden text-ellipsis whitespace-nowrap font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-[22px] leading-[22px]"
-                    style={{ color: colors.text.secondary }}
+                    style={{ color: tokens.textColor.secondary }}
                   >
                     {card.aiPrompt}
                   </p>

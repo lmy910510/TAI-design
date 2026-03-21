@@ -2,6 +2,7 @@ import type { CSSProperties } from "react";
 import { useState } from "react";
 import * as TDesignIcons from "tdesign-icons-react";
 import { Input as TaiInput, RADIUS, SPACING, useTheme } from "@tai-design/components";
+import { DocPageHeader } from "../DocComponents";
 
 const iconCategories = {
   direction: {
@@ -47,7 +48,7 @@ const iconCategories = {
 } as const;
 
 export function Icons() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState("");
   const [copiedIcon, setCopiedIcon] = useState<string | null>(null);
 
@@ -70,35 +71,31 @@ export function Icons() {
     padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
     marginBottom: SPACING["3"],
     borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
+    color: tokens.textColor.secondary,
     fontSize: 14,
   };
 
   const guidePanelStyle: CSSProperties = {
     padding: SPACING["4"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.brand}`,
-    background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+    border: `1px solid ${tokens.borderColor.brand}`,
+    background: `linear-gradient(to right, ${tokens.bgColor.brandLight}, ${tokens.bgColor.container})`,
   };
 
   const categoryCardStyle: CSSProperties = {
     padding: SPACING["4"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   return (
     <div>
+      <DocPageHeader category="Foundation / 基础" title="图标库" description="基于 TDesign Icons 的车机端图标系统。" />
       <div className="mb-8">
-        <div style={chipStyle}>Foundation / 基础</div>
-        <h1 className="text-4xl font-bold mb-4">图标库</h1>
-        <p className="text-lg mb-4" style={{ color: colors.text.secondary }}>
-          基于 TDesign Icons 的车机端图标系统。
-        </p>
-        <a href="https://tdesign.tencent.com/icons" target="_blank" rel="noopener noreferrer" style={{ color: colors.text.link, fontSize: 14 }}>
+        <a href="https://tdesign.tencent.com/icons" target="_blank" rel="noopener noreferrer" style={{ color: tokens.textColor.link, fontSize: 14 }}>
           查看完整图标库 →
         </a>
       </div>
@@ -116,9 +113,9 @@ export function Icons() {
 
       <div style={guidePanelStyle} className="mb-8">
         <h3 className="text-base font-semibold mb-2">💡 使用方法</h3>
-        <div className="text-sm space-y-1" style={{ color: colors.text.secondary }}>
+        <div className="text-sm space-y-1" style={{ color: tokens.textColor.secondary }}>
           <p>
-            <code style={{ padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`, borderRadius: RADIUS.xl, backgroundColor: colors.bg.elevated }}>
+            <code style={{ padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated }}>
               import {'{ IconName }'} from 'tdesign-icons-react'
             </code>
           </p>
@@ -139,10 +136,10 @@ export function Icons() {
                 return (
                   <button key={iconName} type="button" onClick={() => handleCopyIcon(iconName)} style={{ ...categoryCardStyle, position: "relative" }}>
                     <div className="flex flex-col items-center gap-2">
-                      <div style={{ color: colors.text.primary }}>
+                      <div style={{ color: tokens.textColor.primary }}>
                         <IconComponent size={32} />
                       </div>
-                      <span className="text-xs text-center line-clamp-2" style={{ color: colors.text.secondary }}>
+                      <span className="text-xs text-center line-clamp-2" style={{ color: tokens.textColor.secondary }}>
                         {iconName.replace("Icon", "")}
                       </span>
                     </div>
@@ -153,13 +150,13 @@ export function Icons() {
                           position: "absolute",
                           inset: 0,
                           borderRadius: RADIUS["2xl"],
-                          backgroundColor: colors.bg.glass,
+                          backgroundColor: tokens.bgColor.glass,
                           display: "flex",
                           alignItems: "center",
                           justifyContent: "center",
                         }}
                       >
-                        <div className="flex items-center gap-1" style={{ color: colors.text.success }}>
+                        <div className="flex items-center gap-1" style={{ color: tokens.functionalColor.success.main }}>
                           <TDesignIcons.CheckIcon size={16} />
                           <span className="text-xs font-medium">已复制</span>
                         </div>
@@ -175,10 +172,10 @@ export function Icons() {
 
       {Object.keys(filteredCategories).length === 0 ? (
         <div className="py-12 text-center">
-          <div style={{ color: colors.text.tertiary }}>
+          <div style={{ color: tokens.textColor.tertiary }}>
             <TDesignIcons.SearchIcon className="mx-auto mb-4" size={48} />
           </div>
-          <p style={{ color: colors.text.tertiary }}>未找到匹配的图标</p>
+          <p style={{ color: tokens.textColor.tertiary }}>未找到匹配的图标</p>
         </div>
       ) : null}
 
@@ -189,8 +186,8 @@ export function Icons() {
             {[16, 20, 24, 32, 48].map((size) => (
               <div key={size} className="flex flex-col items-center gap-2">
                 <TDesignIcons.HomeIcon size={size} />
-                <span className="text-xs" style={{ color: colors.text.secondary }}>{size}px</span>
-                <span className="text-xs" style={{ color: colors.text.tertiary }}>
+                <span className="text-xs" style={{ color: tokens.textColor.secondary }}>{size}px</span>
+                <span className="text-xs" style={{ color: tokens.textColor.tertiary }}>
                   {size === 16 ? "小图标" : size === 20 ? "常规" : size === 24 ? "标准" : size === 32 ? "大图标" : "特大"}
                 </span>
               </div>

@@ -5,7 +5,6 @@ import {
   forwardRef,
   useMemo,
 } from "react";
-import { createColors } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 type BadgeVariant = "standard" | "dot";
@@ -22,9 +21,9 @@ const SIZE_CONFIG: Record<
     dotSize: number;
   }
 > = {
-  large: { height: 36, minWidth: 36, paddingX: 12, fontSize: 24, dotSize: 18 },
-  medium: { height: 30, minWidth: 30, paddingX: 12, fontSize: 18, dotSize: 12 },
-  small: { height: 24, minWidth: 24, paddingX: 6, fontSize: 18, dotSize: 12 },
+  large: { height: 36, minWidth: 36, paddingX: 12, fontSize: 24, dotSize: 18 },   // fontSize → typography.meta.caption
+  medium: { height: 30, minWidth: 30, paddingX: 12, fontSize: 18, dotSize: 12 },  // fontSize → typography.meta.footnote
+  small: { height: 24, minWidth: 24, paddingX: 6, fontSize: 18, dotSize: 12 },    // fontSize → typography.meta.footnote
 };
 
 export interface BadgeProps {
@@ -74,7 +73,7 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
   ) => {
     const theme = useThemeOptional();
     const isDark = isDarkProp ?? theme.isDark;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const tokens = theme.tokens;
     const sizeConfig = SIZE_CONFIG[size];
 
     const shouldShow = useMemo(() => {
@@ -112,18 +111,18 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
     const badgeColor = useMemo(() => {
       switch (color) {
         case "success":
-          return colors.functional.success.main;
+          return tokens.functionalColor.success.main;
         case "notice":
-          return colors.functional.notice.main;
+          return tokens.functionalColor.warning.main;
         case "info":
-          return colors.functional.info.main;
+          return tokens.functionalColor.info.main;
         case "brand":
-          return colors.brand.primary;
+          return tokens.functionalColor.brand.main;
         case "danger":
         default:
-          return colors.functional.danger.main;
+          return tokens.functionalColor.error.main;
       }
-    }, [color, colors.brand.primary, colors.functional.danger.main, colors.functional.info.main, colors.functional.notice.main, colors.functional.success.main]);
+    }, [color, tokens]);
 
     const containerStyle = useMemo<CSSProperties>(
       () => ({
@@ -145,7 +144,7 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
           height: sizeConfig.dotSize,
           borderRadius: "50%",
           backgroundColor: badgeColor,
-          border: children ? `2px solid ${colors.bg.primary}` : undefined,
+          border: children ? `2px solid ${tokens.bgColor.page}` : undefined,
           boxSizing: "border-box",
         };
       }
@@ -168,15 +167,15 @@ export const Badge = forwardRef<HTMLDivElement, BadgeProps>(
         paddingRight: isSingleDigit ? 0 : sizeConfig.paddingX,
         borderRadius: sizeConfig.height / 2,
         backgroundColor: badgeColor,
-        color: colors.static.white,
-        border: children ? `2px solid ${colors.bg.primary}` : undefined,
+        color: tokens.textColor.anti,
+        border: children ? `2px solid ${tokens.bgColor.page}` : undefined,
         boxSizing: "border-box",
         fontSize: sizeConfig.fontSize,
-        lineHeight: 1,
-        fontWeight: 600,
+        lineHeight: tokens.typography.label.badge.lineHeight,
+        fontWeight: tokens.typography.label.badge.fontWeight,
         whiteSpace: "nowrap",
       };
-    }, [badgeColor, children, colors.bg.primary, colors.static.white, displayContent, offset, sizeConfig, variant]);
+    }, [badgeColor, children, tokens, displayContent, offset, sizeConfig, variant]);
 
     if (!children) {
       if (!shouldShow) {

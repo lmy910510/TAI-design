@@ -6,7 +6,7 @@ import {
   useMemo,
 } from "react";
 import { CloseIcon } from "tdesign-icons-react";
-import { RADIUS, SHADOW, SPACING, createColors } from "../tokens";
+import { RADIUS, SHADOW, SPACING } from "../tokens";
 import { useThemeOptional } from "../hooks";
 
 type TipsPlacement = "top" | "bottom" | "left" | "right";
@@ -55,7 +55,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
   ) => {
     const theme = useThemeOptional();
     const isDark = isDarkProp ?? theme.isDark;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const tokens = theme.tokens;
 
     if (!visible) {
       return null;
@@ -75,13 +75,13 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
         paddingBottom: SPACING["3"],
         boxSizing: "border-box",
         borderRadius: RADIUS["2xl"],
-        backgroundColor: colors.tips.bg,
-        color: colors.tips.text,
-        border: `1px solid ${colors.tips.border}`,
+        backgroundColor: tokens.tips.bg,
+        color: tokens.tips.text,
+        border: `1px solid ${tokens.tips.border}`,
         boxShadow: SHADOW.xl,
         ...style,
       }),
-      [colors.tips.bg, colors.tips.border, colors.tips.text, maxWidth, style]
+      [tokens.tips.bg, tokens.tips.border, tokens.tips.text, maxWidth, style]
     );
 
     const arrowStyle = useMemo<CSSProperties>(() => {
@@ -99,7 +99,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             left: SPACING["4"],
             borderLeft: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderRight: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderBottom: `${TIPS_CONFIG.arrowSize}px solid ${colors.tips.bg}`,
+            borderBottom: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
           };
         case "left":
           return {
@@ -109,7 +109,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             transform: "translateY(-50%)",
             borderTop: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderBottom: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderLeft: `${TIPS_CONFIG.arrowSize}px solid ${colors.tips.bg}`,
+            borderLeft: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
           };
         case "right":
           return {
@@ -119,7 +119,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             transform: "translateY(-50%)",
             borderTop: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderBottom: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderRight: `${TIPS_CONFIG.arrowSize}px solid ${colors.tips.bg}`,
+            borderRight: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
           };
         case "top":
         default:
@@ -129,10 +129,10 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             left: SPACING["4"],
             borderLeft: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderRight: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderTop: `${TIPS_CONFIG.arrowSize}px solid ${colors.tips.bg}`,
+            borderTop: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
           };
       }
-    }, [colors.tips.bg, placement]);
+    }, [tokens.tips.bg, placement]);
 
     return (
       <div
@@ -147,7 +147,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             flex: 1,
             minWidth: 0,
             fontSize: TIPS_CONFIG.textSize,
-            lineHeight: 1.5,
+            lineHeight: tokens.typography.body.primary.lineHeight,
           }}
         >
           {children}
@@ -167,11 +167,11 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
               border: "none",
               borderRadius: RADIUS.xl,
               background: "transparent",
-              color: colors.tips.text,
+              color: tokens.tips.text,
               cursor: "pointer",
             }}
           >
-            <CloseIcon style={{ fontSize: 24, color: colors.tips.text }} />
+            <CloseIcon style={{ fontSize: 24, color: tokens.tips.text }} />
           </button>
         ) : null}
       </div>

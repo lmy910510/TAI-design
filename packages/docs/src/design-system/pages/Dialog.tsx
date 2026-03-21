@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { MessageSquare } from "lucide-react";
-import { Button, useTheme } from "@tai-design/components";
+import { Button, RADIUS, SPACING, STATIC, useTheme } from "@tai-design/components";
 import { DialogComponent, DialogType, DialogSize } from "../DialogComponent";
+import { DocPageHeader, DocTokenTable } from "../DocComponents";
 
 type ContentType = "title-only" | "title-content";
 
 export function Dialog() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
 
   const [selectedType, setSelectedType] = useState<DialogType>("confirm");
   const [selectedSize, setSelectedSize] = useState<DialogSize>("small");
@@ -21,8 +22,8 @@ export function Dialog() {
           <div className="space-y-4 text-left">
             <p>
               您好，为了切实保护用户的隐私及权益，在使用本产品前，请您认真阅读
-              <span style={{ color: colors.text.link }}>《用户服务协议》</span>，
-              <span style={{ color: colors.text.link }}>《隐私保护指引》</span>，请您审慎阅读并选择接受或不接受本协议。
+              <span style={{ color: tokens.textColor.link }}>《用户服务协议》</span>，
+              <span style={{ color: tokens.textColor.link }}>《隐私保护指引》</span>，请您审慎阅读并选择接受或不接受本协议。
             </p>
             <p>隐私保护指引摘要：当您使用的以下功能时，我们需要您主动提供一些信息：</p>
             <p>
@@ -50,46 +51,31 @@ export function Dialog() {
 
   const panelStyle: React.CSSProperties = {
     borderRadius: 24,
-    border: `1px solid ${colors.border.default}`,
-    backgroundColor: colors.bg.primary,
+    border: `1px solid ${tokens.borderColor.level2}`,
+    backgroundColor: tokens.bgColor.page,
   };
 
   const previewSurfaceStyle: React.CSSProperties = {
     minHeight: 500,
     borderRadius: 24,
-    border: `1px dashed ${colors.border.default}`,
-    backgroundColor: colors.bg.subtle,
+    border: `1px dashed ${tokens.borderColor.level2}`,
+    backgroundColor: tokens.bgColor.secondaryContainer,
   };
 
   const getOptionButtonStyle = (selected: boolean, strong = false): React.CSSProperties => ({
     borderRadius: 18,
-    border: `2px solid ${selected ? (strong ? colors.border.focus : colors.border.brand) : colors.static.transparent}`,
-    backgroundColor: selected ? (strong ? colors.bg.code : colors.bg.brandSubtle) : colors.bg.subtle,
-    color: selected ? (strong ? colors.text.primary : colors.text.link) : colors.text.secondary,
+    border: `2px solid ${selected ? (strong ? tokens.borderColor.focus : tokens.borderColor.brand) : STATIC.transparent}`,
+    backgroundColor: selected ? (strong ? tokens.bgColor.code : tokens.bgColor.brandLight) : tokens.bgColor.secondaryContainer,
+    color: selected ? (strong ? tokens.textColor.primary : tokens.textColor.link) : tokens.textColor.secondary,
   });
 
   return (
     <div>
-      <div className="mb-8">
-        <div
-          className="mb-4 inline-block rounded-full border px-3 py-1 text-sm"
-          style={{
-            backgroundColor: colors.bg.code,
-            borderColor: colors.border.default,
-            color: colors.text.primary,
-          }}
-        >
-          Components / 组件
-        </div>
-        <h1 className="mb-4 text-4xl font-bold">弹窗组件 (Dialog)</h1>
-        <p className="text-lg" style={{ color: colors.text.tertiary }}>
-          属于模态弹窗的一种，当需要告知用户关键或者警示性信息并强制用户必须回应时，可以使用 Dialog。这是一种强阻断模态组件。
-        </p>
-      </div>
+      <DocPageHeader category="Components / 组件" title="弹窗组件 (Dialog)" description="属于模态弹窗的一种，当需要告知用户关键或者警示性信息并强制用户必须回应时，可以使用 Dialog。这是一种强阻断模态组件。" />
 
       <div className="mb-8 flex flex-col gap-8">
         <div className="flex flex-col p-8" style={panelStyle}>
-          <h2 className="mb-6 text-2xl font-bold">实时预览</h2>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>实时预览</h2>
 
           <div
             className="relative mb-8 flex flex-1 flex-col items-center justify-center overflow-hidden p-4"
@@ -98,7 +84,7 @@ export function Dialog() {
             {isOpen ? (
               <div
                 className="absolute inset-0 z-10 flex items-center justify-center overflow-y-auto p-4 backdrop-blur-sm"
-                style={{ backgroundColor: colors.dialog.overlay }}
+                style={{ backgroundColor: tokens.bgColor.overlay }}
               >
                 <div className="origin-center transition-transform my-auto transform scale-[0.4] sm:scale-[0.5] md:scale-[0.6] lg:scale-75">
                   <DialogComponent
@@ -126,14 +112,14 @@ export function Dialog() {
             )}
 
             {!isOpen ? (
-              <div className="mt-6 text-sm" style={{ color: colors.text.tertiary }}>
+              <div className="mt-6 text-sm" style={{ color: tokens.textColor.tertiary }}>
                 点击上方按钮预览强阻断弹窗效果
               </div>
             ) : null}
           </div>
 
-          <div className="rounded-[18px] border p-4" style={{ backgroundColor: colors.bg.subtle, borderColor: colors.border.default }}>
-            <div className="space-y-2 text-xs" style={{ color: colors.text.secondary }}>
+          <div className="rounded-[18px] border p-4" style={{ backgroundColor: tokens.bgColor.secondaryContainer, borderColor: tokens.borderColor.level2 }}>
+            <div className="space-y-2 text-xs" style={{ color: tokens.textColor.secondary }}>
               <div className="flex justify-between">
                 <span>类型:</span>
                 <span className="font-mono">{selectedType === "feedback" ? "反馈类 (单按钮)" : "确认类 (双按钮)"}</span>
@@ -157,10 +143,10 @@ export function Dialog() {
         </div>
 
         <div className="overflow-y-auto p-8" style={panelStyle}>
-          <h2 className="mb-6 text-2xl font-bold">属性配置</h2>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>属性配置</h2>
 
           <div className="mb-8">
-            <h3 className="mb-3 text-sm font-medium" style={{ color: colors.text.secondary }}>
+            <h3 className="mb-3 text-sm font-medium" style={{ color: tokens.textColor.secondary }}>
               类型 (Type)
             </h3>
             <div className="grid grid-cols-2 gap-3">
@@ -182,7 +168,7 @@ export function Dialog() {
           </div>
 
           <div className="mb-8">
-            <h3 className="mb-3 text-sm font-medium" style={{ color: colors.text.secondary }}>
+            <h3 className="mb-3 text-sm font-medium" style={{ color: tokens.textColor.secondary }}>
               尺寸 (Size)
             </h3>
             <div className="grid grid-cols-2 gap-3">
@@ -210,7 +196,7 @@ export function Dialog() {
 
           {selectedSize === "small" ? (
             <div className="mb-8">
-              <h3 className="mb-3 text-sm font-medium" style={{ color: colors.text.secondary }}>
+              <h3 className="mb-3 text-sm font-medium" style={{ color: tokens.textColor.secondary }}>
                 内容模式 (Content)
               </h3>
               <div className="grid grid-cols-2 gap-3">
@@ -232,21 +218,78 @@ export function Dialog() {
           <div
             className="mt-8 rounded-[18px] border p-5"
             style={{
-              backgroundColor: colors.bg.brandSubtle,
-              borderColor: colors.border.brand,
+              backgroundColor: tokens.bgColor.brandLight,
+              borderColor: tokens.borderColor.brand,
             }}
           >
-            <h4 className="mb-2 flex items-center gap-2 font-bold" style={{ color: colors.text.link }}>
+            <h4 className="mb-2 flex items-center gap-2 font-bold" style={{ color: tokens.textColor.link }}>
               <MessageSquare size={16} />
               设计规范
             </h4>
-            <ul className="list-disc space-y-2 pl-4 text-sm" style={{ color: colors.text.secondary }}>
+            <ul className="list-disc space-y-2 pl-4 text-sm" style={{ color: tokens.textColor.secondary }}>
               <li><strong>主标题：</strong>最大支持2行，不允许超长文本。</li>
               <li><strong>内容：</strong>支持长文本，最多显示3行；作为副标题时最多1行。</li>
               <li><strong>主要操作：</strong>延续主标题动词，采用主按钮语义 token。</li>
               <li><strong>次要操作：</strong>不会产生实质改变结果，默认“取消”，采用次按钮语义 token。</li>
               <li>蒙层颜色通常使用系统 overlay token，保证不同主题下一致对比度。</li>
             </ul>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>🎨 Token 使用清单</h2>
+        <DocTokenTable
+          rows={[
+            { part: "弹窗背景", compToken: "tokens.dialog.bg", pubToken: "bgColor.elevated", desc: "弹窗面板背景色", color: tokens.dialog.bg },
+            { part: "标题文字", compToken: "tokens.dialog.title", pubToken: "textColor.primary", desc: "弹窗主标题颜色", color: tokens.dialog.title },
+            { part: "正文文字", compToken: "tokens.dialog.content", pubToken: "textColor.secondary", desc: "弹窗描述/内容文字", color: tokens.dialog.content },
+            { part: "遮罩层", compToken: "tokens.dialog.overlay", pubToken: "bgColor.overlay", desc: "模态遮罩背景", color: tokens.dialog.overlay },
+          ]}
+          note={
+            <p style={{ fontSize: 13, color: tokens.textColor.secondary, lineHeight: 1.6, margin: 0 }}>
+              <strong>排版 Token：</strong>标题使用 <code>tokens.typography.title.section</code> (36px/600/1.3)，正文使用 <code>tokens.typography.body.primary</code> (28px/400/1.4)。
+              <br />
+              <strong>布局常量：</strong>圆角 <code>RADIUS["4xl"]</code> (42px)，阴影 <code>SHADOW.xl</code>。
+            </p>
+          }
+        />
+      </div>
+
+      <div>
+        <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>颜色规范</h2>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(0, 1fr))", gap: SPACING["4"] }}>
+          <div style={panelStyle} className="p-6">
+            <h3 className="text-lg font-semibold mb-4">弹窗背景</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.bg, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.bg}</div>
+              <div>弹窗面板背景（<code>bgColor.elevated</code>）</div>
+            </div>
+          </div>
+          <div style={panelStyle} className="p-6">
+            <h3 className="text-lg font-semibold mb-4">标题文字</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.title, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.title}</div>
+              <div>弹窗标题色（<code>textColor.primary</code>）</div>
+            </div>
+          </div>
+          <div style={panelStyle} className="p-6">
+            <h3 className="text-lg font-semibold mb-4">内容文字</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.content, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.content}</div>
+              <div>弹窗正文色（<code>textColor.secondary</code>）</div>
+            </div>
+          </div>
+          <div style={panelStyle} className="p-6">
+            <h3 className="text-lg font-semibold mb-4">遮罩层</h3>
+            <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.overlay, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.overlay}</div>
+              <div>蒙层背景色（<code>bgColor.overlay</code>）</div>
+            </div>
           </div>
         </div>
       </div>

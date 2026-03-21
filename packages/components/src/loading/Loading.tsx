@@ -1,6 +1,6 @@
 import { useMemo, CSSProperties } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { createColors } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -12,9 +12,9 @@ const SIZE_CONFIG: Record<
   LoadingSize,
   { spinnerSize: number; strokeWidth: number; textSize: number; gap: number }
 > = {
-  large: { spinnerSize: 72, strokeWidth: 4, textSize: 28, gap: 18 },
-  medium: { spinnerSize: 48, strokeWidth: 3, textSize: 24, gap: 12 },
-  small: { spinnerSize: 32, strokeWidth: 2, textSize: 20, gap: 8 },
+  large: { spinnerSize: 72, strokeWidth: 4, textSize: 28, gap: 18 },   // textSize → typography.body.primary
+  medium: { spinnerSize: 48, strokeWidth: 3, textSize: 24, gap: 12 },  // textSize → typography.meta.caption
+  small: { spinnerSize: 32, strokeWidth: 2, textSize: 20, gap: 8 },    // textSize → ~meta.time(22)，small 保持 20
 };
 
 // ============================================================================
@@ -97,8 +97,9 @@ export const Loading = ({
   isDark: isDarkProp = false,
   className = "",
 }: LoadingProps) => {
-  const isDark = isDarkProp;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
   const sizeConfig = SIZE_CONFIG[size];
 
   const containerStyle = useMemo<CSSProperties>(
@@ -119,27 +120,27 @@ export const Loading = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: colors.bg.overlay,
+      backgroundColor: tokens.bgColor.overlay,
       zIndex: 3000,
     }),
-    [colors]
+    [tokens]
   );
 
-  const textStyle = useMemo<CSSProperties>(
-    () => ({
-      fontSize: sizeConfig.textSize,
-      color: colors.loading.text,
-      lineHeight: 1.4,
-    }),
-    [sizeConfig, colors]
-  );
+    const textStyle = useMemo<CSSProperties>(
+      () => ({
+        fontSize: sizeConfig.textSize,
+        color: tokens.loading.text,
+        lineHeight: tokens.typography.body.primary.lineHeight,
+      }),
+      [sizeConfig, tokens]
+    );
 
   const content = (
     <div className={`tai-loading ${className}`.trim()} style={containerStyle}>
       <Spinner
         size={sizeConfig.spinnerSize}
         strokeWidth={sizeConfig.strokeWidth}
-        color={colors.loading.spinner}
+        color={tokens.loading.spinner}
       />
       {text && <span style={textStyle}>{text}</span>}
     </div>

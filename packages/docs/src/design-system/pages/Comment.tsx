@@ -5,12 +5,13 @@ import {
   Divider,
   RADIUS,
   SPACING,
-  createColors,
+  getTokens,
 } from "@tai-design/components";
 import { UserCircleIcon } from "tdesign-icons-react";
+import { DocPageHeader, DocTokenTable } from "../DocComponents";
 
 function Avatar({ label, isDark }: { label: string; isDark: boolean }) {
-  const colors = createColors(isDark);
+  const tokens = getTokens(isDark);
 
   return (
     <div
@@ -18,8 +19,8 @@ function Avatar({ label, isDark }: { label: string; isDark: boolean }) {
         width: 72,
         height: 72,
         borderRadius: RADIUS.xl,
-        backgroundColor: colors.bg.tertiary,
-        color: colors.text.secondary,
+        backgroundColor: tokens.bgColor.secondaryContainer,
+        color: tokens.textColor.secondary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -34,31 +35,11 @@ function Avatar({ label, isDark }: { label: string; isDark: boolean }) {
 
 export function Comment() {
   const { isDark } = useOutletContext<{ isDark: boolean }>();
-  const colors = createColors(isDark);
-
-  const tagStyle = {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 36,
-    paddingLeft: SPACING["2"],
-    paddingRight: SPACING["2"],
-    borderRadius: RADIUS.xl,
-    backgroundColor: colors.bg.secondary,
-    border: `1px solid ${colors.border.default}`,
-    color: colors.text.secondary,
-    fontSize: 18,
-  } as const;
+  const tokens = getTokens(isDark);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: SPACING["6"], paddingBottom: SPACING["6"] * 2 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: SPACING["3"] }}>
-        <div style={tagStyle}>Components / 组件</div>
-        <h1 style={{ margin: 0, fontSize: 42, lineHeight: 1.2, color: colors.text.primary }}>评论 Comment</h1>
-        <p style={{ margin: 0, fontSize: 24, lineHeight: 1.6, color: colors.text.tertiary }}>
-          统一评论区的头像、作者、正文、标签和操作区，不再继续使用不可维护的设计稿切片代码。
-        </p>
-      </div>
+      <DocPageHeader category="Components / 组件" title="评论 Comment" description="统一评论区的头像、作者、正文、标签和操作区，不再继续使用不可维护的设计稿切片代码。" />
 
       <Card variant="white" isDark={isDark}>
         <div style={{ display: "flex", flexDirection: "column" }}>
@@ -86,14 +67,14 @@ export function Comment() {
                   width: 72,
                   height: 72,
                   borderRadius: RADIUS.xl,
-                  backgroundColor: colors.bg.tertiary,
-                  color: colors.text.secondary,
+                  backgroundColor: tokens.bgColor.secondaryContainer,
+                  color: tokens.textColor.secondary,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <UserCircleIcon style={{ fontSize: 42, color: colors.text.secondary }} />
+                <UserCircleIcon style={{ fontSize: 42, color: tokens.textColor.secondary }} />
               </div>
             }
             author="阿澈"
@@ -111,7 +92,32 @@ export function Comment() {
 
       <Card variant="gray" isDark={isDark}>
         <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
-          <h2 style={{ margin: 0, fontSize: 30, color: colors.text.primary }}>规范要点</h2>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>🎨 Token 使用清单</h2>
+          <Divider isDark={isDark} spacing="2" />
+          <DocTokenTable
+            rows={[
+              { part: "作者名", token: "tokens.textColor.primary", desc: "评论者名称", color: tokens.textColor.primary },
+              { part: "正文", token: "tokens.textColor.primary", desc: "评论内容文字", color: tokens.textColor.primary },
+              { part: "头像 fallback 文字", token: "tokens.textColor.secondary", desc: "头像占位首字母", color: tokens.textColor.secondary },
+              { part: "标签文字", token: "tokens.textColor.secondary", desc: "标签内文字", color: tokens.textColor.secondary },
+              { part: "时间/元信息", token: "tokens.textColor.tertiary", desc: "时间戳、来源等辅助信息", color: tokens.textColor.tertiary },
+              { part: "操作按钮", token: "tokens.textColor.tertiary", desc: "点赞、回复等操作图标和文字", color: tokens.textColor.tertiary },
+              { part: "头像/标签/图片背景", token: "tokens.bgColor.secondaryContainer", desc: "次级容器背景", color: tokens.bgColor.secondaryContainer },
+              { part: "回复区背景", token: "tokens.bgColor.container", desc: "引用回复区域背景", color: tokens.bgColor.container },
+              { part: "分隔线", token: "tokens.borderColor.level1", desc: "评论间分隔线", color: tokens.borderColor.level1 },
+            ]}
+            note={<>
+              <strong>排版 Token：</strong>作者名字重使用 <code>tokens.typography.title.section.fontWeight</code> (600)，正文行高使用 <code>tokens.typography.body.long.lineHeight</code> (1.6)，标签使用 <code>tokens.typography.label.tag</code>，时间使用 <code>tokens.typography.meta.caption</code>。
+              <br />
+              <strong>布局常量：</strong>头像/标签/图片圆角 <code>RADIUS.xl</code> (24px)，间距 <code>SPACING["2"]</code>~<code>SPACING["4"]</code>。
+            </>}
+          />
+        </div>
+      </Card>
+
+      <Card variant="gray" isDark={isDark}>
+        <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
+          <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>规范要点</h2>
           <Divider isDark={isDark} spacing="2" />
           <ul
             style={{
@@ -120,7 +126,7 @@ export function Comment() {
               display: "flex",
               flexDirection: "column",
               gap: SPACING["2"],
-              color: colors.text.secondary,
+              color: tokens.textColor.secondary,
               fontSize: 24,
               lineHeight: 1.6,
             }}

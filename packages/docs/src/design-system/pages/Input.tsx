@@ -1,6 +1,15 @@
 import type { CSSProperties } from "react";
 import { useState } from "react";
-import { Input as TaiInput, RADIUS, SPACING, useTheme } from "@tai-design/components";
+import { DocPageHeader } from "../DocComponents";
+import {
+  Input as TaiInput,
+  FONT_SIZE,
+  FONT_WEIGHT,
+  LINE_HEIGHT,
+  RADIUS,
+  SPACING,
+  useTheme,
+} from "@tai-design/components";
 
 type InputState = "interactive" | "default" | "typing" | "filled";
 type InputType = "base" | "licensePlate";
@@ -18,53 +27,44 @@ const STATE_OPTIONS: Array<{ value: InputState; label: string }> = [
 ];
 
 export function Input() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
   const [inputType, setInputType] = useState<InputType>("base");
   const [demoState, setDemoState] = useState<InputState>("interactive");
   const [baseValue, setBaseValue] = useState("");
   const [plateValue, setPlateValue] = useState("");
 
-  const chipStyle: CSSProperties = {
-    display: "inline-block",
-    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
-    marginBottom: SPACING["3"],
-    borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
-    fontSize: 14,
-  };
-
   const panelStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const previewSurfaceStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.container,
   };
 
   const guidePanelStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.brand}`,
-    background: `linear-gradient(to right, ${colors.bg.brandSubtle}, ${colors.bg.secondary})`,
+    border: `1px solid ${tokens.borderColor.brand}`,
+    background: `linear-gradient(to right, ${tokens.bgColor.brandLight}, ${tokens.bgColor.container})`,
   };
 
   const getToggleStyle = (active: boolean): CSSProperties => ({
     padding: `${SPACING["2"]}px ${SPACING["4"]}px`,
     borderRadius: RADIUS.xl,
-    border: `1px solid ${active ? colors.button.primary.border : colors.border.subtle}`,
-    backgroundColor: active ? colors.button.primary.bg : colors.bg.secondary,
-    color: active ? colors.button.primary.text : colors.text.secondary,
-    fontSize: 14,
-    fontWeight: 600,
+    border: `1px solid ${active ? tokens.textColor.primary : tokens.borderColor.level1}`,
+    backgroundColor: active ? tokens.textColor.primary : tokens.bgColor.container,
+    color: active ? tokens.textColor.anti : tokens.textColor.secondary,
+    fontSize: FONT_SIZE.sm,
+    fontWeight: FONT_WEIGHT.semibold,
+    lineHeight: LINE_HEIGHT.none,
     transition: "all 150ms ease",
+    cursor: "pointer",
   });
 
   const getStateValue = () => {
@@ -86,7 +86,6 @@ export function Input() {
       setBaseValue(nextValue);
       return;
     }
-
     setPlateValue(nextValue.toUpperCase().replace(/[^A-Z0-9\u4e00-\u9fa5]/g, "").slice(0, 8));
   };
 
@@ -102,26 +101,28 @@ export function Input() {
           : "展示已经录入完成后的稳定状态。";
 
   return (
-    <div className="pb-24">
-      <div className="mb-12">
-        <div style={chipStyle}>Components / 组件</div>
-        <h1 className="text-4xl font-bold mb-4">输入框 Input</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          用于承载用户信息录入的文本框，支持基础文本和特殊格式（如车牌号）的输入，并直接展示组件包中的真实 token 行为。
-        </p>
-      </div>
+    <div style={{ paddingBottom: SPACING["4"] * 4 }}>
+      {/* ── 页头 ── */}
+      <DocPageHeader
+        category="Components / 组件"
+        title="输入框 Input"
+        description="用于承载用户信息录入的文本框，支持基础文本和特殊格式（如车牌号）的输入，并直接展示组件包中的真实 token 行为。"
+      />
 
-      <div className="flex flex-col gap-8 w-full">
+      <div style={{ display: "flex", flexDirection: "column", gap: SPACING["6"], width: "100%" }}>
+        {/* ── 组件预览 ── */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">组件预览</h2>
+          <h2 style={{ ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["3"] }}>
+            组件预览
+          </h2>
           <div style={panelStyle}>
             <div style={previewSurfaceStyle}>
               <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"], maxWidth: 720, margin: "0 auto" }}>
                 <div>
-                  <p className="text-2xl font-semibold" style={{ color: colors.text.primary }}>
+                  <p style={{ fontSize: FONT_SIZE["2xl"], fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.normal, color: tokens.textColor.primary }}>
                     {currentTitle}
                   </p>
-                  <p className="text-sm mt-2" style={{ color: colors.text.secondary }}>
+                  <p style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary, marginTop: SPACING["2"] / 2 }}>
                     {currentDescription}
                   </p>
                 </div>
@@ -138,22 +139,22 @@ export function Input() {
                   style={{ width: "100%" }}
                 />
 
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["4"] }}>
-                  <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, backgroundColor: colors.bg.elevated, border: `1px solid ${colors.border.subtle}` }}>
-                    <p className="text-sm font-semibold mb-2" style={{ color: colors.text.primary }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: SPACING["4"] }}>
+                  <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, border: `1px solid ${tokens.borderColor.level1}` }}>
+                    <p style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.none, color: tokens.textColor.primary, marginBottom: SPACING["2"] }}>
                       组件行为
                     </p>
-                    <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
-                      <li>• 聚焦态使用 `colors.input.ring` 绘制 inset 轮廓</li>
-                      <li>• 输入文字使用 `colors.input.text`</li>
-                      <li>• 清空按钮使用 `colors.input.clearIcon`</li>
+                    <ul style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary, display: "flex", flexDirection: "column", gap: SPACING["2"] / 2 }}>
+                      <li>• 聚焦态使用 `input.ring`（→ borderColor.focus）</li>
+                      <li>• 输入文字使用 `input.text`（→ textColor.primary）</li>
+                      <li>• 清空按钮使用 `input.clearIcon`（→ borderColor.level2）</li>
                     </ul>
                   </div>
-                  <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, backgroundColor: colors.bg.elevated, border: `1px solid ${colors.border.subtle}` }}>
-                    <p className="text-sm font-semibold mb-2" style={{ color: colors.text.primary }}>
+                  <div style={{ padding: SPACING["4"], borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, border: `1px solid ${tokens.borderColor.level1}` }}>
+                    <p style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.none, color: tokens.textColor.primary, marginBottom: SPACING["2"] }}>
                       当前设置
                     </p>
-                    <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+                    <ul style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary, display: "flex", flexDirection: "column", gap: SPACING["2"] / 2 }}>
                       <li>• 类型：{inputType === "base" ? "文本" : "车牌号"}</li>
                       <li>• 状态：{STATE_OPTIONS.find((item) => item.value === demoState)?.label}</li>
                       <li>• 主题：{isDark ? "深色" : "浅色"}</li>
@@ -165,12 +166,15 @@ export function Input() {
           </div>
         </div>
 
+        {/* ── 属性配置 ── */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">属性配置</h2>
+          <h2 style={{ ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["3"] }}>
+            属性配置
+          </h2>
           <div style={panelStyle}>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["6"] }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: SPACING["6"] }}>
               <div>
-                <h3 className="text-sm font-semibold mb-3" style={{ color: colors.text.secondary }}>
+                <h3 style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.none, color: tokens.textColor.secondary, marginBottom: SPACING["2"] }}>
                   输入框类型
                 </h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: SPACING["2"] }}>
@@ -183,7 +187,7 @@ export function Input() {
               </div>
 
               <div>
-                <h3 className="text-sm font-semibold mb-3" style={{ color: colors.text.secondary }}>
+                <h3 style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.none, color: tokens.textColor.secondary, marginBottom: SPACING["2"] }}>
                   演示状态
                 </h3>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: SPACING["2"] }}>
@@ -198,55 +202,107 @@ export function Input() {
           </div>
         </div>
 
+        {/* ── 设计规范 ── */}
         <div style={guidePanelStyle}>
-          <h3 className="text-lg font-semibold mb-3">📐 设计规范</h3>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["4"] }}>
-            <div className="text-sm" style={{ color: colors.text.secondary }}>
-              <p className="mb-2"><strong>尺寸体系：</strong></p>
-              <ul className="space-y-1 text-xs">
+          <h3 style={{ fontSize: FONT_SIZE.xl, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.relaxed, marginBottom: SPACING["2"] }}>
+            📐 设计规范
+          </h3>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: SPACING["4"] }}>
+            <div style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary }}>
+              <p style={{ marginBottom: SPACING["2"], fontWeight: FONT_WEIGHT.semibold, color: tokens.textColor.primary }}>
+                尺寸体系：
+              </p>
+              <ul style={{ fontSize: FONT_SIZE.xs, lineHeight: LINE_HEIGHT.relaxed, display: "flex", flexDirection: "column", gap: SPACING["2"] / 2 }}>
                 <li>• 高度为 84px，符合 6px 栅格</li>
                 <li>• 左右内边距 24px，圆角 24px</li>
-                <li>• 文本字号 32px，适配车机远距阅读</li>
+                <li>• 文本字号 FONT_SIZE["3xl"] (32px)</li>
               </ul>
             </div>
-            <div className="text-sm" style={{ color: colors.text.secondary }}>
-              <p className="mb-2"><strong>状态反馈：</strong></p>
-              <ul className="space-y-1 text-xs">
-                <li>• 页面不再手写浅深色映射，直接复用组件 token</li>
-                <li>• 默认、输入、完成三种静态态与真实交互模式统一展示</li>
-                <li>• 特殊输入类型通过同一组件能力扩展，不额外维护页面级色板</li>
+            <div style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary }}>
+              <p style={{ marginBottom: SPACING["2"], fontWeight: FONT_WEIGHT.semibold, color: tokens.textColor.primary }}>
+                状态反馈：
+              </p>
+              <ul style={{ fontSize: FONT_SIZE.xs, lineHeight: LINE_HEIGHT.relaxed, display: "flex", flexDirection: "column", gap: SPACING["2"] / 2 }}>
+                <li>• 直接复用组件内置 token，无页面级色板</li>
+                <li>• 默认、输入、完成三种静态态与交互模式统一</li>
+                <li>• 特殊输入类型通过组件能力扩展</li>
               </ul>
             </div>
           </div>
         </div>
 
+        {/* ── 🎨 Token 使用清单 ── */}
         <div>
-          <h2 className="text-2xl font-bold mb-4">颜色规范</h2>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 1fr))", gap: SPACING["4"] }}>
-            <div style={panelStyle}>
-              <h3 className="text-lg font-semibold mb-4">背景</h3>
-              <div className="text-sm" style={{ color: colors.text.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: colors.input.bg, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: colors.text.primary }}>{colors.input.bg}</div>
-                <div>输入区域背景（`colors.input.bg`）</div>
-              </div>
+          <h2 style={{ ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["3"] }}>
+            🎨 Token 使用清单
+          </h2>
+          <div style={panelStyle}>
+            <div style={{ overflowX: "auto" }}>
+              <table style={{ width: "100%", borderCollapse: "collapse", fontSize: FONT_SIZE.sm }}>
+                <thead>
+                  <tr style={{ borderBottom: `2px solid ${tokens.borderColor.level1}` }}>
+                    {["部位", "组件级 Token", "公开语义 Token", "用途说明"].map((h) => (
+                      <th key={h} style={{ textAlign: "left", padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.secondary, fontWeight: FONT_WEIGHT.semibold }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {([
+                    { part: "输入框背景", compToken: "tokens.input.bg", pubToken: "bgColor.elevated", desc: "输入框容器背景", color: tokens.input.bg },
+                    { part: "输入文字", compToken: "tokens.input.text", pubToken: "textColor.primary", desc: "用户输入的文字颜色", color: tokens.input.text },
+                    { part: "占位符文字", compToken: "tokens.input.placeholder", pubToken: "textColor.placeholder", desc: "未输入时的占位提示文字", color: tokens.textColor.placeholder },
+                    { part: "聚焦边框", compToken: "tokens.input.ring", pubToken: "borderColor.focus", desc: "输入框获得焦点时的边框", color: tokens.input.ring },
+                    { part: "清除按钮图标", compToken: "tokens.input.clearIcon", pubToken: "borderColor.level2", desc: "清空按钮图标颜色", color: tokens.input.clearIcon },
+                    { part: "禁用态文字", compToken: "tokens.textColor.disabled", pubToken: "textColor.disabled", desc: "禁用输入框文字", color: tokens.textColor.disabled },
+                    { part: "辅助说明文字", compToken: "tokens.textColor.tertiary", pubToken: "textColor.tertiary", desc: "输入框下方辅助说明", color: tokens.textColor.tertiary },
+                  ] as const).map((row) => (
+                    <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
+                      <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, fontWeight: FONT_WEIGHT.medium, color: tokens.textColor.primary }}>{row.part}</td>
+                      <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                          <div style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: row.color, border: `1px solid ${tokens.borderColor.level1}`, flexShrink: 0 }} />
+                          <code style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.link }}>{row.compToken}</code>
+                        </div>
+                      </td>
+                      <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}><code style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.secondary }}>{row.pubToken}</code></td>
+                      <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.tertiary }}>{row.desc}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-            <div style={panelStyle}>
-              <h3 className="text-lg font-semibold mb-4">焦点环</h3>
-              <div className="text-sm" style={{ color: colors.text.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: colors.input.ring, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: colors.text.primary }}>{colors.input.ring}</div>
-                <div>聚焦态描边（`colors.input.ring`）</div>
-              </div>
+            <div style={{ marginTop: SPACING["4"], padding: SPACING["3"], borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.container, border: `1px solid ${tokens.borderColor.level1}` }}>
+              <p style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.secondary, lineHeight: LINE_HEIGHT.relaxed }}>
+                <strong>排版 Token：</strong>输入文字使用 <code>tokens.typography.label.input</code> (32px/400/1.4)。
+                <br />
+                <strong>固定色：</strong>清除按钮背景使用 STATIC.transparent，清除 ×-icon 笔画使用 STATIC.white（内部实现细节）。
+              </p>
             </div>
-            <div style={panelStyle}>
-              <h3 className="text-lg font-semibold mb-4">清空按钮</h3>
-              <div className="text-sm" style={{ color: colors.text.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: colors.input.clearIcon, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: colors.text.primary }}>{colors.input.clearIcon}</div>
-                <div>清空按钮底色（`colors.input.clearIcon`）</div>
+          </div>
+        </div>
+
+        {/* ── 颜色规范 ── */}
+        <div>
+          <h2 style={{ ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["3"] }}>
+            颜色规范
+          </h2>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: SPACING["4"] }}>
+            {[
+              { title: "背景", color: tokens.input.bg, token: "input.bg → bgColor.elevated" },
+              { title: "焦点环", color: tokens.input.ring, token: "input.ring → borderColor.focus" },
+              { title: "清空按钮", color: tokens.input.clearIcon, token: "input.clearIcon → borderColor.level2" },
+            ].map((item) => (
+              <div key={item.title} style={panelStyle}>
+                <h3 style={{ fontSize: FONT_SIZE.xl, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.relaxed, marginBottom: SPACING["3"] }}>
+                  {item.title}
+                </h3>
+                <div style={{ fontSize: FONT_SIZE.sm, fontWeight: FONT_WEIGHT.regular, lineHeight: LINE_HEIGHT.relaxed, color: tokens.textColor.secondary }}>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: item.color, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{item.color}</div>
+                  <div>{item.token}</div>
+                </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

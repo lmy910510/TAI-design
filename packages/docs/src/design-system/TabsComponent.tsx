@@ -1,5 +1,5 @@
 import { ReactNode } from "react";
-import { RADIUS, useThemeOptional } from "@tai-design/components";
+import { RADIUS, STATIC, useThemeOptional } from "@tai-design/components";
 
 export interface GlobalLeftTabProps {
   variant?: "simplified" | "extended";
@@ -18,7 +18,7 @@ export function GlobalLeftTab({
   children,
   bottomContent,
 }: GlobalLeftTabProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   if (variant === "simplified") {
     return (
@@ -26,9 +26,9 @@ export function GlobalLeftTab({
         <div
           className="absolute left-0 top-0 flex w-[96px] flex-col items-start gap-[18px] overflow-clip p-[6px]"
           style={{
-            backgroundColor: colors.bg.glass,
+            backgroundColor: tokens.bgColor.glass,
             borderRadius: 117.073,
-            border: `1px solid ${colors.border.inverse}`,
+            border: `1px solid ${tokens.borderColor.inverse}`,
             backdropFilter: "blur(12px)",
           }}
         >
@@ -45,8 +45,8 @@ export function GlobalLeftTab({
       data-name="Window"
       style={{
         borderRadius: 40,
-        backgroundColor: colors.bg.glass,
-        border: `1px solid ${colors.border.inverse}`,
+        backgroundColor: tokens.bgColor.glass,
+        border: `1px solid ${tokens.borderColor.inverse}`,
         backdropFilter: "blur(12px)",
       }}
     >
@@ -83,7 +83,7 @@ export function GlobalLeftTabSimplifiedItem({
   icon,
   className = "",
 }: GlobalLeftTabItemProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <button
@@ -92,8 +92,8 @@ export function GlobalLeftTabSimplifiedItem({
       className={`relative flex shrink-0 items-center overflow-clip p-[21px] transition-colors ${className}`}
       style={{
         borderRadius: 107.692,
-        backgroundColor: active ? colors.interactive.default : colors.static.transparent,
-        color: active ? colors.text.inverse : colors.text.secondary,
+        backgroundColor: active ? tokens.textColor.primary : STATIC.transparent,
+        color: active ? tokens.textColor.anti : tokens.textColor.secondary,
       }}
     >
       <div className="relative flex size-[42px] shrink-0 items-center justify-center">{icon}</div>
@@ -106,7 +106,7 @@ export function GlobalLeftTabSimplifiedBottomButton({
   icon,
   className = "",
 }: Omit<GlobalLeftTabItemProps, "active">) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <button
@@ -114,10 +114,10 @@ export function GlobalLeftTabSimplifiedBottomButton({
       type="button"
       className={`flex h-[96px] w-[96px] items-center justify-center overflow-clip transition-colors ${className}`}
       style={{
-        backgroundColor: colors.bg.glass,
+        backgroundColor: tokens.bgColor.glass,
         borderRadius: 100,
-        color: colors.text.secondary,
-        border: `1px solid ${colors.border.inverse}`,
+        color: tokens.textColor.secondary,
+        border: `1px solid ${tokens.borderColor.inverse}`,
         backdropFilter: "blur(12px)",
       }}
     >
@@ -131,7 +131,7 @@ export function GlobalLeftTabExtendedBottomButton({
   icon,
   className = "",
 }: Omit<GlobalLeftTabItemProps, "active">) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <button
@@ -139,7 +139,7 @@ export function GlobalLeftTabExtendedBottomButton({
       type="button"
       className={`relative flex h-[80px] w-full shrink-0 items-center justify-center ${className}`}
       style={{
-        backgroundColor: colors.bg.secondary,
+        backgroundColor: tokens.bgColor.container,
         borderRadius: RADIUS.xl,
       }}
     >
@@ -148,8 +148,8 @@ export function GlobalLeftTabExtendedBottomButton({
         style={{
           height: "100%",
           borderRadius: RADIUS.xl,
-          backgroundColor: colors.bg.glass,
-          border: `1px solid ${colors.border.inverse}`,
+          backgroundColor: tokens.bgColor.glass,
+          border: `1px solid ${tokens.borderColor.inverse}`,
           backdropFilter: "blur(12px)",
         }}
       >
@@ -157,7 +157,7 @@ export function GlobalLeftTabExtendedBottomButton({
           <div className="relative flex size-full items-center justify-center py-[30px]">
             <div
               className="relative flex size-[48px] shrink-0 items-center justify-center"
-              style={{ color: colors.text.primary }}
+              style={{ color: tokens.textColor.primary }}
             >
               {icon}
             </div>
@@ -174,14 +174,14 @@ export interface ContentTopTabProps {
 }
 
 export function ContentTopTab({ className = "", children }: ContentTopTabProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <div
       className={`relative flex w-max shrink-0 items-center gap-[36px] p-[6px] ${className}`}
       data-name="top tab"
       style={{
-        backgroundColor: colors.bg.secondary,
+        backgroundColor: tokens.bgColor.container,
         borderRadius: 50,
       }}
     >
@@ -198,7 +198,7 @@ export interface ContentTopTabItemProps {
 }
 
 export function ContentTopTabItem({ active, onClick, label, className = "" }: ContentTopTabItemProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <button
@@ -208,8 +208,8 @@ export function ContentTopTabItem({ active, onClick, label, className = "" }: Co
       style={{
         padding: active ? "18px 48px" : "18px 24px",
         borderRadius: 100,
-        backgroundColor: active ? colors.interactive.default : colors.static.transparent,
-        color: active ? colors.text.inverse : colors.text.secondary,
+        backgroundColor: active ? tokens.textColor.primary : STATIC.transparent,
+        color: active ? tokens.textColor.anti : tokens.textColor.secondary,
       }}
       data-name={active ? "State=Active" : "State=Default"}
     >

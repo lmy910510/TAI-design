@@ -3,7 +3,6 @@ import { ReactNode, ButtonHTMLAttributes } from "react";
 export const BUTTON_VARIANTS = [
   "primary",
   "secondary",
-  "tertiary",
   "ghost",
   "danger",
 ] as const;

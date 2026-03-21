@@ -1,6 +1,6 @@
 import { useMemo, useState, useCallback, CSSProperties } from "react";
 import { motion } from "framer-motion";
-import { createColors } from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -13,16 +13,16 @@ const SIZE_CONFIG: Record<
   { width: number; height: number; thumbSize: number; thumbMargin: number }
 > = {
   default: {
-    width: 90,
-    height: 48,
-    thumbSize: 42,
-    thumbMargin: 3,
+    width: 108,
+    height: 60,
+    thumbSize: 48,
+    thumbMargin: 6,
   },
   small: {
-    width: 72,
-    height: 40,
-    thumbSize: 34,
-    thumbMargin: 3,
+    width: 90,
+    height: 48,
+    thumbSize: 36,
+    thumbMargin: 6,
   },
 };
 
@@ -64,8 +64,9 @@ export const Switch = ({
   const isControlled = checkedProp !== undefined;
   const isChecked = isControlled ? checkedProp : internalChecked;
 
-  const isDark = isDarkProp;
-  const colors = useMemo(() => createColors(isDark), [isDark]);
+  const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+  const isDark = isDarkProp ?? ctxDark;
+  const tokens = ctxTokens;
   const sizeConfig = SIZE_CONFIG[size];
 
   const handleToggle = useCallback(() => {
@@ -77,12 +78,14 @@ export const Switch = ({
     onChange?.(newValue);
   }, [disabled, isChecked, isControlled, onChange]);
 
+  const trackColor = isChecked ? tokens.switch.on : tokens.switch.off;
+
   const containerStyle = useMemo<CSSProperties>(
     () => ({
       width: sizeConfig.width,
       height: sizeConfig.height,
       borderRadius: sizeConfig.height / 2,
-      backgroundColor: isChecked ? colors.switch.on : colors.switch.off,
+      backgroundColor: trackColor,
       cursor: disabled ? "not-allowed" : "pointer",
       opacity: disabled ? 0.5 : 1,
       transition: "background-color 200ms ease",
@@ -90,7 +93,7 @@ export const Switch = ({
       alignItems: "center",
       padding: sizeConfig.thumbMargin,
     }),
-    [sizeConfig, isChecked, colors, disabled]
+    [sizeConfig, trackColor, disabled]
   );
 
   const thumbX = isChecked
@@ -119,8 +122,8 @@ export const Switch = ({
           width: sizeConfig.thumbSize,
           height: sizeConfig.thumbSize,
           borderRadius: "50%",
-          backgroundColor: colors.switch.thumb,
-          boxShadow: "0 2px 4px rgba(0,0,0,0.2)",
+          backgroundColor: tokens.switch.thumb,
+          boxShadow: `0 2px 4px ${tokens.switch.thumbShadow}`,
         }}
         animate={{ x: thumbX }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}

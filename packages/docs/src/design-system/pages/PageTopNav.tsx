@@ -12,12 +12,13 @@ import { ChevronLeftIcon, SearchIcon, SettingIcon } from "tdesign-icons-react";
 import { PageTopNavBar } from "../PageTopNavBar";
 import { PageSubNavBar } from "../PageSubNavBar";
 import { BaseMapComponent } from "../BaseMapComponent";
+import { DocPageHeader } from "../DocComponents";
 
 type NavType = "primary" | "secondary" | "inner";
 type NavSize = "default" | "small";
 
 export function PageTopNav() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
   const [navType, setNavType] = useState<NavType>("primary");
   const [showTitle, setShowTitle] = useState(true);
   const [titleText, setTitleText] = useState("一级页面标题");
@@ -60,36 +61,25 @@ export function PageTopNav() {
 
   const innerConfig = sizeConfig[navSize];
 
-  const chipStyle: CSSProperties = {
-    display: "inline-block",
-    padding: `${SPACING["2"] / 2}px ${SPACING["2"]}px`,
-    marginBottom: SPACING["3"],
-    borderRadius: 999,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.secondary,
-    color: colors.text.secondary,
-    fontSize: 14,
-  };
-
   const panelStyle: CSSProperties = {
     padding: SPACING["6"],
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.elevated,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.elevated,
   };
 
   const previewShellStyle: CSSProperties = {
     borderRadius: RADIUS["2xl"],
-    border: `1px solid ${colors.border.subtle}`,
+    border: `1px solid ${tokens.borderColor.level1}`,
     overflow: "hidden",
-    backgroundColor: colors.bg.secondary,
+    backgroundColor: tokens.bgColor.container,
     boxShadow: SHADOW.xl,
   };
 
   const glassCardStyle: CSSProperties = {
     borderRadius: RADIUS["4xl"],
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.glass,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.glass,
     backdropFilter: "blur(24px)",
     boxShadow: SHADOW.xl,
   };
@@ -98,21 +88,21 @@ export function PageTopNav() {
     width,
     height,
     borderRadius: RADIUS.xl,
-    backgroundColor: colors.bg.tertiary,
+    backgroundColor: tokens.bgColor.secondaryContainer,
   });
 
   const selectorButtonStyle = (active: boolean): CSSProperties => ({
     padding: `${SPACING["2"]}px ${SPACING["4"]}px`,
     borderRadius: RADIUS.xl,
-    border: `1px solid ${active ? colors.button.primary.border : colors.border.subtle}`,
-    backgroundColor: active ? colors.button.primary.bg : colors.bg.secondary,
-    color: active ? colors.button.primary.text : colors.text.secondary,
+    border: `1px solid ${active ? tokens.textColor.primary : tokens.borderColor.level1}`,
+    backgroundColor: active ? tokens.textColor.primary : tokens.bgColor.container,
+    color: active ? tokens.textColor.anti : tokens.textColor.secondary,
     fontSize: 14,
     fontWeight: 600,
   });
 
   const infoTextStyle: CSSProperties = {
-    color: colors.text.secondary,
+    color: tokens.textColor.secondary,
     fontSize: 14,
   };
 
@@ -134,12 +124,12 @@ export function PageTopNav() {
     height: innerConfig.buttonHeight,
     width: innerConfig.buttonWidth,
     borderRadius: innerConfig.borderRadius,
-    border: `1px solid ${colors.border.subtle}`,
-    backgroundColor: colors.bg.glass,
+    border: `1px solid ${tokens.borderColor.level1}`,
+    backgroundColor: tokens.bgColor.glass,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    color: colors.text.primary,
+    color: tokens.textColor.primary,
     backdropFilter: "blur(16px)",
   };
 
@@ -181,13 +171,11 @@ export function PageTopNav() {
 
   return (
     <div className="pb-24">
-      <div className="mb-12">
-        <div style={chipStyle}>Components / 导航</div>
-        <h1 className="text-4xl font-bold mb-4">页面导航栏 Navigation</h1>
-        <p className="text-lg" style={{ color: colors.text.secondary }}>
-          涵盖页面级顶部导航（一级 / 二级），以及页面内的二级卡片导航组合。所有预览容器与控制项均改为主题 token 驱动。
-        </p>
-      </div>
+      <DocPageHeader
+        category="Components / 导航"
+        title="页面导航栏 Navigation"
+        description="涵盖页面级顶部导航（一级 / 二级），以及页面内的二级卡片导航组合。所有预览容器与控制项均改为主题 token 驱动。"
+      />
 
       <div className="mb-8">
         <h2 className="text-2xl font-semibold mb-4">导航栏类型</h2>
@@ -269,8 +257,8 @@ export function PageTopNav() {
                         height: "100%",
                         minHeight: 360,
                         borderRadius: RADIUS["2xl"],
-                        border: `1px solid ${colors.border.subtle}`,
-                        backgroundColor: colors.bg.secondary,
+                        border: `1px solid ${tokens.borderColor.level1}`,
+                        backgroundColor: tokens.bgColor.container,
                         display: "flex",
                         flexDirection: "column",
                         gap: SPACING["4"],
@@ -293,7 +281,7 @@ export function PageTopNav() {
         </div>
 
         {clickedAction ? (
-          <p className="mt-4 text-sm" style={{ color: colors.text.info }}>
+          <p className="mt-4 text-sm" style={{ color: tokens.functionalColor.info.main }}>
             最近点击：{clickedAction}
           </p>
         ) : null}
@@ -305,7 +293,7 @@ export function PageTopNav() {
           {navType === "inner" ? (
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["6"] }}>
               <div>
-                <label className="block text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
+                <label className="block text-sm font-medium mb-3" style={{ color: tokens.textColor.secondary }}>
                   尺寸类型
                 </label>
                 <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] }}>
@@ -319,7 +307,7 @@ export function PageTopNav() {
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-3" style={{ color: colors.text.secondary }}>
+                <label className="block text-sm font-medium mb-3" style={{ color: tokens.textColor.secondary }}>
                   右侧图标按钮
                 </label>
                 <div style={{ display: "flex", alignItems: "center", gap: SPACING["3"] }}>
@@ -332,14 +320,14 @@ export function PageTopNav() {
             <div style={{ display: "flex", flexDirection: "column", gap: SPACING["5"], maxWidth: 720 }}>
               {navType === "primary" ? (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: SPACING["4"] }}>
-                  <label className="text-base font-medium" style={{ color: colors.text.primary }}>显示标题</label>
+                  <label className="text-base font-medium" style={{ color: tokens.textColor.primary }}>显示标题</label>
                   <TaiSwitch checked={showTitle} onChange={setShowTitle} isDark={isDark} />
                 </div>
               ) : null}
 
               {(navType === "secondary" || showTitle) ? (
                 <div>
-                  <label className="block text-base font-medium mb-2" style={{ color: colors.text.primary }}>
+                  <label className="block text-base font-medium mb-2" style={{ color: tokens.textColor.primary }}>
                     标题文本
                   </label>
                   <TaiInput value={titleText} onChange={setTitleText} placeholder="请输入标题" isDark={isDark} style={{ width: "100%" }} />
@@ -347,7 +335,7 @@ export function PageTopNav() {
               ) : null}
 
               <div>
-                <label className="block text-base font-medium mb-3" style={{ color: colors.text.primary }}>
+                <label className="block text-base font-medium mb-3" style={{ color: tokens.textColor.primary }}>
                   操作按钮数量（最多 {navType === "primary" ? "3" : "2"} 个）
                 </label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: SPACING["2"] }}>
@@ -361,21 +349,21 @@ export function PageTopNav() {
 
               {buttonCount >= 1 ? (
                 <div>
-                  <label className="block text-base font-medium mb-2" style={{ color: colors.text.primary }}>按钮 1 文本</label>
+                  <label className="block text-base font-medium mb-2" style={{ color: tokens.textColor.primary }}>按钮 1 文本</label>
                   <TaiInput value={button1Text} onChange={setButton1Text} isDark={isDark} style={{ width: "100%" }} />
                 </div>
               ) : null}
 
               {buttonCount >= 2 ? (
                 <div>
-                  <label className="block text-base font-medium mb-2" style={{ color: colors.text.primary }}>按钮 2 文本</label>
+                  <label className="block text-base font-medium mb-2" style={{ color: tokens.textColor.primary }}>按钮 2 文本</label>
                   <TaiInput value={button2Text} onChange={setButton2Text} isDark={isDark} style={{ width: "100%" }} />
                 </div>
               ) : null}
 
               {navType === "primary" && buttonCount >= 3 ? (
                 <div>
-                  <label className="block text-base font-medium mb-2" style={{ color: colors.text.primary }}>按钮 3 文本</label>
+                  <label className="block text-base font-medium mb-2" style={{ color: tokens.textColor.primary }}>按钮 3 文本</label>
                   <TaiInput value={button3Text} onChange={setButton3Text} isDark={isDark} style={{ width: "100%" }} />
                 </div>
               ) : null}
@@ -391,7 +379,7 @@ export function PageTopNav() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["6"] }}>
               <div>
                 <h3 className="text-lg font-semibold mb-3">布局结构</h3>
-                <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+                <ul className="space-y-2 text-sm" style={{ color: tokens.textColor.secondary }}>
                   <li>• 整体高度为 132px（含 24px 内边距）</li>
                   <li>• 标题与操作按钮共用统一导航基线</li>
                   <li>• 顶部导航支持透明玻璃面板叠加在场景内容之上</li>
@@ -399,9 +387,9 @@ export function PageTopNav() {
               </div>
               <div>
                 <h3 className="text-lg font-semibold mb-3">按钮行为</h3>
-                <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+                <ul className="space-y-2 text-sm" style={{ color: tokens.textColor.secondary }}>
                   <li>• 操作按钮使用组件包 `Button` token</li>
-                  <li>• 标题文本直接使用 `colors.text.primary`</li>
+                  <li>• 标题文本直接使用 `tokens.textColor.primary`</li>
                   <li>• 二级导航返回图标与标题保持统一主题色</li>
                 </ul>
               </div>
@@ -415,14 +403,14 @@ export function PageTopNav() {
             <div style={panelStyle}>
               <h3 className="text-lg font-semibold mb-4">间距规范</h3>
               <div style={{ display: "flex", flexDirection: "column", gap: SPACING["2"] }}>
-                <div className="flex justify-between"><span style={infoTextStyle}>按钮间距</span><span style={{ color: colors.text.primary }}>{innerConfig.gap}px</span></div>
-                <div className="flex justify-between"><span style={infoTextStyle}>容器内边距</span><span style={{ color: colors.text.primary }}>{innerConfig.padding}px</span></div>
-                <div className="flex justify-between"><span style={infoTextStyle}>按钮高度</span><span style={{ color: colors.text.primary }}>{innerConfig.buttonHeight}px</span></div>
+                <div className="flex justify-between"><span style={infoTextStyle}>按钮间距</span><span style={{ color: tokens.textColor.primary }}>{innerConfig.gap}px</span></div>
+                <div className="flex justify-between"><span style={infoTextStyle}>容器内边距</span><span style={{ color: tokens.textColor.primary }}>{innerConfig.padding}px</span></div>
+                <div className="flex justify-between"><span style={infoTextStyle}>按钮高度</span><span style={{ color: tokens.textColor.primary }}>{innerConfig.buttonHeight}px</span></div>
               </div>
             </div>
             <div style={panelStyle}>
               <h3 className="text-lg font-semibold mb-4">交互规范</h3>
-              <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+              <ul className="space-y-2 text-sm" style={{ color: tokens.textColor.secondary }}>
                 <li>• 内部按钮使用统一的玻璃态背景与边框 token</li>
                 <li>• 返回按钮与功能按钮遵循同一圆角与留白体系</li>
                 <li>• 可根据内容密度在默认 / 小尺寸之间切换</li>
@@ -437,7 +425,7 @@ export function PageTopNav() {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: SPACING["4"] }}>
           <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-3">✅ 适用场景</h3>
-            <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+            <ul className="space-y-2 text-sm" style={{ color: tokens.textColor.secondary }}>
               {navType === "primary" ? (
                 <>
                   <li>• 一级页面顶部导航</li>
@@ -463,7 +451,7 @@ export function PageTopNav() {
           </div>
           <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-3">❌ 不适用场景</h3>
-            <ul className="space-y-2 text-sm" style={{ color: colors.text.secondary }}>
+            <ul className="space-y-2 text-sm" style={{ color: tokens.textColor.secondary }}>
               <li>• 需要标签切换的页面（应使用 Tabs）</li>
               <li>• 需要深层嵌套层级的多级面包屑场景</li>
               {navType !== "inner" ? <li>• 弹窗或抽屉内部（可使用小尺寸 Inner Nav）</li> : null}

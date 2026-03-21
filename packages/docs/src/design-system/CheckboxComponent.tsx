@@ -28,7 +28,7 @@ export function CheckboxComponent({
   onChange,
   disabled = false,
 }: CheckboxComponentProps) {
-  const { colors } = useThemeOptional();
+  const { tokens } = useThemeOptional();
 
   return (
     <button
@@ -40,14 +40,14 @@ export function CheckboxComponent({
         height: SIZE,
         borderRadius: SIZE / 2,
         opacity: disabled ? 0.2 : 1,
-        backgroundColor: checked ? colors.checkbox.checked : "transparent",
-        border: checked ? "none" : `2px solid ${colors.checkbox.unchecked}`,
+        backgroundColor: checked ? tokens.checkbox.checked : "transparent",
+        border: checked ? "none" : `2px solid ${tokens.checkbox.unchecked}`,
         transition: "background-color 150ms ease, border-color 150ms ease",
       }}
       type="button"
       aria-pressed={checked}
     >
-      {checked ? <Checkmark color={colors.checkbox.checkmark} /> : null}
+      {checked ? <Checkmark color={tokens.checkbox.checkmark} /> : null}
     </button>
   );
 }

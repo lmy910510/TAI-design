@@ -1,24 +1,10 @@
 import { useOutletContext } from "react-router-dom";
-import { Card, Divider, RADIUS, SPACING, createColors } from "@tai-design/components";
+import { Card, Divider, RADIUS, SPACING, getTokens } from "@tai-design/components";
+import { DocPageHeader, DocTokenTable } from "../DocComponents";
 
 export function DividerPage() {
   const { isDark } = useOutletContext<{ isDark: boolean }>();
-  const colors = createColors(isDark);
-
-  const tagStyle = {
-    display: "inline-flex",
-    alignItems: "center",
-    justifyContent: "center",
-    minHeight: 36,
-    paddingLeft: SPACING["2"],
-    paddingRight: SPACING["2"],
-    borderRadius: RADIUS.xl,
-    backgroundColor: colors.bg.secondary,
-    border: `1px solid ${colors.border.default}`,
-    color: colors.text.secondary,
-    fontSize: 18,
-    lineHeight: 1.5,
-  } as const;
+  const tokens = getTokens(isDark);
 
   return (
     <div
@@ -29,35 +15,27 @@ export function DividerPage() {
         paddingBottom: SPACING["6"] * 2,
       }}
     >
-      <div style={{ display: "flex", flexDirection: "column", gap: SPACING["3"] }}>
-        <div style={tagStyle}>Components / 组件</div>
-        <h1 style={{ margin: 0, fontSize: 42, lineHeight: 1.2, color: colors.text.primary }}>
-          分割线 Divider
-        </h1>
-        <p style={{ margin: 0, fontSize: 24, lineHeight: 1.6, color: colors.text.tertiary }}>
-          用统一的线条、留白和标签组织内容结构，避免页面里散落的硬编码边框与 <code>&lt;hr /&gt;</code>。
-        </p>
-      </div>
+      <DocPageHeader category="Components / 组件" title="分割线 Divider" description={<>用统一的线条、留白和标签组织内容结构，避免页面里散落的硬编码边框与 <code>&lt;hr /&gt;</code>。</>} />
 
       <Card variant="white" isDark={isDark}>
         <div style={{ display: "flex", flexDirection: "column", gap: SPACING["6"] }}>
           <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
-            <h2 style={{ margin: 0, fontSize: 30, color: colors.text.primary }}>基础类型</h2>
+            <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>基础类型</h2>
             <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
               <div>
-                <div style={{ fontSize: 24, color: colors.text.secondary, marginBottom: SPACING["2"] }}>
+                <div style={{ fontSize: 24, color: tokens.textColor.secondary, marginBottom: SPACING["2"] }}>
                   标准分割线
                 </div>
                 <Divider isDark={isDark} />
               </div>
               <div>
-                <div style={{ fontSize: 24, color: colors.text.secondary, marginBottom: SPACING["2"] }}>
+                <div style={{ fontSize: 24, color: tokens.textColor.secondary, marginBottom: SPACING["2"] }}>
                   虚线分割线
                 </div>
                 <Divider isDark={isDark} variant="dashed" />
               </div>
               <div>
-                <div style={{ fontSize: 24, color: colors.text.secondary, marginBottom: SPACING["2"] }}>
+                <div style={{ fontSize: 24, color: tokens.textColor.secondary, marginBottom: SPACING["2"] }}>
                   带标签的分割线
                 </div>
                 <Divider isDark={isDark} label="更多内容" />
@@ -68,7 +46,7 @@ export function DividerPage() {
           <Divider isDark={isDark} />
 
           <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
-            <h2 style={{ margin: 0, fontSize: 30, color: colors.text.primary }}>垂直分割</h2>
+            <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>垂直分割</h2>
             <div
               style={{
                 display: "grid",
@@ -84,8 +62,8 @@ export function DividerPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: RADIUS.xl,
-                  backgroundColor: colors.bg.secondary,
-                  color: colors.text.primary,
+                  backgroundColor: tokens.bgColor.container,
+                  color: tokens.textColor.primary,
                   fontSize: 24,
                 }}
               >
@@ -99,8 +77,8 @@ export function DividerPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: RADIUS.xl,
-                  backgroundColor: colors.bg.secondary,
-                  color: colors.text.primary,
+                  backgroundColor: tokens.bgColor.container,
+                  color: tokens.textColor.primary,
                   fontSize: 24,
                 }}
               >
@@ -114,8 +92,8 @@ export function DividerPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   borderRadius: RADIUS.xl,
-                  backgroundColor: colors.bg.secondary,
-                  color: colors.text.primary,
+                  backgroundColor: tokens.bgColor.container,
+                  color: tokens.textColor.primary,
                   fontSize: 24,
                 }}
               >
@@ -127,7 +105,7 @@ export function DividerPage() {
           <Divider isDark={isDark} />
 
           <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
-            <h2 style={{ margin: 0, fontSize: 30, color: colors.text.primary }}>使用建议</h2>
+            <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>使用建议</h2>
             <ul
               style={{
                 margin: 0,
@@ -135,7 +113,7 @@ export function DividerPage() {
                 display: "flex",
                 flexDirection: "column",
                 gap: SPACING["2"],
-                color: colors.text.secondary,
+                color: tokens.textColor.secondary,
                 fontSize: 24,
                 lineHeight: 1.6,
               }}
@@ -144,6 +122,22 @@ export function DividerPage() {
               <li>同一区域保持统一粗细，默认使用 1px；强调场景再使用 2px。</li>
               <li>分割线前后留白统一使用 `SPACING`，避免 10px、15px 这类任意值。</li>
             </ul>
+          </div>
+          <Divider isDark={isDark} />
+
+          <div style={{ display: "flex", flexDirection: "column", gap: SPACING["4"] }}>
+            <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>🎨 Token 使用清单</h2>
+            <DocTokenTable
+              rows={[
+                { part: "线条颜色", token: "tokens.borderColor.level1", desc: "分割线颜色，轻量级分隔", color: tokens.borderColor.level1 },
+                { part: "标签文字", token: "tokens.textColor.tertiary", desc: "带标签分割线上的辅助文字", color: tokens.textColor.tertiary },
+              ]}
+              note={<>
+                <strong>排版 Token：</strong>标签文字使用 <code>tokens.typography.meta.caption</code> (24px/400/1.5)。
+                <br />
+                <strong>布局常量：</strong>前后间距使用 <code>SPACING["2"]</code> (12px) / <code>SPACING["4"]</code> (24px)，通过 <code>spacing</code> prop 配置。
+              </>}
+            />
           </div>
         </div>
       </Card>

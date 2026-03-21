@@ -5,12 +5,15 @@ import {
   useCallback,
   useRef,
   useEffect,
-  useContext,
   CSSProperties,
   ReactNode,
 } from "react";
-import { createColors } from "../tokens";
-import { ThemeContext } from "../hooks/ThemeContext";
+import {
+  STATIC,
+  SPACING,
+  SHADOW,
+} from "../tokens";
+import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
 // 配置
@@ -31,21 +34,21 @@ const SIZE_CONFIG: Record<
   large: {
     trackHeight: 12,
     thumbSize: 48,
-    valueFontSize: 28,
+    valueFontSize: 28,   // → typography.body.primary.fontSize
     iconSize: 40,
     height: 60,
   },
   medium: {
     trackHeight: 10,
     thumbSize: 40,
-    valueFontSize: 24,
+    valueFontSize: 24,   // → typography.display.numeric.fontSize
     iconSize: 32,
     height: 52,
   },
   small: {
     trackHeight: 8,
     thumbSize: 32,
-    valueFontSize: 20,
+    valueFontSize: 20,   // ~meta.time(22)，small 保持 20
     iconSize: 28,
     height: 44,
   },
@@ -116,9 +119,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
     },
     ref
   ) => {
-    const ctx = useContext(ThemeContext);
-    const isDark = isDarkProp ?? ctx?.isDark ?? false;
-    const colors = useMemo(() => createColors(isDark), [isDark]);
+    const { isDark: ctxDark, tokens: ctxTokens } = useThemeOptional();
+    const isDark = isDarkProp ?? ctxDark;
+    const tokens = ctxTokens;
     const sizeConfig = SIZE_CONFIG[size];
 
     const [internalValue, setInternalValue] = useState(defaultValue);
@@ -215,7 +218,7 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       () => ({
         display: "flex",
         alignItems: "center",
-        gap: 16,
+        gap: SPACING["3"],
         height: sizeConfig.height,
         opacity: disabled ? 0.5 : 1,
         cursor: disabled ? "not-allowed" : "default",
@@ -232,9 +235,9 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        color: colors.text.secondary,
+        color: tokens.textColor.secondary,
       }),
-      [sizeConfig.iconSize, colors]
+      [sizeConfig.iconSize, tokens]
     );
 
     const trackWrapperStyle = useMemo<CSSProperties>(
@@ -253,12 +256,12 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
       () => ({
         width: "100%",
         height: sizeConfig.trackHeight,
-        backgroundColor: colors.bg.tertiary,
+        backgroundColor: tokens.bgColor.secondaryContainer,
         borderRadius: sizeConfig.trackHeight / 2,
         overflow: "hidden",
         position: "relative",
       }),
-      [sizeConfig.trackHeight, colors]
+      [sizeConfig.trackHeight, tokens]
     );
 
     const fillStyle = useMemo<CSSProperties>(
@@ -268,11 +271,11 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         top: 0,
         height: "100%",
         width: `${percent}%`,
-        backgroundColor: colors.text.primary,
+        backgroundColor: tokens.textColor.primary,
         borderRadius: sizeConfig.trackHeight / 2,
         transition: isDragging ? "none" : "width 100ms ease",
       }),
-      [percent, colors, sizeConfig.trackHeight, isDragging]
+      [percent, tokens, sizeConfig.trackHeight, isDragging]
     );
 
     const thumbStyle = useMemo<CSSProperties>(
@@ -283,25 +286,25 @@ export const Slider = forwardRef<HTMLDivElement, SliderProps>(
         transform: "translate(-50%, -50%)",
         width: sizeConfig.thumbSize,
         height: sizeConfig.thumbSize,
-        backgroundColor: colors.static.white,
-        borderRadius: "50%",
-        boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+        backgroundColor: STATIC.white,
+        borderRadius: "50%", // 圆形 thumb，几何形状非设计圆角
+        boxShadow: SHADOW.xl,
         transition: isDragging ? "none" : "left 100ms ease",
         cursor: disabled ? "not-allowed" : "grab",
       }),
-      [percent, sizeConfig.thumbSize, colors, isDragging, disabled]
+      [percent, sizeConfig.thumbSize, isDragging, disabled]
     );
 
     const valueStyle = useMemo<CSSProperties>(
       () => ({
         fontSize: sizeConfig.valueFontSize,
-        fontWeight: 500,
-        color: colors.text.primary,
+        fontWeight: tokens.typography.display.numeric.fontWeight,
+        color: tokens.textColor.primary,
         minWidth: 48,
         textAlign: "center",
         flexShrink: 0,
       }),
-      [sizeConfig.valueFontSize, colors]
+      [sizeConfig.valueFontSize, tokens]
     );
 
     return (
