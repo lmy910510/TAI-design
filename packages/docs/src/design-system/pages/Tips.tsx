@@ -93,9 +93,9 @@ export function Tips() {
             <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>🎨 Token 使用清单</h2>
             <DocTokenTable
               rows={[
-                { part: "气泡背景", compToken: "tokens.tips.bg", pubToken: "bgColor.container", desc: "Tips 气泡容器背景", color: tokens.tips.bg },
-                { part: "文字", compToken: "tokens.tips.text", pubToken: "textColor.primary", desc: "Tips 提示文字颜色", color: tokens.tips.text },
-                { part: "边框", compToken: "tokens.tips.border", pubToken: "borderColor.level2", desc: "Tips 气泡描边", color: tokens.tips.border },
+                { part: "气泡背景", compToken: "tokens.bgColor.container", pubToken: "bgColor.container", desc: "Tips 气泡容器背景", color: tokens.bgColor.container },
+                { part: "文字", compToken: "tokens.textColor.primary", pubToken: "textColor.primary", desc: "Tips 提示文字颜色", color: tokens.textColor.primary },
+                { part: "边框", compToken: "tokens.borderColor.level2", pubToken: "borderColor.level2", desc: "Tips 气泡描边", color: tokens.borderColor.level2 },
               ]}
               note={<>
                 <strong>排版 Token：</strong>Tips 文字行高使用 <code>tokens.typography.body.primary.lineHeight</code> (1.4)。
@@ -119,8 +119,8 @@ export function Tips() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>背景</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.tips.bg, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.tips.bg}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.container, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.bgColor.container}</div>
                   <div>Tips 背景（<code>bgColor.container</code>）</div>
                 </div>
               </div>
@@ -134,8 +134,8 @@ export function Tips() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>文字</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.tips.text, marginBottom: SPACING["2"] }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.tips.text}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.primary, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.textColor.primary}</div>
                   <div>Tips 文字（<code>textColor.primary</code>）</div>
                 </div>
               </div>
@@ -149,8 +149,8 @@ export function Tips() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>边框</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.tips.border, marginBottom: SPACING["2"] }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.tips.border}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.borderColor.level2, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.borderColor.level2}</div>
                   <div>Tips 边框（<code>borderColor.level2</code>）</div>
                 </div>
               </div>

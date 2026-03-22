@@ -112,8 +112,8 @@ export const Toast = ({
       paddingBottom: TOAST_CONFIG.paddingY,
       boxSizing: "border-box",
       borderRadius: RADIUS["2xl"],
-      backgroundColor: tokens.toast.bg,
-      color: tokens.toast.text,
+      backgroundColor: tokens.bgColor.secondaryContainer,
+      color: tokens.textColor.anti,
       fontSize: TOAST_CONFIG.fontSize,
       fontWeight: tokens.typography.title.card.fontWeight,
       lineHeight: tokens.typography.title.card.lineHeight,
@@ -121,7 +121,7 @@ export const Toast = ({
       boxShadow: SHADOW.xl,
       wordBreak: "break-word",
     }),
-    [tokens.toast.bg, tokens.toast.text]
+    [tokens.bgColor.secondaryContainer, tokens.textColor.anti]
   );
 
   const resolvedIcon = useMemo(() => {

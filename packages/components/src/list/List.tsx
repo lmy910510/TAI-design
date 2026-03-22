@@ -100,11 +100,11 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
     const containerStyle = useMemo<CSSProperties>(
       () => ({
         width: "100%",
-        backgroundColor: tokens.list.bg,
+        backgroundColor: tokens.bgColor.elevated,
         display: "flex",
         flexDirection: "column",
         borderRadius: bordered ? RADIUS["2xl"] : undefined,
-        border: bordered ? `1px solid ${tokens.list.border}` : undefined,
+        border: bordered ? `1px solid ${tokens.borderColor.level1}` : undefined,
         overflow: bordered ? "hidden" : undefined,
         ...style,
       }),
@@ -119,7 +119,7 @@ export const List = forwardRef<HTMLDivElement, ListProps>(
         if (!isValidElement(child)) return child;
         return cloneElement(child as React.ReactElement<ListItemProps>, {
           _showDivider: true,
-          _dividerColor: tokens.list.border,
+          _dividerColor: tokens.borderColor.level1,
         });
       });
     }, [children, divided, tokens]);
@@ -214,7 +214,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
         paddingTop: LIST_CONFIG.paddingY,
         paddingBottom: LIST_CONFIG.paddingY,
         boxSizing: "border-box",
-        backgroundColor: tokens.list.bg,
+        backgroundColor: tokens.bgColor.elevated,
         cursor: isInteractive
           ? "pointer"
           : disabled
@@ -223,7 +223,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
         opacity: disabled ? 0.5 : 1,
         transition: "background-color 150ms ease",
         borderBottom: _showDivider
-          ? `1px solid ${_dividerColor || tokens.list.border}`
+          ? `1px solid ${_dividerColor || tokens.borderColor.level1}`
           : undefined,
         ...style,
       }),
@@ -265,7 +265,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
         fontSize: tokens.typography.title.card.fontSize,
         lineHeight: tokens.typography.title.card.lineHeight,
         fontWeight: tokens.typography.title.card.fontWeight,
-        color: tokens.list.title,
+        color: tokens.textColor.primary,
         overflow: "hidden",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
@@ -277,7 +277,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
       () => ({
         fontSize: tokens.typography.body.primary.fontSize,
         lineHeight: tokens.typography.body.primary.lineHeight,
-        color: tokens.list.description,
+        color: tokens.textColor.tertiary,
         marginTop: LIST_CONFIG.titleDescGap,
         overflow: "hidden",
         textOverflow: "ellipsis",
@@ -300,7 +300,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
     const suffixTextStyle = useMemo<CSSProperties>(
       () => ({
         fontSize: LIST_CONFIG.descriptionFontSize,
-        color: tokens.list.description,
+        color: tokens.textColor.tertiary,
       }),
       [tokens]
     );
@@ -351,7 +351,7 @@ export const ListItem = forwardRef<HTMLDivElement, ListItemProps>(
             {showArrow && (
               <ChevronRightIcon
                 size={LIST_CONFIG.arrowSize}
-                color={tokens.list.arrow}
+                color={tokens.textColor.placeholder}
               />
             )}
           </div>

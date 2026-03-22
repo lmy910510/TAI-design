@@ -206,8 +206,8 @@ export function Checkbox() {
           <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-4">未选中边框</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: 999, border: `2px solid ${tokens.checkbox.unchecked}`, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.checkbox.unchecked}</div>
+              <div style={{ width: 48, height: 48, borderRadius: 999, border: `2px solid ${tokens.borderColor.level2}`, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.borderColor.level2}</div>
               <div>`borderColor.level2`（公开语义 token）</div>
             </div>
           </div>
@@ -215,8 +215,8 @@ export function Checkbox() {
           <div style={panelStyle}>
             <h3 className="text-lg font-semibold mb-4">选中填充</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: 999, backgroundColor: tokens.checkbox.checked, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.checkbox.checked}</div>
+              <div style={{ width: 48, height: 48, borderRadius: 999, backgroundColor: tokens.borderColor.focus, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.borderColor.focus}</div>
               <div>`borderColor.focus`（公开语义 token）</div>
             </div>
           </div>
@@ -229,16 +229,16 @@ export function Checkbox() {
                   width: 48,
                   height: 48,
                   borderRadius: 999,
-                  backgroundColor: tokens.checkbox.checked,
+                  backgroundColor: tokens.borderColor.focus,
                   marginBottom: SPACING["2"],
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                 }}
               >
-                <CheckmarkPreview color={tokens.checkbox.checkmark} />
+                <CheckmarkPreview color={tokens._meta.mode === "dark" ? "#000000" : "#FFFFFF"} />
               </div>
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.checkbox.checkmark}</div>
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens._meta.mode === "dark" ? "#000000" : "#FFFFFF"}</div>
               <div>`STATIC.white/black`（固定色）</div>
             </div>
           </div>
@@ -268,29 +268,26 @@ export function Checkbox() {
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: 14 }}>
               <thead>
                 <tr style={{ borderBottom: `2px solid ${tokens.borderColor.level1}` }}>
-                  {["部位", "组件级 Token", "公开语义 Token", "用途说明"].map((h) => (
+                  {["部位", "公开语义 Token", "用途说明"].map((h) => (
                     <th key={h} style={{ textAlign: "left", padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.secondary, fontWeight: 600 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
                 {([
-                  { part: "未选中边框", compToken: "tokens.checkbox.unchecked", pubToken: "borderColor.level2", desc: "未选中态描边，表达可选但未激活", color: tokens.checkbox.unchecked },
-                  { part: "选中填充/描边", compToken: "tokens.checkbox.checked", pubToken: "borderColor.focus", desc: "选中态背景与描边，全黑/全白高对比", color: tokens.checkbox.checked },
-                  { part: "对勾标记", compToken: "tokens.checkbox.checkmark", pubToken: "固定色 STATIC.white / STATIC.black", desc: "勾选标记，需 100% 不透明度", color: tokens.checkbox.checkmark },
-                  { part: "标签文字", compToken: "tokens.textColor.primary", pubToken: "textColor.primary", desc: "跟随 Checkbox 的标签文字颜色", color: tokens.textColor.primary },
-                  { part: "未选中背景", compToken: "—", pubToken: "固定色 STATIC.transparent", desc: "未选中态背景透明", color: "transparent" },
+                  { part: "未选中边框", pubToken: "borderColor.level2", desc: "未选中态描边，表达可选但未激活", color: tokens.borderColor.level2 },
+                  { part: "选中填充/描边", pubToken: "borderColor.focus", desc: "选中态背景与描边，全黑/全白高对比", color: tokens.borderColor.focus },
+                  { part: "对勾标记", pubToken: "固定色 STATIC.white / STATIC.black", desc: "勾选标记，需 100% 不透明度", color: tokens._meta.mode === "dark" ? "#000000" : "#FFFFFF" },
+                  { part: "标签文字", pubToken: "textColor.primary", desc: "跟随 Checkbox 的标签文字颜色", color: tokens.textColor.primary },
+                  { part: "未选中背景", pubToken: "固定色 STATIC.transparent", desc: "未选中态背景透明", color: "transparent" },
                 ] as const).map((row) => (
                   <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
                     <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, fontWeight: 500, color: tokens.textColor.primary }}>{row.part}</td>
                     <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <div style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: row.color, border: `1px solid ${tokens.borderColor.level1}`, flexShrink: 0 }} />
-                        <code style={{ fontSize: 12, color: tokens.textColor.link }}>{row.compToken}</code>
+                        <code style={{ fontSize: 12, color: tokens.textColor.link }}>{row.pubToken}</code>
                       </div>
-                    </td>
-                    <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}>
-                      <code style={{ fontSize: 12, color: tokens.textColor.secondary }}>{row.pubToken}</code>
                     </td>
                     <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.tertiary }}>{row.desc}</td>
                   </tr>

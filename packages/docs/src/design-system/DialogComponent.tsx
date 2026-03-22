@@ -71,7 +71,7 @@ export function DialogComponent({
       style={{
         width: "100%",
         maxWidth: DIALOG_WIDTH[size],
-        backgroundColor: tokens.dialog.bg,
+        backgroundColor: tokens.bgColor.elevated,
         borderRadius: RADIUS["4xl"],
         boxShadow: SHADOW.xl,
       }}
@@ -111,7 +111,7 @@ export function DialogComponent({
               fontSize: 36,
               lineHeight: "36px",
               fontWeight: 600,
-              color: tokens.dialog.title,
+              color: tokens.textColor.primary,
             }}
           >
             {title}
@@ -124,7 +124,7 @@ export function DialogComponent({
                 textAlign: size === "large" ? "left" : "center",
                 fontSize: 28,
                 lineHeight: "42px",
-                color: tokens.dialog.content,
+                color: tokens.textColor.secondary,
               }}
             >
               {content}

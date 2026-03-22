@@ -108,11 +108,11 @@ export const resolveTagPalette = (tokens: SemanticTokens, color: TagColor): TagP
   }
 
   return {
-    main: tokens.tag.default.main,
-    bg: tokens.tag.default[6],
-    border: tokens.tag.default[30],
-    borderLow: tokens.tag.default[12],
-    lightBg: tokens.tag.default[12],
+    main: tokens.textColor.tertiary,
+    bg: tokens.bgColor.infoLight,
+    border: tokens.functionalColor.info.disabled,
+    borderLow: tokens.bgColor.infoLight,
+    lightBg: tokens.bgColor.infoLight,
     inverseText,
     mutedText,
     secondaryBg,

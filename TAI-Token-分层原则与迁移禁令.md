@@ -2,7 +2,7 @@
 
 > 本文档是 TAI Design 组件库 token 体系的**唯一治理规范**。  
 > 所有新增代码、组件变更、文档页修改、review 评审必须以此为准。  
-> 最后更新：2026-03-21
+> 最后更新：2026-03-22
 
 ---
 
@@ -55,7 +55,7 @@ TAI Design 的 token 体系只有三个层级，从底到顶：
 
 - **公开语义颜色 token 只有 4 类**：`textColor`、`bgColor`、`borderColor`、`functionalColor`
 - **不允许为新组件创建组件级颜色 token 包装层**
-- **历史存量组件 token**（switch / checkbox / input / dialog / toast / tips / push / list / loading / tag）保留，但冻结，不新增
+- **历史存量组件 token 已彻底移除**（2026-03-22）：`switch` / `checkbox` / `input` / `dialog` / `toast` / `tips` / `push` / `list` / `loading` / `tag` 的组件级 token 定义已从 `semanticTokens.ts` 中删除，所有组件实现和文档页已改为直接引用 4 类公开语义 token
 
 ---
 
@@ -91,6 +91,8 @@ TAI Design 的 token 体系只有三个层级，从底到顶：
   - 不出现在文档页主叙事中
   - 不作为推荐用法出现在任何教学/交接材料中
 - 每季度评估一次是否可以安全移除
+
+> **已完成（2026-03-22）**：10 个组件级 token（`tokens.switch.*`、`tokens.checkbox.*` 等）已从 `semanticTokens.ts` 接口定义、变量赋值、返回值中全部删除。12 个组件实现文件 + 15 个 docs 文件的全部引用已替换为公开语义 token。整个项目零残留。
 
 ---
 
@@ -216,6 +218,7 @@ function MyComponent({ isDark: isDarkProp, ...props }) {
 - [ ] 新代码没有引入 `createColors` / `c(isDark)` / `BG_COLORS` / `type Colors`
 - [ ] 颜色值全部通过 `tokens.*` 获取，无硬编码十六进制或 rgba
 - [ ] Primitive 常量（`alpha` / `blueGray` / `COLD_GRAY` 等）只出现在 `semanticTokens.ts` 内部
+- [ ] 无组件级 token 引用（`tokens.switch.*`、`tokens.dialog.*` 等已删除，不得恢复）
 
 ### 设计规范
 
@@ -248,13 +251,13 @@ function MyComponent({ isDark: isDarkProp, ...props }) {
 
 按收益/成本比排序，建议逐步执行：
 
-| 优先级 | 事项 | 原因 |
-|--------|------|------|
-| **P0** | 冻结词汇表（本文档） | 让所有人对"什么是正确入口"达成共识 |
-| **P1** | 统一主题接入模板 | 消除组件间的写法差异，降低 review 心智负担 |
-| **P2** | 清理 docs `colorTokens.ts` 导出，收敛文档叙事 | 堵住文档层继续传播旧入口的通道 |
-| **P3** | 逐组件消除手写间距/圆角/颜色值 | 让规范从"建议"变成"事实" |
-| **P4** | 建立自动化 lint 检查 | 让规范从"人工 review"变成"CI 拦截" |
+| 优先级 | 事项 | 原因 | 状态 |
+|--------|------|------|------|
+| **P0** | 冻结词汇表（本文档） | 让所有人对"什么是正确入口"达成共识 | ✅ 已完成 |
+| **P1** | 统一主题接入模板 | 消除组件间的写法差异，降低 review 心智负担 | 进行中 |
+| **P2** | 清理 docs `colorTokens.ts` 导出，收敛文档叙事 | 堵住文档层继续传播旧入口的通道 | 进行中 |
+| **P3** | 逐组件消除手写间距/圆角/颜色值 | 让规范从"建议"变成"事实" | ✅ 组件级 token 已清除；间距/圆角待继续 |
+| **P4** | 建立自动化 lint 检查 | 让规范从"人工 review"变成"CI 拦截" | 待启动 |
 
 ---
 
@@ -266,7 +269,7 @@ function MyComponent({ isDark: isDarkProp, ...props }) {
 |------|------|--------|
 | **Primitive** | `primitives.ts` 中的原始色板和常量 | "基础色"、"底层色" |
 | **Semantic Token** | `semanticTokens.ts` 中的语义色，通过 `getTokens()` 获取 | "主题色"、"配色方案" |
-| **组件级 token** | 历史存量的 `switch` / `input` 等组件 token | "组件色"、"组件主题" |
+| **组件级 token** | ~~历史存量的 `switch` / `input` 等组件 token~~ **已删除**（2026-03-22），不得恢复 | "组件色"、"组件主题" |
 | **兼容层** | `legacyColors.ts` / `createColors` / `c()` / `BG_COLORS` | "旧 API"、"v1 入口" |
 | **文档包装组件** | `packages/docs/src/design-system/` 下的组件 | "demo 组件"、"示例组件" |
 

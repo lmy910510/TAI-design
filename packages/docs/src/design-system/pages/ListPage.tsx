@@ -205,11 +205,11 @@ export function ListPage() {
                 </thead>
                 <tbody>
                   {([
-                    { part: "列表背景", compToken: "tokens.list.bg", pubToken: "bgColor.elevated", desc: "列表容器背景色", color: tokens.list.bg },
-                    { part: "主标题文字", compToken: "tokens.list.title", pubToken: "textColor.primary", desc: "列表项主标题颜色", color: tokens.list.title },
-                    { part: "描述文字", compToken: "tokens.list.description", pubToken: "textColor.tertiary", desc: "列表项副标题/描述", color: tokens.list.description },
-                    { part: "分割线", compToken: "tokens.list.border", pubToken: "borderColor.level1", desc: "列表项之间的分隔线", color: tokens.list.border },
-                    { part: "箭头图标", compToken: "tokens.list.arrow", pubToken: "textColor.placeholder", desc: "右侧展开箭头颜色", color: tokens.list.arrow },
+                    { part: "列表背景", compToken: "tokens.bgColor.elevated", pubToken: "bgColor.elevated", desc: "列表容器背景色", color: tokens.bgColor.elevated },
+                    { part: "主标题文字", compToken: "tokens.textColor.primary", pubToken: "textColor.primary", desc: "列表项主标题颜色", color: tokens.textColor.primary },
+                    { part: "描述文字", compToken: "tokens.textColor.tertiary", pubToken: "textColor.tertiary", desc: "列表项副标题/描述", color: tokens.textColor.tertiary },
+                    { part: "分割线", compToken: "tokens.borderColor.level1", pubToken: "borderColor.level1", desc: "列表项之间的分隔线", color: tokens.borderColor.level1 },
+                    { part: "箭头图标", compToken: "tokens.textColor.placeholder", pubToken: "textColor.placeholder", desc: "右侧展开箭头颜色", color: tokens.textColor.placeholder },
                   ] as const).map((row) => (
                     <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
                       <td style={{ padding: "10px 14px", fontWeight: 500, color: tokens.textColor.primary }}>{row.part}</td>
@@ -249,8 +249,8 @@ export function ListPage() {
             >
               <h3 className="text-lg font-semibold mb-4">列表背景</h3>
               <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.list.bg, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
-                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.list.bg}</div>
+                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.bgColor.elevated}</div>
                 <div><code>bgColor.elevated</code></div>
               </div>
             </div>
@@ -264,8 +264,8 @@ export function ListPage() {
             >
               <h3 className="text-lg font-semibold mb-4">标题文字</h3>
               <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.list.title, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.list.title}</div>
+                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.primary, marginBottom: SPACING["2"] }} />
+                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.primary}</div>
                 <div><code>textColor.primary</code></div>
               </div>
             </div>
@@ -279,8 +279,8 @@ export function ListPage() {
             >
               <h3 className="text-lg font-semibold mb-4">描述文字</h3>
               <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.list.description, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.list.description}</div>
+                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.tertiary, marginBottom: SPACING["2"] }} />
+                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.tertiary}</div>
                 <div><code>textColor.tertiary</code></div>
               </div>
             </div>
@@ -294,8 +294,8 @@ export function ListPage() {
             >
               <h3 className="text-lg font-semibold mb-4">分割线</h3>
               <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.list.border, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.list.border}</div>
+                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.borderColor.level1, marginBottom: SPACING["2"] }} />
+                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.borderColor.level1}</div>
                 <div><code>borderColor.level1</code></div>
               </div>
             </div>
@@ -309,8 +309,8 @@ export function ListPage() {
             >
               <h3 className="text-lg font-semibold mb-4">箭头图标</h3>
               <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.list.arrow, marginBottom: SPACING["2"] }} />
-                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.list.arrow}</div>
+                <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.placeholder, marginBottom: SPACING["2"] }} />
+                <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.placeholder}</div>
                 <div><code>textColor.placeholder</code></div>
               </div>
             </div>

@@ -153,12 +153,12 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
         paddingBottom: SPACING["4"],
         boxSizing: "border-box",
         borderRadius: RADIUS["2xl"],
-        backgroundColor: tokens.push.bg,
+        backgroundColor: tokens.bgColor.elevated,
         border: `1px solid ${tokens.borderColor.level1}`,
         boxShadow: SHADOW.xl,
         ...style,
       }),
-      [tokens.borderColor.level1, tokens.push.bg, style]
+      [tokens.borderColor.level1, tokens.bgColor.elevated, style]
     );
 
     if (!visible) {
@@ -210,7 +210,7 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
                   fontSize: PUSH_CONFIG.titleFontSize,
                   lineHeight: tokens.typography.body.primary.lineHeight,
                   fontWeight: tokens.typography.title.section.fontWeight,
-                  color: tokens.push.title,
+                  color: tokens.textColor.primary,
                   wordBreak: "break-word",
                 }}
               >
@@ -221,7 +221,7 @@ export const Push = forwardRef<HTMLDivElement, PushProps>(
                   style={{
                     fontSize: PUSH_CONFIG.descriptionFontSize,
                     lineHeight: tokens.typography.meta.caption.lineHeight,
-                    color: tokens.push.content,
+                    color: tokens.textColor.secondary,
                     wordBreak: "break-word",
                   }}
                 >

@@ -107,8 +107,8 @@ export const Checkbox = ({
       width: CHECKBOX_CONFIG.size,
       height: CHECKBOX_CONFIG.size,
       borderRadius: CHECKBOX_CONFIG.radius,
-      backgroundColor: isChecked ? tokens.checkbox.checked : STATIC.transparent,
-      border: isChecked ? "none" : `2px solid ${tokens.checkbox.unchecked}`,
+      backgroundColor: isChecked ? tokens.borderColor.focus : STATIC.transparent,
+      border: isChecked ? "none" : `2px solid ${tokens.borderColor.level2}`,
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
@@ -146,7 +146,7 @@ export const Checkbox = ({
       }}
     >
       <div style={boxStyle}>
-        {isChecked && <CheckmarkIcon color={tokens.checkbox.checkmark} />}
+        {isChecked && <CheckmarkIcon color={isDark ? STATIC.black : STATIC.white} />}
       </div>
       {label && <span style={labelStyle}>{label}</span>}
     </div>

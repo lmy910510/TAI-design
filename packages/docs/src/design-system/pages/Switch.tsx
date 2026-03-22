@@ -273,13 +273,13 @@ function SwitchTokenPanel({
       entries.push({
         label: "轨道背景",
         tokenPath: "bgColor.brand",
-        value: tokens.switch.on,
+        value: tokens.bgColor.brand,
       });
     } else {
       entries.push({
         label: "轨道背景",
         tokenPath: "bgColor.component",
-        value: tokens.switch.off,
+        value: tokens.bgColor.component,
       });
     }
 
@@ -287,14 +287,14 @@ function SwitchTokenPanel({
     entries.push({
       label: "滑块",
       tokenPath: "STATIC.white",
-      value: tokens.switch.thumb,
+      value: STATIC.white,
     });
 
     // 滑块阴影
     entries.push({
       label: "滑块阴影",
       tokenPath: "borderColor.component",
-      value: tokens.switch.thumbShadow,
+      value: tokens.borderColor.component,
     });
 
     // 禁用态特殊标注
@@ -321,8 +321,8 @@ function SwitchTokenPanel({
               borderRadius: 30,
               backgroundColor:
                 selectedState === "on" || selectedState === "disabled-on"
-                  ? tokens.switch.on
-                  : tokens.switch.off,
+                  ? tokens.bgColor.brand
+                  : tokens.bgColor.component,
               opacity: selectedState.startsWith("disabled") ? 0.5 : 1,
               display: "flex",
               alignItems: "center",
@@ -335,8 +335,8 @@ function SwitchTokenPanel({
                 width: 48,
                 height: 48,
                 borderRadius: "50%",
-                backgroundColor: tokens.switch.thumb,
-                boxShadow: `0 2px 4px ${tokens.switch.thumbShadow}`,
+                backgroundColor: STATIC.white,
+                boxShadow: `0 2px 4px ${tokens.borderColor.component}`,
                 transform:
                   selectedState === "on" || selectedState === "disabled-on"
                     ? "translateX(48px)"

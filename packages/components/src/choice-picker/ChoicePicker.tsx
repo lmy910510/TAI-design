@@ -234,9 +234,9 @@ function CheckboxIndicator({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: CHOICE_CONFIG.checkboxRadius,
-    border: `2px solid ${selected ? tokens.checkbox.checked : tokens.checkbox.unchecked}`,
-    backgroundColor: selected ? tokens.checkbox.checked : STATIC.transparent,
-    color: tokens.checkbox.checkmark,
+    border: `2px solid ${selected ? tokens.borderColor.focus : tokens.borderColor.level2}`,
+    backgroundColor: selected ? tokens.borderColor.focus : STATIC.transparent,
+    color: selected ? STATIC.white : STATIC.transparent,
     fontSize: CHOICE_CONFIG.checkmarkFontSize,
     fontWeight: CHOICE_CONFIG.checkmarkFontWeight,
   };

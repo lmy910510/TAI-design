@@ -274,8 +274,12 @@ export function Colors() {
   const lightSwatchShell = tokens.bgColor.elevated;
   const darkSwatchShell = STATIC.black;
 
-  const getSwatchCardStyle = (surface: "light" | "dark", width: string): CSSProperties => ({
-    width,
+  /** 统一色块卡片 — 所有色板等宽 */
+  const SWATCH_W = 108;
+  const SWATCH_H = 72;
+
+  const getSwatchCardStyle = (surface: "light" | "dark"): CSSProperties => ({
+    width: SWATCH_W,
     flexShrink: 0,
     overflow: "hidden",
     borderRadius: RADIUS.xl,
@@ -283,8 +287,8 @@ export function Colors() {
     backgroundColor: surface === "dark" ? darkSwatchShell : lightSwatchShell,
   });
 
-  const getSwatchPreviewStyle = (surface: "light" | "dark", height: number): CSSProperties => ({
-    height,
+  const getSwatchPreviewStyle = (surface: "light" | "dark"): CSSProperties => ({
+    height: SWATCH_H,
     position: "relative",
     backgroundColor: surface === "dark" ? darkSwatchShell : STATIC.white,
   });
@@ -555,12 +559,12 @@ export function Colors() {
         <p className="text-sm mb-4" style={{ color: tokens.textColor.tertiary }}>
           {alphaColorConfig.light.description}
         </p>
-        <div className="grid grid-cols-5 gap-4 mb-8">
+        <div className="flex flex-wrap gap-3 mb-8">
           {alphaColorConfig.light.colors
             .filter((color) => ALPHA_LEVELS.includes(color.level))
             .map((color) => (
-              <div key={color.name} style={getSwatchCardStyle("light", "auto")}>
-                <div style={getSwatchPreviewStyle("light", 96)}>
+              <div key={color.name} style={getSwatchCardStyle("light")}>
+                <div style={getSwatchPreviewStyle("light")}>
                   <div className="absolute inset-0" style={{ backgroundColor: color.value }} />
                   <div
                     className="absolute inset-0 flex items-center justify-center"
@@ -598,12 +602,12 @@ export function Colors() {
             backgroundColor: tokens.bgColor.container,
           }}
         >
-          <div className="grid grid-cols-5 gap-4">
+          <div className="flex flex-wrap gap-3">
             {alphaColorConfig.dark.colors
               .filter((color) => ALPHA_LEVELS.includes(color.level))
               .map((color) => (
-                <div key={color.name} style={getSwatchCardStyle("dark", "auto")}>
-                  <div style={getSwatchPreviewStyle("dark", 96)}>
+                <div key={color.name} style={getSwatchCardStyle("dark")}>
+                  <div style={getSwatchPreviewStyle("dark")}>
                     <div className="absolute inset-0" style={{ backgroundColor: color.value }} />
                     <div className="absolute inset-0 flex items-center justify-center" style={{ color: STATIC.white }}>
                       <span className="font-bold text-lg">{color.level}</span>
@@ -633,16 +637,16 @@ export function Colors() {
         <p className="text-sm mb-6" style={{ color: tokens.textColor.secondary }}>
           中性底盘色，用于页面背景、卡片、容器等，数字表示明度等级（0 最浅，100 最深）。
         </p>
-        <div className="flex gap-3 overflow-x-auto pb-2">
+        <div className="flex flex-wrap gap-3 pb-2">
           {blueGrayConfig.map((color) => {
             const isDarkColor = color.level >= 60;
             const surface = isDarkColor ? "dark" : "light";
             return (
               <div
                 key={color.name}
-                style={getSwatchCardStyle(surface, color.level === 50 ? "170px" : "120px")}
+                style={getSwatchCardStyle(surface)}
               >
-                <div style={getSwatchPreviewStyle(surface, 80)}>
+                <div style={getSwatchPreviewStyle(surface)}>
                   <div className="absolute inset-0" style={{ backgroundColor: color.value }} />
                   <div
                     className="absolute inset-0 flex items-center justify-center"
@@ -683,27 +687,30 @@ export function Colors() {
                 <h3 className="text-base font-semibold mb-3" style={{ color: tokens.textColor.primary }}>
                   {colorGroup.name} / {colorGroup.label}
                 </h3>
-                <div className="flex gap-2 overflow-x-auto pb-1">
+                <div className="flex flex-wrap gap-3 pb-1">
                   {swatches.map((swatch) => {
                     const isDarkColor = swatch.level >= 60;
                     const surface = isDarkColor ? "dark" : "light";
                     return (
                       <div
                         key={swatch.level}
-                        style={getSwatchCardStyle(surface, swatch.isStandard ? "110px" : "80px")}
+                        style={{
+                          ...getSwatchCardStyle(surface),
+                          ...(swatch.isStandard ? { outline: `2px solid ${tokens.functionalColor.brand.main}`, outlineOffset: 2 } : {}),
+                        }}
                       >
-                        <div style={getSwatchPreviewStyle(surface, 56)}>
+                        <div style={getSwatchPreviewStyle(surface)}>
                           <div className="absolute inset-0" style={{ backgroundColor: swatch.value }} />
                           {swatch.isStandard ? (
                             <div
-                              className="absolute top-1.5 left-1/2 -translate-x-1/2 text-xs font-medium"
+                              className="absolute top-1.5 left-1/2 -translate-x-1/2 text-[10px] font-medium"
                               style={{ color: STATIC.white }}
                             >
                               标准色
                             </div>
                           ) : null}
                           <div
-                            className={`absolute inset-0 flex items-center justify-center ${swatch.isStandard ? "mt-4" : ""}`}
+                            className={`absolute inset-0 flex items-center justify-center ${swatch.isStandard ? "mt-3" : ""}`}
                             style={{
                               color:
                                 isDarkColor || swatch.level >= 40
@@ -767,17 +774,21 @@ export function Colors() {
                     </span>
                   ) : null}
                 </h3>
-                <div className="flex gap-3 overflow-x-auto pb-2">
+                <div className="flex flex-wrap gap-3 pb-2">
                   {Object.entries(swatches).map(([level, value]) => {
                     const levelNum = parseInt(level, 10);
                     const isDarkColor = levelNum >= 60;
                     const surface = isDarkColor ? "dark" : "light";
+                    const isMain = level === "50";
                     return (
                       <div
                         key={level}
-                        style={getSwatchCardStyle(surface, level === "50" ? "170px" : "120px")}
+                        style={{
+                          ...getSwatchCardStyle(surface),
+                          ...(isMain ? { outline: `2px solid ${tokens.functionalColor.brand.main}`, outlineOffset: 2 } : {}),
+                        }}
                       >
-                        <div style={getSwatchPreviewStyle(surface, 80)}>
+                        <div style={getSwatchPreviewStyle(surface)}>
                           <div className="absolute inset-0 rounded-t-xl" style={{ backgroundColor: value }} />
                           <div
                             className="absolute inset-0 flex items-center justify-center"

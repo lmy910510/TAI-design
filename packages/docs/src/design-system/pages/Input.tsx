@@ -241,30 +241,29 @@ export function Input() {
               <table style={{ width: "100%", borderCollapse: "collapse", fontSize: FONT_SIZE.sm }}>
                 <thead>
                   <tr style={{ borderBottom: `2px solid ${tokens.borderColor.level1}` }}>
-                    {["部位", "组件级 Token", "公开语义 Token", "用途说明"].map((h) => (
+                    {["部位", "公开语义 Token", "用途说明"].map((h) => (
                       <th key={h} style={{ textAlign: "left", padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.secondary, fontWeight: FONT_WEIGHT.semibold }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {([
-                    { part: "输入框背景", compToken: "tokens.input.bg", pubToken: "bgColor.elevated", desc: "输入框容器背景", color: tokens.input.bg },
-                    { part: "输入文字", compToken: "tokens.input.text", pubToken: "textColor.primary", desc: "用户输入的文字颜色", color: tokens.input.text },
-                    { part: "占位符文字", compToken: "tokens.input.placeholder", pubToken: "textColor.placeholder", desc: "未输入时的占位提示文字", color: tokens.textColor.placeholder },
-                    { part: "聚焦边框", compToken: "tokens.input.ring", pubToken: "borderColor.focus", desc: "输入框获得焦点时的边框", color: tokens.input.ring },
-                    { part: "清除按钮图标", compToken: "tokens.input.clearIcon", pubToken: "borderColor.level2", desc: "清空按钮图标颜色", color: tokens.input.clearIcon },
-                    { part: "禁用态文字", compToken: "tokens.textColor.disabled", pubToken: "textColor.disabled", desc: "禁用输入框文字", color: tokens.textColor.disabled },
-                    { part: "辅助说明文字", compToken: "tokens.textColor.tertiary", pubToken: "textColor.tertiary", desc: "输入框下方辅助说明", color: tokens.textColor.tertiary },
+                    { part: "输入框背景", pubToken: "bgColor.elevated", desc: "输入框容器背景", color: tokens.bgColor.elevated },
+                    { part: "输入文字", pubToken: "textColor.primary", desc: "用户输入的文字颜色", color: tokens.textColor.primary },
+                    { part: "占位符文字", pubToken: "textColor.placeholder", desc: "未输入时的占位提示文字", color: tokens.textColor.placeholder },
+                    { part: "聚焦边框", pubToken: "borderColor.focus", desc: "输入框获得焦点时的边框", color: tokens.borderColor.focus },
+                    { part: "清除按钮图标", pubToken: "borderColor.level2", desc: "清空按钮图标颜色", color: tokens.borderColor.level2 },
+                    { part: "禁用态文字", pubToken: "textColor.disabled", desc: "禁用输入框文字", color: tokens.textColor.disabled },
+                    { part: "辅助说明文字", pubToken: "textColor.tertiary", desc: "输入框下方辅助说明", color: tokens.textColor.tertiary },
                   ] as const).map((row) => (
                     <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
                       <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, fontWeight: FONT_WEIGHT.medium, color: tokens.textColor.primary }}>{row.part}</td>
                       <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}>
                         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                           <div style={{ width: 20, height: 20, borderRadius: 4, backgroundColor: row.color, border: `1px solid ${tokens.borderColor.level1}`, flexShrink: 0 }} />
-                          <code style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.link }}>{row.compToken}</code>
+                          <code style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.link }}>{row.pubToken}</code>
                         </div>
                       </td>
-                      <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px` }}><code style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.secondary }}>{row.pubToken}</code></td>
                       <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, color: tokens.textColor.tertiary }}>{row.desc}</td>
                     </tr>
                   ))}
@@ -288,9 +287,9 @@ export function Input() {
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: SPACING["4"] }}>
             {[
-              { title: "背景", color: tokens.input.bg, token: "input.bg → bgColor.elevated" },
-              { title: "焦点环", color: tokens.input.ring, token: "input.ring → borderColor.focus" },
-              { title: "清空按钮", color: tokens.input.clearIcon, token: "input.clearIcon → borderColor.level2" },
+              { title: "背景", color: tokens.bgColor.elevated, token: "bgColor.elevated" },
+              { title: "焦点环", color: tokens.borderColor.focus, token: "borderColor.focus" },
+              { title: "清空按钮", color: tokens.borderColor.level2, token: "borderColor.level2" },
             ].map((item) => (
               <div key={item.title} style={panelStyle}>
                 <h3 style={{ fontSize: FONT_SIZE.xl, fontWeight: FONT_WEIGHT.semibold, lineHeight: LINE_HEIGHT.relaxed, marginBottom: SPACING["3"] }}>

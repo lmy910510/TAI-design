@@ -51,12 +51,12 @@ export function Loading() {
     boxShadow: SHADOW.xl,
   };
 
-  const ruleBorderColor = tokens.loading.spinner;
+  const ruleBorderColor = tokens.functionalColor.brand.main;
   const helperPillStyle: CSSProperties = {
     width: 20,
     height: 20,
     borderRadius: 999,
-    backgroundColor: tokens.loading.spinner,
+    backgroundColor: tokens.functionalColor.brand.main,
     color: STATIC.white,
     fontSize: 12,
     fontWeight: 700,
@@ -76,12 +76,12 @@ export function Loading() {
             className="flex items-center gap-6 px-12 py-6"
             style={{
               borderRadius: RADIUS["2xl"],
-              backgroundColor: tokens.toast.bg,
+              backgroundColor: tokens.bgColor.secondaryContainer,
               boxShadow: SHADOW.xl,
             }}
           >
-            <SpinnerLine className="w-12 h-12 [animation:spin_0.8s_linear_infinite]" color={tokens.toast.text} />
-            <span className="text-[32px] font-medium leading-none font-['Noto_Sans_S_Chinese']" style={{ color: tokens.toast.text }}>
+            <SpinnerLine className="w-12 h-12 [animation:spin_0.8s_linear_infinite]" color={tokens.textColor.anti} />
+            <span className="text-[32px] font-medium leading-none font-['Noto_Sans_S_Chinese']" style={{ color: tokens.textColor.anti }}>
               加载中...
             </span>
           </div>
@@ -154,8 +154,8 @@ export function Loading() {
         <h2 style={{ margin: 0, fontSize: tokens.typography.title.section.fontSize, fontWeight: tokens.typography.title.section.fontWeight, lineHeight: tokens.typography.title.section.lineHeight, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>类型三：局部加载 / 图标 + 文字</h2>
         <div className="flex items-center justify-center" style={sectionPanelStyle}>
           <div className="flex items-center gap-3">
-            <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.loading.spinner} />
-            <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.loading.text }}>
+            <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.functionalColor.brand.main} />
+            <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.textColor.secondary }}>
               松开加载下一页
             </span>
           </div>
@@ -167,7 +167,7 @@ export function Loading() {
         <div className="flex items-center justify-center gap-24" style={sectionPanelStyle}>
           <div className="flex items-center gap-2 relative">
             <div className="relative p-1" style={{ border: `1px solid ${ruleBorderColor}` }}>
-              <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.loading.spinner} />
+              <SpinnerCircle className="w-9 h-9 [animation:spin_0.8s_linear_infinite]" color={tokens.functionalColor.brand.main} />
               <div className="absolute left-1/2 -bottom-8 -translate-x-1/2 flex flex-col items-center">
                 <div className="w-[1px] h-6" style={{ backgroundColor: ruleBorderColor }} />
                 <div style={helperPillStyle}>1</div>
@@ -175,7 +175,7 @@ export function Loading() {
             </div>
 
             <div className="relative p-1" style={{ border: `1px solid ${ruleBorderColor}` }}>
-              <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.loading.text }}>
+              <span className="text-[28px] font-['Noto_Sans_S_Chinese']" style={{ color: tokens.textColor.secondary }}>
                 松开加载下一页
               </span>
               <div className="absolute left-1/2 -bottom-8 -translate-x-1/2 flex flex-col items-center">
@@ -218,7 +218,7 @@ export function Loading() {
           <li>• 加载反馈应优先表达进度感，避免静止元素造成不确定性。</li>
           <li>• 骨架屏适合结构清晰的内容区，能帮助用户预判即将出现的信息布局。</li>
           <li>• Toast / 模态加载应减少层级噪音，聚焦状态反馈本身。</li>
-          <li>• 页面示例直接复用 `tokens.loading.*` 和背景语义 token。</li>
+          <li>• 页面示例直接复用 `functionalColor.brand.main`、`textColor.secondary` 等公开语义 token。</li>
         </ul>
       </div>
 
@@ -243,11 +243,11 @@ export function Loading() {
               </thead>
               <tbody>
                 {([
-                  { part: "旋转图标", compToken: "tokens.loading.spinner", pubToken: "functionalColor.brand.main", desc: "加载动画主色", color: tokens.loading.spinner },
-                  { part: "提示文字", compToken: "tokens.loading.text", pubToken: "textColor.secondary", desc: "加载提示文案", color: tokens.loading.text },
+                  { part: "旋转图标", compToken: "tokens.functionalColor.brand.main", pubToken: "functionalColor.brand.main", desc: "加载动画主色", color: tokens.functionalColor.brand.main },
+                  { part: "提示文字", compToken: "tokens.textColor.secondary", pubToken: "textColor.secondary", desc: "加载提示文案", color: tokens.textColor.secondary },
                   { part: "遮罩背景", compToken: "tokens.bgColor.overlay", pubToken: "bgColor.overlay", desc: "全局加载遮罩层", color: tokens.bgColor.overlay },
-                  { part: "Toast 背景（全局加载）", compToken: "tokens.toast.bg", pubToken: "bgColor.secondaryContainer", desc: "全局加载弹层背景", color: tokens.toast.bg },
-                  { part: "Toast 文字（全局加载）", compToken: "tokens.toast.text", pubToken: "textColor.anti", desc: "全局加载弹层文字", color: tokens.toast.text },
+                  { part: "Toast 背景（全局加载）", compToken: "tokens.bgColor.secondaryContainer", pubToken: "bgColor.secondaryContainer", desc: "全局加载弹层背景", color: tokens.bgColor.secondaryContainer },
+                  { part: "Toast 文字（全局加载）", compToken: "tokens.textColor.anti", pubToken: "textColor.anti", desc: "全局加载弹层文字", color: tokens.textColor.anti },
                 ] as const).map((row) => (
                   <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
                     <td style={{ padding: "10px 14px", fontWeight: 500, color: tokens.textColor.primary }}>{row.part}</td>
@@ -285,8 +285,8 @@ export function Loading() {
           >
             <h3 className="text-lg font-semibold mb-4">加载动画</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.loading.spinner, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.loading.spinner}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.functionalColor.brand.main, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.functionalColor.brand.main}</div>
               <div>Spinner 颜色（<code>functionalColor.brand.main</code>）</div>
             </div>
           </div>
@@ -300,8 +300,8 @@ export function Loading() {
           >
             <h3 className="text-lg font-semibold mb-4">加载文字</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.loading.text, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.loading.text}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.secondary, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.secondary}</div>
               <div>加载提示文字（<code>textColor.secondary</code>）</div>
             </div>
           </div>
@@ -315,8 +315,8 @@ export function Loading() {
           >
             <h3 className="text-lg font-semibold mb-4">Toast 背景</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.bg, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.toast.bg}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.secondaryContainer, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.bgColor.secondaryContainer}</div>
               <div>全局加载背景（<code>bgColor.secondaryContainer</code>）</div>
             </div>
           </div>
@@ -330,8 +330,8 @@ export function Loading() {
           >
             <h3 className="text-lg font-semibold mb-4">Toast 文字</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.text, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level1}` }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.toast.text}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.anti, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level1}` }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.anti}</div>
               <div>全局加载文字（<code>textColor.anti</code>）</div>
             </div>
           </div>

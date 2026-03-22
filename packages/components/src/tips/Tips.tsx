@@ -75,13 +75,13 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
         paddingBottom: SPACING["3"],
         boxSizing: "border-box",
         borderRadius: RADIUS["2xl"],
-        backgroundColor: tokens.tips.bg,
-        color: tokens.tips.text,
-        border: `1px solid ${tokens.tips.border}`,
+        backgroundColor: tokens.bgColor.container,
+        color: tokens.textColor.primary,
+        border: `1px solid ${tokens.borderColor.level2}`,
         boxShadow: SHADOW.xl,
         ...style,
       }),
-      [tokens.tips.bg, tokens.tips.border, tokens.tips.text, maxWidth, style]
+      [tokens.bgColor.container, tokens.borderColor.level2, tokens.textColor.primary, maxWidth, style]
     );
 
     const arrowStyle = useMemo<CSSProperties>(() => {
@@ -99,7 +99,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             left: SPACING["4"],
             borderLeft: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderRight: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderBottom: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
+            borderBottom: `${TIPS_CONFIG.arrowSize}px solid ${tokens.bgColor.container}`,
           };
         case "left":
           return {
@@ -109,7 +109,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             transform: "translateY(-50%)",
             borderTop: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderBottom: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderLeft: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
+            borderLeft: `${TIPS_CONFIG.arrowSize}px solid ${tokens.bgColor.container}`,
           };
         case "right":
           return {
@@ -119,7 +119,7 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             transform: "translateY(-50%)",
             borderTop: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderBottom: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderRight: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
+            borderRight: `${TIPS_CONFIG.arrowSize}px solid ${tokens.bgColor.container}`,
           };
         case "top":
         default:
@@ -129,10 +129,10 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
             left: SPACING["4"],
             borderLeft: `${TIPS_CONFIG.arrowSize}px solid transparent`,
             borderRight: `${TIPS_CONFIG.arrowSize}px solid transparent`,
-            borderTop: `${TIPS_CONFIG.arrowSize}px solid ${tokens.tips.bg}`,
+            borderTop: `${TIPS_CONFIG.arrowSize}px solid ${tokens.bgColor.container}`,
           };
       }
-    }, [tokens.tips.bg, placement]);
+    }, [tokens.bgColor.container, placement]);
 
     return (
       <div
@@ -167,11 +167,11 @@ export const Tips = forwardRef<HTMLDivElement, TipsProps>(
               border: "none",
               borderRadius: RADIUS.xl,
               background: "transparent",
-              color: tokens.tips.text,
+              color: tokens.textColor.primary,
               cursor: "pointer",
             }}
           >
-            <CloseIcon style={{ fontSize: 24, color: tokens.tips.text }} />
+            <CloseIcon style={{ fontSize: 24, color: tokens.textColor.primary }} />
           </button>
         ) : null}
       </div>

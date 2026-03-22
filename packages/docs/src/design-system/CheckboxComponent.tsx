@@ -40,14 +40,14 @@ export function CheckboxComponent({
         height: SIZE,
         borderRadius: SIZE / 2,
         opacity: disabled ? 0.2 : 1,
-        backgroundColor: checked ? tokens.checkbox.checked : "transparent",
-        border: checked ? "none" : `2px solid ${tokens.checkbox.unchecked}`,
+        backgroundColor: checked ? tokens.borderColor.focus : "transparent",
+        border: checked ? "none" : `2px solid ${tokens.borderColor.level2}`,
         transition: "background-color 150ms ease, border-color 150ms ease",
       }}
       type="button"
       aria-pressed={checked}
     >
-      {checked ? <Checkmark color={tokens.checkbox.checkmark} /> : null}
+      {checked ? <Checkmark color={tokens._meta.mode === "dark" ? "#000000" : "#FFFFFF"} /> : null}
     </button>
   );
 }

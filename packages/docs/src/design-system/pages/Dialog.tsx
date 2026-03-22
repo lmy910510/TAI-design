@@ -241,10 +241,10 @@ export function Dialog() {
         <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary, marginBottom: SPACING["4"] }}>🎨 Token 使用清单</h2>
         <DocTokenTable
           rows={[
-            { part: "弹窗背景", compToken: "tokens.dialog.bg", pubToken: "bgColor.elevated", desc: "弹窗面板背景色", color: tokens.dialog.bg },
-            { part: "标题文字", compToken: "tokens.dialog.title", pubToken: "textColor.primary", desc: "弹窗主标题颜色", color: tokens.dialog.title },
-            { part: "正文文字", compToken: "tokens.dialog.content", pubToken: "textColor.secondary", desc: "弹窗描述/内容文字", color: tokens.dialog.content },
-            { part: "遮罩层", compToken: "tokens.dialog.overlay", pubToken: "bgColor.overlay", desc: "模态遮罩背景", color: tokens.dialog.overlay },
+            { part: "弹窗背景", compToken: "tokens.bgColor.elevated", pubToken: "bgColor.elevated", desc: "弹窗面板背景色", color: tokens.bgColor.elevated },
+            { part: "标题文字", compToken: "tokens.textColor.primary", pubToken: "textColor.primary", desc: "弹窗主标题颜色", color: tokens.textColor.primary },
+            { part: "正文文字", compToken: "tokens.textColor.secondary", pubToken: "textColor.secondary", desc: "弹窗描述/内容文字", color: tokens.textColor.secondary },
+            { part: "遮罩层", compToken: "tokens.bgColor.overlay", pubToken: "bgColor.overlay", desc: "模态遮罩背景", color: tokens.bgColor.overlay },
           ]}
           note={
             <p style={{ fontSize: 13, color: tokens.textColor.secondary, lineHeight: 1.6, margin: 0 }}>
@@ -262,32 +262,32 @@ export function Dialog() {
           <div style={panelStyle} className="p-6">
             <h3 className="text-lg font-semibold mb-4">弹窗背景</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.bg, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.bg}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.bgColor.elevated}</div>
               <div>弹窗面板背景（<code>bgColor.elevated</code>）</div>
             </div>
           </div>
           <div style={panelStyle} className="p-6">
             <h3 className="text-lg font-semibold mb-4">标题文字</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.title, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.title}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.primary, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.primary}</div>
               <div>弹窗标题色（<code>textColor.primary</code>）</div>
             </div>
           </div>
           <div style={panelStyle} className="p-6">
             <h3 className="text-lg font-semibold mb-4">内容文字</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.content, marginBottom: SPACING["2"] }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.content}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.secondary, marginBottom: SPACING["2"] }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.textColor.secondary}</div>
               <div>弹窗正文色（<code>textColor.secondary</code>）</div>
             </div>
           </div>
           <div style={panelStyle} className="p-6">
             <h3 className="text-lg font-semibold mb-4">遮罩层</h3>
             <div className="text-sm" style={{ color: tokens.textColor.secondary }}>
-              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.dialog.overlay, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
-              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.dialog.overlay}</div>
+              <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.overlay, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+              <div className="font-mono" style={{ color: tokens.textColor.primary }}>{tokens.bgColor.overlay}</div>
               <div>蒙层背景色（<code>bgColor.overlay</code>）</div>
             </div>
           </div>

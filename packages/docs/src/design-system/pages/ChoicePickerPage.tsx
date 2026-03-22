@@ -126,9 +126,9 @@ export function ChoicePickerPage() {
                   { part: "未选中边框", token: "borderColor.level2", desc: "二级描边", color: tokens.borderColor.level2 },
                   { part: "Radio 内圈填充", token: "functionalColor.brand.main", desc: "Radio 模式选中指示圆点", color: tokens.functionalColor.brand.main },
                   { part: "Radio 外圈背景", token: "bgColor.elevated", desc: "Radio 外圈容器", color: tokens.bgColor.elevated },
-                  { part: "Checkbox 选中边框/背景", token: "组件级 tokens.checkbox.checked", desc: "复用 Checkbox 的选中 token", color: tokens.checkbox.checked },
-                  { part: "Checkbox 未选中边框", token: "组件级 tokens.checkbox.unchecked", desc: "复用 Checkbox 的未选中 token", color: tokens.checkbox.unchecked },
-                  { part: "Checkbox 对勾", token: "组件级 tokens.checkbox.checkmark", desc: "复用 Checkbox 勾选标记", color: tokens.checkbox.checkmark },
+                  { part: "Checkbox 选中边框/背景", token: "borderColor.focus", desc: "复用 Checkbox 的选中 token", color: tokens.borderColor.focus },
+                  { part: "Checkbox 未选中边框", token: "borderColor.level2", desc: "复用 Checkbox 的未选中 token", color: tokens.borderColor.level2 },
+                  { part: "Checkbox 对勾", token: "固定色 STATIC.white", desc: "复用 Checkbox 勾选标记", color: tokens._meta.mode === "dark" ? "#000000" : "#FFFFFF" },
                 ] as const).map((row) => (
                   <tr key={row.part} style={{ borderBottom: `1px solid ${tokens.borderColor.level1}` }}>
                     <td style={{ padding: `${SPACING["2"]}px ${SPACING["3"]}px`, fontWeight: FONT_WEIGHT.medium, color: tokens.textColor.primary }}>{row.part}</td>
@@ -146,7 +146,7 @@ export function ChoicePickerPage() {
           </div>
           <div style={{ marginTop: SPACING["4"], padding: SPACING["3"], borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.container, border: `1px solid ${tokens.borderColor.level1}` }}>
             <p style={{ fontSize: FONT_SIZE.xs, color: tokens.textColor.secondary, lineHeight: LINE_HEIGHT.relaxed }}>
-              <strong>说明：</strong>ChoicePicker 在 Checkbox 模式下直接复用 <code>tokens.checkbox.*</code> 组件级 token，在 Radio 模式下使用公开语义 token。
+              <strong>说明：</strong>ChoicePicker 在 Checkbox 模式下直接使用 <code>borderColor.focus</code>、<code>borderColor.level2</code> 等公开语义 token，在 Radio 模式下同样使用公开语义 token。
               <br />
               <strong>布局常量：</strong>选项卡圆角 <code>RADIUS.xl</code> (24px)，间距 <code>SPACING["3"]</code> (18px) / <code>SPACING["4"]</code> (24px)。
             </p>

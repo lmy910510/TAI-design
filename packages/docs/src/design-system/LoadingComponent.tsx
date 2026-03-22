@@ -39,14 +39,14 @@ export function LoadingComponent({
       <Loader2
         size={sizeConfig.spinner}
         className="animate-spin"
-        style={{ color: tokens.loading.spinner }}
+        style={{ color: tokens.functionalColor.brand.main }}
         strokeWidth={2.5}
       />
       {showText && (
         <div
           className="font-['Noto_Sans_S_Chinese:Regular',sans-serif] text-center"
           style={{
-            color: tokens.loading.text,
+            color: tokens.textColor.secondary,
             fontSize: `${sizeConfig.text}px`,
             marginTop: `${sizeConfig.gap}px`,
             lineHeight: 1.5,

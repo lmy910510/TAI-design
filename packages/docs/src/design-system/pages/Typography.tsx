@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import { RADIUS, SPACING, useTheme } from "@tai-design/components";
 import { DocPageHeader } from "../DocComponents";
-import type { TypographyStyleToken } from "@tai-design/components/src/tokens/semanticTokens";
+import type { TypographyStyleToken } from "@tai-design/components";
 
 // ============================================================================
 // 语义排版 Token 数据定义

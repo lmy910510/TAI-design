@@ -136,9 +136,9 @@ export function Push() {
             <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>🎨 Token 使用清单</h2>
             <DocTokenTable
               rows={[
-                { part: "卡片背景", compToken: "tokens.push.bg", pubToken: "bgColor.elevated", desc: "推送卡片容器背景", color: tokens.push.bg },
-                { part: "标题文字", compToken: "tokens.push.title", pubToken: "textColor.primary", desc: "推送标题", color: tokens.push.title },
-                { part: "内容文字", compToken: "tokens.push.content", pubToken: "textColor.secondary", desc: "推送描述正文", color: tokens.push.content },
+                { part: "卡片背景", compToken: "tokens.bgColor.elevated", pubToken: "bgColor.elevated", desc: "推送卡片容器背景", color: tokens.bgColor.elevated },
+                { part: "标题文字", compToken: "tokens.textColor.primary", pubToken: "textColor.primary", desc: "推送标题", color: tokens.textColor.primary },
+                { part: "内容文字", compToken: "tokens.textColor.secondary", pubToken: "textColor.secondary", desc: "推送描述正文", color: tokens.textColor.secondary },
                 { part: "成功图标", compToken: "tokens.functionalColor.success.main", pubToken: "functionalColor.success.main", desc: "success 语义色", color: tokens.functionalColor.success.main },
                 { part: "警告图标", compToken: "tokens.functionalColor.warning.main", pubToken: "functionalColor.warning.main", desc: "warning 语义色", color: tokens.functionalColor.warning.main },
                 { part: "错误图标", compToken: "tokens.functionalColor.error.main", pubToken: "functionalColor.error.main", desc: "error 语义色", color: tokens.functionalColor.error.main },
@@ -167,8 +167,8 @@ export function Push() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>卡片背景</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.push.bg, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.push.bg}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.elevated, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.bgColor.elevated}</div>
                   <div>Push 卡片背景（<code>bgColor.elevated</code>）</div>
                 </div>
               </div>
@@ -182,8 +182,8 @@ export function Push() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>标题</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.push.title, marginBottom: SPACING["2"] }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.push.title}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.primary, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.textColor.primary}</div>
                   <div>Push 标题色（<code>textColor.primary</code>）</div>
                 </div>
               </div>
@@ -197,8 +197,8 @@ export function Push() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>内容</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.push.content, marginBottom: SPACING["2"] }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.push.content}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.secondary, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.textColor.secondary}</div>
                   <div>Push 内容色（<code>textColor.secondary</code>）</div>
                 </div>
               </div>

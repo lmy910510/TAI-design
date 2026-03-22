@@ -129,7 +129,7 @@ export const Loading = ({
     const textStyle = useMemo<CSSProperties>(
       () => ({
         fontSize: sizeConfig.textSize,
-        color: tokens.loading.text,
+        color: tokens.textColor.secondary,
         lineHeight: tokens.typography.body.primary.lineHeight,
       }),
       [sizeConfig, tokens]
@@ -140,7 +140,7 @@ export const Loading = ({
       <Spinner
         size={sizeConfig.spinnerSize}
         strokeWidth={sizeConfig.strokeWidth}
-        color={tokens.loading.spinner}
+        color={tokens.functionalColor.brand.main}
       />
       {text && <span style={textStyle}>{text}</span>}
     </div>

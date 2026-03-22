@@ -45,6 +45,10 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
       'motion/react': 'framer-motion',
     },
+    dedupe: ['react', 'react-dom'],
+  },
+  optimizeDeps: {
+    exclude: ['@tai-design/components'],
   },
   server: {
     port: 3000,

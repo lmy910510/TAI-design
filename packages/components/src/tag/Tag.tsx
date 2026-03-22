@@ -85,13 +85,45 @@ export const Tag = ({
   const sizeConfig = SIZE_CONFIG[size];
 
   const colorConfig = useMemo(() => {
-    const tagColors = tokens.tag[color];
-    return {
-      main: tagColors.main,
-      bg6: tagColors[6],
-      bg12: tagColors[12],
-      bg30: tagColors[30],
-    };
+    // 直接从公开语义 token 映射 Tag 色阶，消除组件级中间层
+    switch (color) {
+      case "danger":
+        return {
+          main: tokens.functionalColor.error.main,
+          bg6: tokens.bgColor.errorLight,
+          bg12: tokens.bgColor.errorLight,
+          bg30: tokens.functionalColor.error.disabled,
+        };
+      case "notice":
+        return {
+          main: tokens.functionalColor.warning.main,
+          bg6: tokens.bgColor.warningLight,
+          bg12: tokens.bgColor.warningLight,
+          bg30: tokens.functionalColor.warning.disabled,
+        };
+      case "success":
+        return {
+          main: tokens.functionalColor.success.main,
+          bg6: tokens.bgColor.successLight,
+          bg12: tokens.bgColor.successLight,
+          bg30: tokens.functionalColor.success.disabled,
+        };
+      case "info":
+        return {
+          main: tokens.functionalColor.info.main,
+          bg6: tokens.bgColor.infoLight,
+          bg12: tokens.bgColor.infoLight,
+          bg30: tokens.functionalColor.info.disabled,
+        };
+      case "default":
+      default:
+        return {
+          main: tokens.textColor.tertiary,
+          bg6: tokens.bgColor.infoLight,
+          bg12: tokens.bgColor.infoLight,
+          bg30: tokens.functionalColor.info.disabled,
+        };
+    }
   }, [tokens, color]);
 
   const containerStyle = useMemo<CSSProperties>(() => {

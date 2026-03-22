@@ -1,0 +1,137 @@
+---
+name: tai-theme-compliance-audit
+description: 当需要审查或修正组件是否符合 TAI Design 设计规范时使用；覆盖间距、颜色、圆角、阴影、图标、排版和暗黑模式一致性检查。
+---
+
+# TAI Theme Compliance Audit
+
+## Overview
+
+这个 skill 用于审核或修复 TAI Design 中的 UI 代码是否符合设计规范，重点关注 token 使用、主题适配、组件复用和视觉一致性。
+当用户要求"检查规范""修主题适配""去掉硬编码颜色""确认深浅色一致""看看这个页面是否符合设计系统""检查排版 token"时，应使用本 skill。
+
+## Audit Scope
+
+适用范围包括：
+
+- `packages/components/src/*`
+- `packages/docs/src/*`
+- 任何新增或改动过的 React 组件、文档页、组合展示组件
+- 影响颜色、间距、圆角、阴影、图标容器、排版或暗色模式的改动
+
+## Audit Workflow
+
+### 1. 间距检查
+
+- 所有间距优先来自 `SPACING`。
+- 间距值必须是 6 的倍数。
+- 出现 `10`、`15`、`20` 这类裸值时，默认视为高风险问题，需要替换成 token 或按规范重构。
+
+### 2. 颜色与主题检查
+
+- 颜色应通过 `useTheme()` 或组件内建颜色 token 获取。
+- 禁止新增硬编码颜色值，例如 `#333`、`gray`、随手写的 `rgba(...)`。
+- 对于状态色，优先使用 `functionalColor.*` 或组件级 token。
+- 审核时必须同时考虑浅色与暗色模式，不允许只在一种主题下成立。
+- **禁止使用 `_meta.brandColor`**，应使用 `bgColor.brand` 或 `functionalColor.brand.main`。
+- **禁止裸字符串 `"transparent"`**，应使用 `STATIC.transparent`。
+- **禁止裸字符串 `"white"` / `stroke="white"`**，应使用 `STATIC.white` 或 `textColor.anti`。
+- **公开颜色 token 只有 4 类**：`textColor`、`bgColor`、`borderColor`、`functionalColor`。不允许为新组件新增颜色 token 包装层。
+
+### 3. 排版 token 检查
+
+- **组件代码**中所有排版必须使用 `tokens.typography.*` 语义 token。
+- **docs 页面**的排版也必须使用 `tokens.typography.*`，或使用 `DocComponents` 骨架组件（已内置正确排版）。
+- 禁止裸数值如 `fontSize: 14`、`fontWeight: 600`、`lineHeight: 1.5`。
+- 禁止 Tailwind 文字类：`text-sm`、`text-lg`、`font-bold` 等。
+- **旧常量 `FONT_SIZE` / `FONT_WEIGHT` / `LINE_HEIGHT`** 仅在 `tokens/index.ts` 保留为过渡期兼容，新代码不应使用。
+
+#### 排版语义 token 速查
+
+| 类别 | Token 路径 | 字号/字重/行高 | 典型用途 |
+|------|-----------|--------------|---------|
+| title | `typography.title.page` | 42/600/1.2 | 页面大标题 |
+| title | `typography.title.section` | 36/600/1.3 | 区块标题、弹窗标题 |
+| title | `typography.title.card` | 32/500/1.5 | 卡片标题、Toast |
+| title | `typography.title.subsection` | 30/500/1.4 | 小标题、输入框文字 |
+| body | `typography.body.primary` | 28/400/1.4 | 主正文、列表描述 |
+| body | `typography.body.secondary` | 26/400/1.5 | 次正文、ActionSheet 描述 |
+| body | `typography.body.long` | 28/400/1.6 | Comment 正文、长文本 |
+| label | `typography.label.buttonLarge` | 32/500/1 | 大按钮文字 |
+| label | `typography.label.tag` | 24/500/1 | Tag 文字 |
+| label | `typography.label.badge` | 24/600/1 | Badge 文字 |
+| label | `typography.label.input` | 32/400/1.4 | 输入框文字 |
+| meta | `typography.meta.caption` | 24/400/1.5 | 说明文字 |
+| meta | `typography.meta.time` | 22/400/1 | 时间标签 |
+| meta | `typography.meta.footnote` | 18/400/1 | 脚注、倍速标签 |
+| display | `typography.display.hero` | 42/700/1.2 | 全屏标题 |
+| display | `typography.display.numeric` | 24/600/1.5 | 数据数字 |
+
+### 4. 圆角与阴影检查
+
+- 圆角统一使用 `RADIUS`。
+- 阴影统一使用 `SHADOW`。
+- 不要为了局部效果随手写一个新的圆角或阴影值。
+
+### 5. 组件复用检查
+
+- 优先使用 `@tai-design/components` 中已有基础组件。
+- 组合组件可以负责布局，但不应复制基础组件的视觉实现。
+- 如果发现 docs 层或业务层手写了一套与基础组件重复的样式，优先建议复用。
+
+### 6. 文档骨架组件检查
+
+- docs 页面必须使用 `DocComponents.tsx` 中的共享骨架组件（`DocPageHeader`、`DocSection`、`DocPanel`、`DocTokenTable` 等）。
+- 不允许手写等价的标题/区块/表格样式。
+
+### 7. 图标与图标容器检查
+
+- 图标优先使用 `tdesign-icons-react`。
+- 图标颜色要有足够对比度，不能看起来像误禁用。
+- 需要背景容器时，默认走克制的冷灰体系；只有明确语义场景才使用彩色强调。
+- 同一区域的图标容器风格应统一，不要一块区域里混多套视觉语言。
+
+### 8. 文档页一致性检查
+
+- docs 页面同样受规范约束，不是"展示层就可以放宽"。
+- 页面文案必须与真实组件表现一致。
+- 如果这次审计涉及组件视觉，需同时检查调用方与预览，避免只修单点。
+- **docs 页面的文字样式也必须使用 `tokens.typography.*`，不允许 Tailwind 文字类、裸数值或旧排版常量**。
+
+## Fast Checklist
+
+提交前至少确认以下问题：
+
+- [ ] 是否使用了 `SPACING` / `RADIUS` / `SHADOW`
+- [ ] 是否通过 `useTheme()` 或组件 token 取色
+- [ ] 是否支持浅色与暗色模式
+- [ ] 是否复用了现有组件而不是重复造轮子
+- [ ] 是否存在无语义的彩色滥用
+- [ ] 是否存在硬编码颜色或非规范尺寸
+- [ ] **排版是否全部使用 `tokens.typography.*`（无裸数值、无 Tailwind 类、无旧常量）**
+- [ ] **是否存在 `_meta.brandColor`、`"transparent"` 裸字符串、`"white"` 裸字符串**
+- [ ] **docs 页面是否使用了 DocComponents 骨架组件**
+- [ ] 是否有文档页、包装组件或调用方与真实组件不一致
+
+## Common Pitfalls
+
+- docs 页面为了快，直接写一套硬编码颜色
+- 间距改动只看视觉顺眼，没有回到 6 倍数体系
+- 图标容器为了"更好看"滥用彩色
+- 深色模式没有真正验证，只是沿用浅色样式
+- 组件库已提供现成组件，但页面仍手写按钮、开关、弹窗样式
+- **组件代码使用旧排版常量 `FONT_SIZE` 而非 `tokens.typography.*`**
+- **docs 页面使用 Tailwind 文字类而非 `tokens.typography.*`**
+- **组件内有 `stroke="white"` 等硬编码颜色字符串未被替换**
+- **`_meta.brandColor` 被当成公开 token 使用**
+- **docs 页面未使用 DocComponents 骨架组件，手写了等价的标题/区块样式**
+
+## Expected Output
+
+审计结果应明确给出：
+
+- 哪些文件符合规范
+- 哪些文件不符合规范
+- 每个问题对应的规则项（含排版 token 规则）
+- 建议的修复方向
+- 如果已修复，说明修复后是否完成构建和预览确认

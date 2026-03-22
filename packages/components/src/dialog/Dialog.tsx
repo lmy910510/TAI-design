@@ -130,7 +130,7 @@ export const Dialog = ({
       display: "flex",
       alignItems: "center",
       justifyContent: "center",
-      backgroundColor: overlay ? tokens.dialog.overlay : "transparent",
+      backgroundColor: overlay ? tokens.bgColor.overlay : "transparent",
       zIndex: 1000,
     }),
     [overlay, tokens]
@@ -142,7 +142,7 @@ export const Dialog = ({
       padding: sizeConfig.padding,
       paddingBottom: sizeConfig.padding - 12,
       borderRadius: RADIUS["4xl"],
-      backgroundColor: tokens.dialog.bg,
+      backgroundColor: tokens.bgColor.elevated,
       boxShadow: SHADOW.xl,
       display: "flex",
       flexDirection: "column",
@@ -155,7 +155,7 @@ export const Dialog = ({
     () => ({
       fontSize: tokens.typography.title.section.fontSize,
       fontWeight: tokens.typography.title.section.fontWeight,
-      color: tokens.dialog.title,
+      color: tokens.textColor.primary,
       textAlign: "center",
       lineHeight: tokens.typography.title.section.lineHeight,
     }),
@@ -165,7 +165,7 @@ export const Dialog = ({
   const contentStyle = useMemo<CSSProperties>(
     () => ({
       fontSize: tokens.typography.body.primary.fontSize,
-      color: tokens.dialog.content,
+      color: tokens.textColor.secondary,
       textAlign: "center",
       lineHeight: tokens.typography.body.primary.lineHeight,
     }),

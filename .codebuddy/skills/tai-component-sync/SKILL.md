@@ -1,0 +1,138 @@
+---
+name: tai-component-sync
+description: 当修改组件、token、样式、交互或文档展示时使用；在 TAI Design 中同步组件源码、调用方、文档页和预览产物，避免只改一半。
+---
+
+# TAI Component Sync
+
+## Overview
+
+这个 skill 用于处理 TAI Design 中任何会影响组件真实表现的改动，确保 `packages/components`、`packages/docs`、组合展示组件和预览产物保持单一事实源。
+当用户提到"改组件样式""微调 token""修文档预览""某个组件调用后样式不一致""弹窗里引用的按钮不对"这类请求时，应优先加载本 skill。
+
+## When to Use
+
+- 调整 `packages/components/src/*` 下的组件实现、样式、类型或交互
+- 调整 `packages/components/src/tokens/*` 中影响组件外观的 token
+- 修改 `packages/docs/src/design-system/pages/*` 的展示文案、预览态或交互控制
+- 修改 `packages/docs/src/design-system/*Component.tsx` 这类文档包装/组合组件
+- 用户明确要求"组件本身 + 预览 + 调用方"全部同步
+- 用户反馈"文档写的是 A，实际渲染是 B"
+
+## Repository Map
+
+- `packages/components/src/<component>/`：组件源码和类型
+- `packages/components/src/tokens/`：颜色、语义 token、迁移兼容层
+- `packages/components/src/tokens/index.ts`：公开排版 token（`FONT_SIZE` / `FONT_WEIGHT` / `LINE_HEIGHT`，过渡期兼容）、`SPACING`、`RADIUS`、`SHADOW`
+- `packages/components/src/tokens/semanticTokens.ts`：颜色语义 token、`PRESSED_OVERLAY`、`STATIC`、`TypographyTokens`（`tokens.typography.*`）
+- `packages/components/src/tokens/primitives.ts`：primitive 色板（不应直接在组件/页面中使用）
+- `packages/components/src/index.ts`：组件库公开导出入口
+- `packages/docs/src/design-system/pages/`：文档页面
+- `packages/docs/src/design-system/DocComponents.tsx`：共享文档骨架组件（`DocPageHeader`、`DocSection`、`DocPanel`、`DocTokenTable` 等）
+- `packages/docs/src/design-system/*Component.tsx`：文档展示/组合组件
+- `packages/docs/src/main.tsx`：文档路由入口
+
+## Token 体系要点
+
+### 颜色
+- 公开语义颜色只有 4 类：`textColor`、`bgColor`、`borderColor`、`functionalColor`
+- 不允许为新组件创建组件级颜色 token 包装层
+- 组件内部实现可使用 primitive（`STATIC.*`、`SHADOW.*` 等），但不向文档/用户暴露
+
+### 排版
+- **组件代码**统一使用 `tokens.typography.*`（如 `tokens.typography.title.page.fontSize`）
+- **旧常量** `FONT_SIZE` / `FONT_WEIGHT` / `LINE_HEIGHT` 保留在 `tokens/index.ts` 供过渡期
+- 静态配置常量（编译时）使用硬编码数值 + 注释标注对应语义 token
+- 图标 `fontSize` 属性（非排版语义）保持硬编码数值
+
+### 5 大排版类别
+| 类别 | 路径前缀 | 包含 token |
+|------|---------|-----------|
+| title | `tokens.typography.title.*` | page(42/600/1.2)、section(36/600/1.3)、card(32/500/1.5)、subsection(30/500/1.4) |
+| body | `tokens.typography.body.*` | primary(28/400/1.4)、secondary(26/400/1.5)、long(28/400/1.6) |
+| label | `tokens.typography.label.*` | buttonLarge、buttonMedium、buttonSmall、buttonMini、tag、tab、badge、input |
+| meta | `tokens.typography.meta.*` | caption(24/400/1.5)、time(22/400/1)、footnote(18/400/1) |
+| display | `tokens.typography.display.*` | hero(42/700/1.2)、numeric(24/600/1.5) |
+
+## Sync Workflow
+
+### 1. 找到真实样式源
+
+- 先确认样式的单一事实源是在组件本体、token 还是组合组件。
+- 如果发现重复定义，优先收敛到组件包或统一 token，避免 docs 层自己再画一份样式。
+- 同步检查相关类型文件，例如 `Button.types.ts`。
+
+### 2. 找全调用链
+
+- 搜索直接和间接使用该组件的地方，至少覆盖：
+  - 组件包内部复用
+  - `packages/docs/src/design-system/*Component.tsx`
+  - `packages/docs/src/design-system/pages/*`
+  - 路由入口、组合展示页
+- 对"文档演示组件自己实现一套样式"的情况保持高警惕。
+
+### 3. 同步调用方和文案
+
+- 如果底层组件行为变了，更新上层包装组件和文档描述。
+- 文档页中的状态文案必须与真实渲染一致，例如"无描边""轻描边""透明背景"。
+- 优先让展示组件直接复用基础组件，而不是再维护一套原生 DOM 样式。
+
+### 4. 输出 Token 使用清单
+
+每个组件同步完成后，**必须输出该组件真实使用的全部公开 token 清单**，分两类：
+
+#### 颜色 token
+列出所有使用的 `textColor.*`、`bgColor.*`、`borderColor.*`、`functionalColor.*`、组件级 token（如 `input.*`、`checkbox.*`）和静态色（`STATIC.*`、`PRESSED_OVERLAY`）。
+
+#### 排版 token
+列出所有使用的 `tokens.typography.*` 语义路径。
+
+格式示例：
+```
+## Button Token 清单
+
+### 颜色 token
+- `bgColor.brand` — primary 变体背景
+- `textColor.anti` — primary 变体文字
+- `STATIC.transparent` — ghost 变体背景
+...
+
+### 排版 token
+- `tokens.typography.label.buttonLarge` — xlarge 尺寸文字
+- `tokens.typography.label.buttonMedium` — large 尺寸文字
+...
+```
+
+### 5. 重建预览
+
+- 在仓库根目录执行：
+  - `pnpm build`
+  - 如需本地持续联调可用 `pnpm dev`
+  - 仅预览文档可用 `pnpm preview`
+- 不能只改源码不重建预览产物。
+
+### 6. 完成前核对
+
+只有下面四层都一致，才能对用户说"已改好"：
+
+1. 组件源码、类型、token 已同步
+2. 已接入该组件的调用方和包装组件已同步
+3. 文档预览已重建，文案与实际渲染一致
+4. **Token 使用清单已输出**
+
+## Common Failure Modes
+
+- `token` 前后定义打架，后面的返回值把前面的修复覆盖掉
+- docs 包装组件未复用基础组件，导致预览与真实组件分叉
+- 只改了 `packages/components`，没改 `pages/*` 或 `*Component.tsx`
+- 文案还写旧行为，例如"无描边"但真实仍有边框
+- 构建未刷新，预览仍在看旧产物
+- **没有输出 token 使用清单，用户无法验证改动是否正确**
+- **组件本体和 docs 页面的排版 token 不一致**
+
+## Response Contract
+
+- 如果只完成了一部分，必须明确说明哪一层未同步
+- 不得把"源码已改但未重建/未核对调用方"的状态表述为"已改好"
+- 汇报结果时优先说明：源组件、调用方、预览 是否都完成
+- **必须附上每个组件的 token 使用清单**

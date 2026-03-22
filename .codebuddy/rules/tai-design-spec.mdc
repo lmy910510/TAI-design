@@ -2,7 +2,7 @@
 description: 
 alwaysApply: true
 enabled: true
-updatedAt: 2026-03-18T13:13:28.256Z
+updatedAt: 2026-03-21T16:00:00.000Z
 provider: 
 ---
 
@@ -46,12 +46,12 @@ provider:
 import { useTheme } from '@tai-design/components';
 
 function MyComponent() {
-  const { colors, isDark } = useTheme();
+  const { tokens, isDark } = useTheme();
   
   return (
     <div style={{ 
-      backgroundColor: colors.bg.primary,
-      color: colors.text.primary 
+      backgroundColor: tokens.bgColor.container,
+      color: tokens.textColor.primary 
     }}>
       ...
     </div>
@@ -59,69 +59,69 @@ function MyComponent() {
 }
 ```
 
-### 2.2 语义色表
+### 2.2 公开语义颜色（仅 4 类）
 
-#### 文字颜色 `colors.text`
+公开颜色 token 只有 4 类，**不允许为新组件创建组件级颜色 token 包装层**：
+
+#### 文字颜色 `tokens.textColor`
 | Token | 用途 |
 |-------|------|
-| `primary` | 主要文字 (92% 不透明度) |
-| `secondary` | 次要文字 (72%) |
-| `tertiary` | 辅助文字 (60%) |
-| `disabled` | 禁用文字 (30%) |
-| `placeholder` | 占位符 (42%) |
-| `inverse` | 反色文字 |
+| `primary` | 主要文字（标题、正文） |
+| `secondary` | 次要文字（副标题、说明文案） |
+| `tertiary` | 辅助文字（时间戳、备注） |
+| `disabled` | 禁用态文字 |
+| `placeholder` | 占位符文字 |
+| `anti` | 反色文字（深色背景上） |
+| `brand` | 品牌色文字 |
+| `link` | 链接文字 |
 
-#### 背景颜色 `colors.bg`
+#### 背景颜色 `tokens.bgColor`
 | Token | 用途 |
 |-------|------|
-| `primary` | 主背景（浅色白/深色 #1A1D28） |
-| `secondary` | 次级背景 |
-| `tertiary` | 三级背景 |
-| `elevated` | 悬浮层背景 |
-| `overlay` | 遮罩层 |
+| `page` | 页面主背景 |
+| `container` | 容器背景 |
+| `secondaryContainer` | 次级容器背景 |
+| `component` | 组件背景 |
+| `specialComponent` | 特殊组件背景（Button/Input 等） |
+| `elevated` | 悬浮卡片、弹出层背景 |
+| `overlay` | 模态遮罩层 |
+| `brand` | 品牌色背景 |
 
-#### 边框颜色 `colors.border`
+#### 边框颜色 `tokens.borderColor`
 | Token | 用途 |
 |-------|------|
-| `default` | 默认边框 |
-| `subtle` | 细微边框 |
-| `hover` | 悬停边框 |
-| `focus` | 聚焦边框 |
+| `level1` | 主要边框 |
+| `level2` | 次级边框 |
+| `brand` | 品牌色边框 |
 
-#### 功能色 `colors.functional`
-| Token | 色值 | 用途 |
-|-------|------|------|
-| `danger.main` | #ff293b | 危险/警示 |
-| `notice.main` | #fa6800 | 提示/警告 |
-| `success.main` | #00b578 | 成功/积极 |
-| `info.main` | #697181 | 常规/信息 |
-
-每个功能色都有透明度变体：`6`, `12`, `24`, `30`
-
-#### 品牌色 `colors.brand`
-| Token | 色值 |
+#### 功能色 `tokens.functionalColor`
+| Token | 用途 |
 |-------|------|
-| `primary` | #1A1D28 |
+| `danger.main` | 危险/警示 |
+| `warning.main` | 提示/警告 |
+| `success.main` | 成功/积极 |
+| `info.main` | 常规/信息 |
+| `brand.main` | 品牌色 |
 
-#### 固定色 `colors.static`
-| Token | 色值 |
-|-------|------|
-| `white` | #FFFFFF |
-| `black` | #000000 |
-| `transparent` | transparent |
+每个功能色都有 `light` 透明度变体。
 
-### 2.3 组件级颜色
+### 2.3 组件级颜色（已删除，不得恢复）
 
-组件已内置颜色适配，直接使用：
-- `colors.button.primary/secondary/tertiary/ghost/danger`
-- `colors.input`
-- `colors.dialog`
-- `colors.toast`
-- `colors.switch`
-- `colors.checkbox`
-- `colors.tag`
-- `colors.list`
-- `colors.loading`
+历史存量的 10 个组件级 token 已于 2026-03-22 彻底移除。以下 token 路径**不再存在**，不得在任何代码中引用：
+
+~~`tokens.switch`、`tokens.checkbox`、`tokens.input`、`tokens.dialog`、`tokens.toast`、`tokens.tips`、`tokens.push`、`tokens.list`、`tokens.loading`、`tokens.tag`~~
+
+所有组件已改为直接使用 `textColor`、`bgColor`、`borderColor`、`functionalColor` 4 类公开语义 token。
+
+### 2.4 固定色
+
+组件内部实现可使用 `STATIC` 常量，但**不应在文档和用户文案中暴露**：
+
+| Token | 值 |
+|-------|-----|
+| `STATIC.white` | #FFFFFF |
+| `STATIC.black` | #000000 |
+| `STATIC.transparent` | transparent |
 
 ---
 
@@ -159,7 +159,62 @@ function MyComponent() {
 
 ---
 
-## 5. 图标 (Icons)
+## 5. 排版 (Typography)
+
+**原则：使用 `tokens.typography.*` 语义 token，按内容角色选择**
+
+### 5.1 获取排版 token
+
+```tsx
+const { tokens } = useTheme();
+
+<h1 style={{
+  fontSize: tokens.typography.title.page.fontSize,
+  fontWeight: tokens.typography.title.page.fontWeight,
+  lineHeight: tokens.typography.title.page.lineHeight,
+  color: tokens.textColor.primary,
+}}>
+  页面标题
+</h1>
+```
+
+### 5.2 语义排版 token 表
+
+| 类别 | Token 路径 | 字号/字重/行高 | 典型用途 |
+|------|-----------|--------------|---------|
+| title | `typography.title.page` | 42/600/1.2 | 页面大标题 |
+| title | `typography.title.section` | 36/600/1.3 | 区块标题、弹窗标题 |
+| title | `typography.title.card` | 32/500/1.5 | 卡片标题、Toast |
+| title | `typography.title.subsection` | 30/500/1.4 | 小标题 |
+| body | `typography.body.primary` | 28/400/1.4 | 主正文、列表描述 |
+| body | `typography.body.secondary` | 26/400/1.5 | 次正文 |
+| body | `typography.body.long` | 28/400/1.6 | 长文本 |
+| label | `typography.label.buttonLarge` | 32/500/1 | 大按钮 |
+| label | `typography.label.buttonMedium` | 30/500/1 | 中按钮 |
+| label | `typography.label.buttonSmall` | 28/500/1 | 小按钮 |
+| label | `typography.label.buttonMini` | 24/500/1 | 迷你按钮 |
+| label | `typography.label.tag` | 24/500/1 | Tag 文字 |
+| label | `typography.label.tab` | 28/400→600/1 | Tabs 文字 |
+| label | `typography.label.badge` | 24/600/1 | Badge 文字 |
+| label | `typography.label.input` | 32/400/1.4 | 输入框文字 |
+| meta | `typography.meta.caption` | 24/400/1.5 | 说明文字 |
+| meta | `typography.meta.time` | 22/400/1 | 时间标签 |
+| meta | `typography.meta.footnote` | 18/400/1 | 脚注 |
+| display | `typography.display.hero` | 42/700/1.2 | 全屏标题 |
+| display | `typography.display.numeric` | 24/600/1.5 | 数据数字 |
+
+### 5.3 旧排版常量（过渡期兼容）
+
+`FONT_SIZE`、`FONT_WEIGHT`、`LINE_HEIGHT` 保留在 `tokens/index.ts`，**新代码不应使用**。
+
+### 5.4 特殊情况
+
+- 静态配置常量（编译时）：使用硬编码数值 + 注释标注对应语义 token
+- 图标 `fontSize` 属性（非排版语义）：保持硬编码数值
+
+---
+
+## 6. 图标 (Icons)
 
 **使用 TDesign Icons**
 
@@ -167,10 +222,10 @@ function MyComponent() {
 import { IconName } from 'tdesign-icons-react';
 
 // 颜色跟随 token
-<IconName style={{ color: colors.text.primary }} />
+<IconName style={{ color: tokens.textColor.primary }} />
 ```
 
-### 5.1 图标容器设计原则
+### 6.1 图标容器设计原则
 
 **核心原则：克制、优雅、简约**
 
@@ -190,40 +245,13 @@ import { IconName } from 'tdesign-icons-react';
 | 圆角 | 18px | 18px |
 | 图标大小 | 42px | 42px |
 
-```tsx
-import { blueGray } from '@/data/colorTokens';
-import { UserCircleIcon } from 'tdesign-icons-react';
-
-// ✅ 默认：冷灰色调，克制优雅
-<div style={{
-  width: 72,
-  height: 72,
-  backgroundColor: isDark ? blueGray[90] : blueGray[10],
-  color: isDark ? blueGray[30] : blueGray[80],
-  borderRadius: 18,
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center'
-}}>
-  <UserCircleIcon style={{ fontSize: 42 }} />
-</div>
-
-// ✅ 有语义时：可用彩色强调（如危险操作）
-<div style={{
-  backgroundColor: isDark ? 'rgba(255, 41, 59, 0.1)' : status.red[0],
-  color: status.red[50]
-}}>
-  <DeleteIcon style={{ fontSize: 42 }} />
-</div>
-```
-
 **注意事项：**
 - 图标颜色要足够深，避免看起来像置灰/禁用态
 - 不要为了好看随意使用彩色，彩色应该有意义
 
 ---
 
-## 6. 组件优先
+## 7. 组件优先
 
 **优先使用 `@tai-design/components` 已有组件：**
 
@@ -235,16 +263,39 @@ import { UserCircleIcon } from 'tdesign-icons-react';
 - `Tag` - 标签
 - `Badge` - 徽标
 - `Card` - 卡片（gray/white/elevated/transparent）
+- `Divider` - 分割线
 - `List` / `ListItem` - 列表
+- `Comment` - 评论
+- `Tabs` - 标签页
+- `Image` - 图片
+- `Video` - 视频
+- `AudioPlayer` - 音频播放器
+- `ChoicePicker` - 选择器（radio/checkbox 模式）
 - `Dialog` - 弹窗
 - `Toast` - 轻提示
+- `Tips` - 提示气泡
+- `Push` - 推送通知
 - `Loading` - 加载
 - `ActionSheet` - 动作面板
 - `ThemeProvider` / `useTheme` - 主题
 
 ---
 
-## 7. 主题适配
+## 8. 文档页骨架
+
+**docs 页面必须使用 `DocComponents.tsx` 共享组件：**
+
+- `DocPageHeader` - 页面头部（分类标签 + 标题 + 描述）
+- `DocSection` - 区块容器（h2 标题 + children）
+- `DocPanel` - 说明卡片（elevated/subtle/accent/code/notice/success）
+- `DocSubsection` - h3 级别子区块
+- `DocTokenTable` - Token 使用清单表格
+- `DocGuidePanel` - 设计规范/使用指南面板
+- `DocInlineCode` - 行内代码
+
+---
+
+## 9. 主题适配
 
 **所有 UI 必须同时支持浅色和暗色模式：**
 
@@ -256,11 +307,11 @@ import { UserCircleIcon } from 'tdesign-icons-react';
 
 // 子组件自动适配
 function Card() {
-  const { colors } = useTheme();
+  const { tokens } = useTheme();
   return (
     <div style={{ 
-      background: colors.bg.elevated,
-      color: colors.text.primary 
+      background: tokens.bgColor.elevated,
+      color: tokens.textColor.primary 
     }}>
       ...
     </div>
@@ -270,12 +321,19 @@ function Card() {
 
 ---
 
-## 8. 禁止事项
+## 10. 禁止事项
 
 - ❌ 使用非 6 倍数的间距值（如 10px, 15px, 20px）
 - ❌ 使用硬编码颜色值（如 `#333`, `gray`）
+- ❌ 使用 `"transparent"` / `"white"` / `"black"` 裸字符串（应用 `STATIC.*`）
 - ❌ 使用非 token 定义的圆角值
 - ❌ 不考虑暗色模式的颜色写法
 - ❌ 重复造轮子（已有组件不用）
 - ❌ 无语义地滥用彩色（彩色应有明确含义）
 - ❌ 同一列表/区域内图标样式杂乱不统一
+- ❌ 使用旧排版常量 `FONT_SIZE` / `FONT_WEIGHT` / `LINE_HEIGHT`（应用 `tokens.typography.*`）
+- ❌ 使用裸数值排版（`fontSize: 14`、`fontWeight: 600`）
+- ❌ 使用 Tailwind 文字类（`text-lg`、`font-bold`）
+- ❌ 为新组件创建组件级颜色 token 包装层
+- ❌ 在文档中暴露 primitive 常量名（`STATIC.*`、`SHADOW.*`）
+- ❌ docs 页面手写标题/区块/表格样式（应用 DocComponents 骨架）

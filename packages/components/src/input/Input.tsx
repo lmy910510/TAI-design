@@ -137,9 +137,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         paddingLeft: INPUT_CONFIG.paddingX,
         paddingRight: INPUT_CONFIG.paddingX,
         borderRadius: INPUT_CONFIG.radius,
-        backgroundColor: tokens.input.bg,
+        backgroundColor: tokens.bgColor.elevated,
         transition: "box-shadow 150ms ease",
-        boxShadow: isFocused ? `inset 0 0 0 2px ${tokens.input.ring}` : "none",
+        boxShadow: isFocused ? `inset 0 0 0 2px ${tokens.borderColor.focus}` : "none",
         ...style,
       }),
       [tokens, isFocused, style]
@@ -154,8 +154,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         outline: "none",
         backgroundColor: STATIC.transparent,
         fontSize: tokens.typography.label.input.fontSize,
-        color: disabled ? tokens.textColor.disabled : tokens.input.text,
-        caretColor: tokens.input.text,
+        color: disabled ? tokens.textColor.disabled : tokens.textColor.primary,
+        caretColor: tokens.textColor.primary,
       }),
       [tokens, disabled]
     );
@@ -222,7 +222,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           >
             <ClearIcon
               size={INPUT_CONFIG.clearButtonSize}
-              color={tokens.input.clearIcon}
+              color={tokens.borderColor.level2}
             />
           </span>
         )}

@@ -153,82 +153,7 @@ export interface FunctionalColorTokens {
  */
 export const PRESSED_OVERLAY = "rgba(0, 0, 0, 0.12)";
 
-// ============================================================================
-// 组件级 token 类型 — 直接在语义层定义，不再由 legacyColors 提供
-// ============================================================================
 
-export interface SwitchTokens {
-  on: string;
-  off: string;
-  thumb: string;
-  thumbShadow: string;
-}
-
-export interface CheckboxTokens {
-  checked: string;
-  unchecked: string;
-  checkmark: string;
-}
-
-export interface InputTokens {
-  bg: string;
-  text: string;
-  placeholder: string;
-  ring: string;
-  clearIcon: string;
-}
-
-export interface DialogTokens {
-  bg: string;
-  title: string;
-  content: string;
-  overlay: string;
-}
-
-export interface ToastTokens {
-  bg: string;
-  text: string;
-}
-
-export interface TipsTokens {
-  bg: string;
-  text: string;
-  border: string;
-}
-
-export interface PushTokens {
-  bg: string;
-  title: string;
-  content: string;
-}
-
-export interface ListTokens {
-  bg: string;
-  title: string;
-  description: string;
-  border: string;
-  arrow: string;
-}
-
-export interface LoadingTokens {
-  spinner: string;
-  text: string;
-}
-
-export interface TagColorLevel {
-  main: string;
-  6: string;
-  12: string;
-  30: string;
-}
-
-export interface TagTokens {
-  danger: TagColorLevel;
-  notice: TagColorLevel;
-  success: TagColorLevel;
-  info: TagColorLevel;
-  default: TagColorLevel;
-}
 
 // ============================================================================
 // 排版语义 Token — 按内容职责定义，不按物理尺寸
@@ -350,18 +275,6 @@ export interface SemanticTokens {
   /** 排版 — 按内容职责定义的字号 / 字重 / 行高组合 */
   typography: TypographyTokens;
 
-  // ---- 组件级 token（直接在语义层定义）----
-  switch: SwitchTokens;
-  checkbox: CheckboxTokens;
-  input: InputTokens;
-  dialog: DialogTokens;
-  toast: ToastTokens;
-  tips: TipsTokens;
-  push: PushTokens;
-  list: ListTokens;
-  loading: LoadingTokens;
-  tag: TagTokens;
-
   // ---- 元数据 ----
   /** 元数据（模式、主题名、品牌色） */
   _meta: { mode: ColorMode; themeName: string; brandColor: string };
@@ -451,99 +364,6 @@ export function createSemanticTokens(config: SemanticTokensConfig): SemanticToke
     },
   };
 
-  // ── 组件级 token（优先引用公开语义层，固定色直接用 STATIC）──
-
-  const switchTokens: SwitchTokens = {
-    on: bgColor.brand,                      // 开启态轨道 → 公开语义 bgColor.brand
-    off: bgColor.component,                 // 关闭态轨道 → 公开语义 bgColor.component
-    thumb: STATIC.white,                    // 滑块固定纯白
-    thumbShadow: borderColor.component,     // 滑块阴影 → 公开语义 borderColor.component
-  };
-
-  const checkboxTokens: CheckboxTokens = {
-    checked: borderColor.focus,              // 选中态描边 → 公开语义 borderColor.focus
-    unchecked: borderColor.level2,           // 未选中态描边 → 公开语义 borderColor.level2
-    checkmark: isDark ? STATIC.black : STATIC.white,  // 勾选标记固定色（需100%不透明度）
-  };
-
-  const inputTokens: InputTokens = {
-    bg: bgColor.elevated,                    // 输入框背景 → bgColor.elevated（深色 90 vs 原 80，微差可接受）
-    text: textColor.primary,                 // 输入文字 → textColor.primary
-    placeholder: textColor.placeholder,      // 占位符 → textColor.placeholder
-    ring: borderColor.focus,                 // 聚焦边框 → borderColor.focus
-    clearIcon: borderColor.level2,           // 清除图标 → borderColor.level2
-  };
-
-  const dialogTokens: DialogTokens = {
-    bg: bgColor.elevated,                    // 弹窗背景 → bgColor.elevated
-    title: textColor.primary,                // 弹窗标题 → textColor.primary
-    content: textColor.secondary,            // 弹窗正文 → textColor.secondary（原 84% 近似 72%，语义为次要文字）
-    overlay: bgColor.overlay,                // 遮罩层 → bgColor.overlay
-  };
-
-  const toastTokens: ToastTokens = {
-    bg: bgColor.secondaryContainer,          // Toast 背景 → bgColor.secondaryContainer（深色 COLD_GRAY[80] 近似原值，浅色场景实际也呈深底）
-    text: textColor.anti,                    // Toast 文字 → textColor.anti（反色文字，近似原 WHITE[90]）
-  };
-
-  const tipsTokens: TipsTokens = {
-    bg: bgColor.container,                   // Tips 背景 → bgColor.container（深色 COLD_GRAY[90] 精确匹配，浅色 COLD_GRAY[0] vs 原 COLD_GRAY[10] 微差）
-    text: textColor.primary,                 // Tips 文字 → textColor.primary
-    border: borderColor.level2,              // Tips 边框 → borderColor.level2（深色 WHITE[24] 精确匹配，浅色 BLACK[24] vs 原 BLACK[10] 有差）
-  };
-
-  const pushTokens: PushTokens = {
-    bg: bgColor.elevated,                    // 推送卡片背景 → 公开语义 bgColor.elevated
-    title: textColor.primary,                // 推送标题 → 公开语义 textColor.primary
-    content: textColor.secondary,            // 推送内容 → 公开语义 textColor.secondary
-  };
-
-  const listTokens: ListTokens = {
-    bg: bgColor.elevated,                    // 列表背景 → 公开语义 bgColor.elevated
-    title: textColor.primary,                // 列表标题 → 公开语义 textColor.primary
-    description: textColor.tertiary,         // 列表描述 → 公开语义 textColor.tertiary
-    border: borderColor.level1,              // 列表分割线 → 公开语义 borderColor.level1
-    arrow: textColor.placeholder,            // 箭头图标 → 公开语义 textColor.placeholder
-  };
-
-  const loadingTokens: LoadingTokens = {
-    spinner: functionalColor.brand.main,     // 加载动画 → 公开语义 functionalColor.brand.main
-    text: textColor.secondary,               // 加载文字 → 公开语义 textColor.secondary
-  };
-
-  const tagTokens: TagTokens = {
-    danger: {
-      main: functionalColor.error.main,      // → functionalColor.error.main
-      6: bgColor.errorLight,                 // 6% 近似 → bgColor.errorLight（12%，微差可接受）
-      12: bgColor.errorLight,                // 12% → bgColor.errorLight（精确匹配）
-      30: functionalColor.error.disabled,    // 30% → functionalColor.error.disabled（精确匹配）
-    },
-    notice: {
-      main: functionalColor.warning.main,    // → functionalColor.warning.main
-      6: bgColor.warningLight,               // 6% 近似 → bgColor.warningLight（12%，微差可接受）
-      12: bgColor.warningLight,              // 12% → bgColor.warningLight（精确匹配）
-      30: functionalColor.warning.disabled,  // 30% → functionalColor.warning.disabled（精确匹配）
-    },
-    success: {
-      main: functionalColor.success.main,    // → functionalColor.success.main
-      6: bgColor.successLight,               // 6% 近似 → bgColor.successLight（12%，微差可接受）
-      12: bgColor.successLight,              // 12% → bgColor.successLight（精确匹配）
-      30: functionalColor.success.disabled,  // 30% → functionalColor.success.disabled（精确匹配）
-    },
-    info: {
-      main: functionalColor.info.main,       // → functionalColor.info.main
-      6: bgColor.infoLight,                  // 6% 近似 → bgColor.infoLight（12%，微差可接受）
-      12: bgColor.infoLight,                 // 12% → bgColor.infoLight（精确匹配）
-      30: functionalColor.info.disabled,     // 30% → functionalColor.info.disabled（精确匹配）
-    },
-    default: {
-      main: textColor.tertiary,              // COLD_GRAY[70] 近似 → textColor.tertiary（60% 灰，语义为辅助文字色）
-      6: bgColor.infoLight,                  // → bgColor.infoLight
-      12: bgColor.infoLight,                 // → bgColor.infoLight
-      30: functionalColor.info.disabled,     // → functionalColor.info.disabled
-    },
-  };
-
   // ── 排版语义 token ──
   //
   // 原则：每个 token 对应一种"内容职责"，不是物理尺寸
@@ -596,18 +416,6 @@ export function createSemanticTokens(config: SemanticTokensConfig): SemanticToke
 
     // ── 排版语义 token ──
     typography,
-
-    // ── 组件级 token ──
-    switch: switchTokens,
-    checkbox: checkboxTokens,
-    input: inputTokens,
-    dialog: dialogTokens,
-    toast: toastTokens,
-    tips: tipsTokens,
-    push: pushTokens,
-    list: listTokens,
-    loading: loadingTokens,
-    tag: tagTokens,
 
     // ── 元数据 ──
     _meta: {

@@ -1,5 +1,6 @@
 import { useMemo, useState, useCallback, CSSProperties } from "react";
 import { motion } from "framer-motion";
+import { STATIC } from "../tokens/primitives";
 import { useThemeOptional } from "../hooks/ThemeContext";
 
 // ============================================================================
@@ -78,7 +79,7 @@ export const Switch = ({
     onChange?.(newValue);
   }, [disabled, isChecked, isControlled, onChange]);
 
-  const trackColor = isChecked ? tokens.switch.on : tokens.switch.off;
+  const trackColor = isChecked ? tokens.bgColor.brand : tokens.bgColor.component;
 
   const containerStyle = useMemo<CSSProperties>(
     () => ({
@@ -122,8 +123,8 @@ export const Switch = ({
           width: sizeConfig.thumbSize,
           height: sizeConfig.thumbSize,
           borderRadius: "50%",
-          backgroundColor: tokens.switch.thumb,
-          boxShadow: `0 2px 4px ${tokens.switch.thumbShadow}`,
+          backgroundColor: STATIC.white,
+          boxShadow: `0 2px 4px ${tokens.borderColor.component}`,
         }}
         animate={{ x: thumbX }}
         transition={{ type: "spring", stiffness: 500, damping: 30 }}

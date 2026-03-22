@@ -94,8 +94,8 @@ export function Toast() {
             <h2 style={{ margin: 0, ...tokens.typography.title.section, color: tokens.textColor.primary }}>🎨 Token 使用清单</h2>
             <DocTokenTable
               rows={[
-                { part: "Toast 背景", compToken: "tokens.toast.bg", pubToken: "bgColor.secondaryContainer", desc: "轻提示容器背景", color: tokens.toast.bg },
-                { part: "Toast 文字", compToken: "tokens.toast.text", pubToken: "textColor.anti", desc: "反色文字（深色背景上）", color: tokens.toast.text },
+                { part: "Toast 背景", compToken: "tokens.bgColor.secondaryContainer", pubToken: "bgColor.secondaryContainer", desc: "轻提示容器背景", color: tokens.bgColor.secondaryContainer },
+                { part: "Toast 文字", compToken: "tokens.textColor.anti", pubToken: "textColor.anti", desc: "反色文字（深色背景上）", color: tokens.textColor.anti },
                 { part: "成功图标", compToken: "tokens.functionalColor.success.main", pubToken: "functionalColor.success.main", desc: "成功语义图标", color: tokens.functionalColor.success.main },
                 { part: "失败图标", compToken: "tokens.functionalColor.error.main", pubToken: "functionalColor.error.main", desc: "错误语义图标", color: tokens.functionalColor.error.main },
                 { part: "信息图标", compToken: "tokens.functionalColor.info.main", pubToken: "functionalColor.info.main", desc: "信息语义图标", color: tokens.functionalColor.info.main },
@@ -123,8 +123,8 @@ export function Toast() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>背景</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.bg, marginBottom: SPACING["2"] }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.toast.bg}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.bgColor.secondaryContainer, marginBottom: SPACING["2"] }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.bgColor.secondaryContainer}</div>
                   <div>Toast 背景（<code>bgColor.secondaryContainer</code>）</div>
                 </div>
               </div>
@@ -138,8 +138,8 @@ export function Toast() {
               >
                 <h3 style={{ margin: 0, marginBottom: SPACING["2"], fontSize: 24, fontWeight: 600, color: tokens.textColor.primary }}>文字</h3>
                 <div style={{ fontSize: 20, color: tokens.textColor.secondary }}>
-                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.toast.text, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
-                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.toast.text}</div>
+                  <div style={{ width: 48, height: 48, borderRadius: RADIUS.xl, backgroundColor: tokens.textColor.anti, marginBottom: SPACING["2"], border: `1px solid ${tokens.borderColor.level2}` }} />
+                  <div style={{ fontFamily: "monospace", color: tokens.textColor.primary }}>{tokens.textColor.anti}</div>
                   <div>Toast 文字（<code>textColor.anti</code>）</div>
                 </div>
               </div>
